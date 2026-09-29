@@ -27,7 +27,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 <header data-screen-label="Header" style="background:#1f3c5d;color:var(--color-bg)">
   <sc-if value="{{ showUtility }}" hint-placeholder-val="{{ true }}">
     <div style="background:#15283f;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:8px clamp(20px,4vw,48px);font-size:12px;color:var(--color-neutral-300)">
-      <span>Covenant Presbyterian Church · Nashville, Tennessee</span>
+      <span style="font-family:var(--font-heading);font-style:italic;font-size:14px;color:var(--color-neutral-300)">Psalms, hymns, and spiritual songs — for public and daily worship</span>
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
         <span>This month: <em style="color:var(--color-bg)">{{ hom.now.title }}</em></span>
         <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px">Reserve the first printing →</button>
@@ -119,7 +119,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <span style="position:absolute;inset:0;background:rgba(21,40,63,.58)"></span>
         <span style="position:relative;max-width:1200px;margin:0 auto;height:100%;padding:0 clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px">
           <span style="display:flex;flex-direction:column;gap:10px">
-            <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-300)">The Hymnal</span>
+            <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-300)">Inside</span>
             <span style="font-family:var(--font-heading);font-size:clamp(34px,5vw,64px);font-weight:400;letter-spacing:.06em;text-transform:uppercase;line-height:1;color:var(--color-bg)">Worship as a family</span>
           </span>
           <span style="font-family:var(--font-heading);font-size:36px;color:var(--color-accent-300)">→</span>
@@ -223,32 +223,47 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 
 <!-- ═════════ THE HYMNAL ═════════ -->
 <sc-if value="{{ isHymnal }}" hint-placeholder-val="{{ false }}">
-  <section data-screen-label="The Hymnal" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
-    <div style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:40px;align-items:end">
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">The Hymnal</span>
-        <h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;margin:0;line-height:1;color:var(--color-bg)">Inside the book</h1>
+  <section data-screen-label="Inside" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:40px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Inside</span>
+        <h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;margin:0;line-height:1;color:var(--color-bg)">What is in the book</h1>
+        <p style="margin:0;font-size:15px;line-height:1.7;color:var(--color-neutral-200);text-align:left;max-width:520px">A hymnal for the pew, the family table, and the quiet hour: hymns and psalm settings, service music, the creeds and Westminster Standards, a five-year cycle of Hymns of the Month, and a guide to worship in the home.</p>
       </div>
-      <p style="margin:0;font-size:15px;line-height:1.7;color:var(--color-neutral-200);text-align:left">Ten sections of hymns, psalm settings, and service music, followed by the indexes, the creeds, the Westminster Confession of Faith and Shorter Catechism, the Hymns of the Month, and an introduction to family worship.</p>
+      <div style="display:flex;justify-content:center"><img src="assets/hymnal-cover.png" alt="The Covenant Hymnal" style="height:300px;width:auto;display:block;filter:drop-shadow(0 18px 28px rgba(0,0,0,.45))"></div>
     </div>
   </section>
-  <section style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px) 0">
-    <figure style="margin:0"><img class="plate" src="assets/photo-communion.jpg" alt="The Lord’s Supper at Covenant" style="width:100%;height:clamp(260px,36vw,460px);object-fit:cover;object-position:55% 45%;display:block"><figcaption style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--color-neutral-700);margin-top:8px"><span>The Lord’s Supper</span><span>The Church · hymns 315–380</span></figcaption></figure>
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px) 0">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));border-top:1px solid var(--color-divider)">
+      <sc-for list="{{ insideParts }}" as="ip" hint-placeholder-count="6">
+        <button onClick="{{ ip.go }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:26px 24px 28px 0;border-bottom:1px solid var(--color-divider);box-sizing:border-box" style-hover="color:var(--color-accent-700)">
+          <span style="font-family:var(--font-heading);font-size:30px;color:var(--color-accent);line-height:1">{{ ip.num }}</span>
+          <span style="font-family:var(--font-heading);font-size:24px;font-weight:600;line-height:1.15">{{ ip.title }}</span>
+          <span style="font-size:13.5px;line-height:1.6;color:var(--color-neutral-700)">{{ ip.body }}</span>
+          <span style="font-size:13px;color:var(--color-accent-700)">{{ ip.link }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px) 0">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(32px,5vw,72px);align-items:center">
+      <figure style="margin:0"><img class="plate" src="assets/photo-communion.jpg" alt="The Lord’s Supper at Covenant" style="width:100%;height:clamp(260px,34vw,420px);object-fit:cover;object-position:55% 45%;display:block"><figcaption style="font-size:12px;color:var(--color-neutral-700);margin-top:8px">The Lord’s Supper</figcaption></figure>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Singing the Psalms</span>
+        <h2 style="font-size:clamp(30px,3.4vw,40px);font-weight:400;margin:0;line-height:1.1">Nearly a hundred psalm settings, sung from the ESV.</h2>
+        <p style="margin:0;font-size:15px;line-height:1.7;text-align:left">The hymnal draws substantially from the Psalms, the inspired hymns of Scripture. Each setting's credit line tells you how closely it follows the Psalm — a metrical setting, a paraphrase, a Christianized paraphrase, or a hymn based on it — and the Index of Psalms gathers them psalm by psalm.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button onClick="{{ goPsalms }}" class="btn btn-primary" style="background:none;white-space:nowrap">Index of Psalms</button><button onClick="{{ goArticle }}" class="btn btn-ghost" style="background:none;white-space:nowrap">How the hymnal sings the Psalms →</button></div>
+      </div>
+    </div>
   </section>
   <section style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px)">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(32px,5vw,72px)">
       <div>
-        <h2 style="font-size:34px;font-weight:500;margin:0 0 18px">Contents</h2>
-        <sc-for list="{{ sections }}" as="s" hint-placeholder-count="10">
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px 20px;padding:14px 0;border-top:1px solid var(--color-divider)">
-            <span style="font-family:var(--font-heading);font-size:21px;font-weight:600">{{ s.name }}</span>
-            <span style="font-family:var(--font-heading);font-size:18px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ s.range }}</span>
-            <span style="font-size:12.5px;line-height:1.5;color:var(--color-neutral-700);grid-column:1 / -1">{{ s.detail }}</span>
-          </div>
-        </sc-for>
-        <div style="border-top:1px solid var(--color-divider);padding-top:14px;display:flex;flex-wrap:wrap;gap:6px">
-          <sc-for list="{{ backMatter }}" as="bm" hint-placeholder-count="6"><span class="tag tag-neutral">{{ bm }}</span></sc-for>
-        </div>
+        <h2 style="font-size:34px;font-weight:500;margin:0 0 18px">How the book is arranged</h2>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.7;text-align:left">The hymns follow the shape of the faith: they begin with God our Father, move through the person and work of Jesus our Lord and the Holy Spirit, and on to the Word, the Church, the Gospel, and the Christian life, closing with hymns for special seasons and the service music sung each Lord's Day.</p>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.7;text-align:left">Within each division the hymns are gathered under sub-topics — the hymnal's own headings, printed in small capitals at the top of every page — so that a hymn on assurance, or lament, or the Lord's Supper can be found by turning to its place in the book as readily as by its number.</p>
+        <p style="margin:0 0 18px;font-size:15px;line-height:1.7;text-align:left">Behind the hymns stand the indexes, the Apostles' and Nicene Creeds, the Westminster Confession of Faith and Shorter Catechism, the Hymns of the Month, and an introduction to family worship.</p>
+        <button onClick="{{ goHymns }}" class="btn btn-secondary" style="background:none;white-space:nowrap">Browse the hymns by section →</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px">
         <h2 style="font-size:34px;font-weight:500;margin:0">The page at a glance</h2>
@@ -446,6 +461,152 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
   </section>
 </sc-if>
 
+<!-- ═════════ HYMNS (index) ═════════ -->
+<sc-if value="{{ isHymns }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Hymns" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;flex-direction:column;gap:12px"><span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">The Hymns</span><h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;margin:0;line-height:1;color:var(--color-bg)">Every hymn in the book</h1></div>
+      <div style="display:flex;gap:8px;max-width:720px"><input class="input" value="{{ q }}" onChange="{{ setQ }}" placeholder="Search by number, title, first line, tune, meter, author, composer, or psalm" style="font-size:16px;min-height:50px;padding:10px 16px;background:rgba(243,242,242,.06);color:var(--color-bg);border-color:rgba(243,242,242,.3)"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid rgba(243,242,242,.16)">
+        <sc-for list="{{ views }}" as="v" hint-placeholder-count="5"><button onClick="{{ v.go }}" style="background:none;border:0;border-bottom:2px solid {{ v.line }};margin-bottom:-1px;padding:10px 14px;cursor:pointer;color:{{ v.color }};font-size:12px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap" style-hover="color:var(--color-accent-400)">{{ v.label }}</button></sc-for>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(28px,4vw,48px) clamp(20px,4vw,48px) clamp(48px,6vw,80px)">
+    <sc-if value="{{ isListView }}" hint-placeholder-val="{{ true }}"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:13px;color:var(--color-neutral-700)"><span>{{ resultLabel }}</span><span style="font-style:italic">Credits as printed in the 9.14.26 proof</span></div></sc-if>
+    <sc-if value="{{ isAncientView }}" hint-placeholder-val="{{ false }}">
+      <p style="margin:0 0 28px;font-size:15px;line-height:1.7;max-width:820px">Hymns first written before the Reformation, by era and date, each with its original first line (Greek in Latin letters) and its author or source. A hymn that came into English through a German version is followed by the German hymn.</p>
+      <div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;margin-bottom:36px;border-bottom:1px solid var(--color-divider);padding-bottom:20px">
+      <sc-for list="{{ ancientGroups }}" as="e" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-size:22px;font-weight:600">{{ e.name }}</span><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ e.span }}</span></div></sc-for>
+    </div>
+    <sc-for list="{{ ancientGroups }}" as="e" hint-placeholder-count="3">
+      <div style="display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:24px 48px;margin-bottom:clamp(40px,5vw,64px)">
+        <div style="display:flex;flex-direction:column;gap:8px;position:sticky;top:20px;align-self:start"><span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">{{ e.span }}</span><h2 style="font-size:34px;font-weight:500;margin:0;line-height:1.05">{{ e.name }}</h2><p style="margin:0;font-size:14px;line-height:1.6;color:var(--color-neutral-700)">{{ e.blurb }}</p></div>
+        <div style="border-top:2px solid var(--color-text)">
+          <sc-for list="{{ e.rows }}" as="a" hint-placeholder-count="6">
+            <button onClick="{{ a.go }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 18px;width:100%;padding:14px 0;border-bottom:1px solid var(--color-divider);box-sizing:border-box;align-items:baseline" style-hover="background:var(--color-neutral-100)">
+              <span style="font-family:var(--font-heading);font-size:20px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ a.n }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                <span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-family:var(--font-heading);line-height:1.15"><b style="font-size:21px;font-weight:600">{{ a.title }}</b><em style="font-size:17px;font-weight:400;color:var(--color-accent-700);padding-left:14px;border-left:1px solid var(--color-divider)">{{ a.titleTail }}</em></span>
+                <span style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">{{ a.source }}</span>
+                <sc-if value="{{ a.hasGerman }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--color-neutral-700);padding-left:14px;border-left:2px solid var(--color-accent-300)">{{ a.viaGerman }}</span></sc-if>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+    </sc-if>
+    <sc-if value="{{ isPsalmView }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px 48px;border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:24px 28px;margin-bottom:32px;font-size:13.5px;line-height:1.6">
+        <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Kind of setting</span><span><b style="font-weight:600">Metrical setting</b> — the psalm itself, put into meter and rhyme verse by verse.</span><span><b style="font-weight:600">Paraphrase</b> — the psalm restated freely, keeping its thought and order.</span><span><b style="font-weight:600">Based on</b> — a hymn that draws its theme or imagery from the psalm without following it.</span><span><b style="font-weight:600">Imitation</b> — Watts’s term: the psalm sung as fulfilled in Christ, who is named in it.</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Category of psalm</span><span><b style="font-weight:600">Praise</b> · <b style="font-weight:600">Thanksgiving</b> · <b style="font-weight:600">Lament</b> (including the penitential psalms) · <b style="font-weight:600">Trust</b> · <b style="font-weight:600">Royal</b> · <b style="font-weight:600">Wisdom</b> · <b style="font-weight:600">Torah/Law</b> · <b style="font-weight:600">Historical</b> · <b style="font-weight:600">Imprecatory</b></span><span style="color:var(--color-neutral-700)">Following the broad groupings used by biblical scholars. <button onClick="{{ goArticle }}" style="all:unset;cursor:pointer;color:var(--color-accent-700)">Read more on how the hymnal sings the Psalms →</button></span></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isPsalmView }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:0 16px;padding:0 0 8px;border-bottom:2px solid var(--color-text);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-700)"><span>No.</span><span>Title</span><span>Setting</span><span>Category</span><span>Tune &amp; meter</span><span>Source &amp; author</span></div>
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+        <div style="display:flex;align-items:baseline;gap:14px;padding:22px 0 6px"><span style="font-family:var(--font-heading);font-size:22px;font-weight:600">{{ g.name }}</span></div>
+        <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="2">
+          <button onClick="{{ r.go }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:4px 16px;align-items:baseline;width:100%;padding:11px 0;border-top:1px solid var(--color-divider);box-sizing:border-box;font-size:13px" style-hover="background:var(--color-neutral-100)">
+            <span style="font-family:var(--font-heading);font-size:19px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ r.n }}</span>
+            <span style="font-family:var(--font-heading);font-size:19px;font-weight:600;line-height:1.15">{{ r.title }}</span>
+            <span>{{ r.kindShort }}</span>
+            <span style="color:var(--color-neutral-700)">{{ r.category }}</span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:12px;letter-spacing:.08em">{{ r.tune }}</span><span style="font-size:12px;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">{{ r.meter }}</span></span>
+            <span style="font-size:12.5px;line-height:1.45;color:var(--color-neutral-700)">{{ r.author }}</span>
+          </button>
+        </sc-for>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{ isStdList }}" hint-placeholder-val="{{ true }}">
+    <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+      <div style="margin-bottom:28px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0 8px;border-bottom:2px solid var(--color-text);position:sticky;top:0;background:var(--color-bg);z-index:1"><span style="font-family:var(--font-heading);font-size:24px;font-weight:600">{{ g.name }}</span><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ g.meta }}</span></div>
+        <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="4">
+          <button onClick="{{ r.go }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:8px 18px;align-items:baseline;width:100%;padding:12px 0;border-bottom:1px solid var(--color-divider);box-sizing:border-box" style-hover="background:var(--color-neutral-100)">
+            <span style="font-family:var(--font-heading);font-size:20px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ r.n }}</span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.15">{{ r.title }}</span><span style="font-size:12.5px;font-style:italic;color:var(--color-neutral-700)">{{ r.subtitle }}</span></span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:12px;letter-spacing:.08em">{{ r.tune }}</span><span style="font-size:12px;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">{{ r.meter }}</span></span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0;font-size:12px;color:var(--color-neutral-700)"><span>{{ r.authorShort }}</span><span>{{ r.composerShort }}</span></span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-for>
+    </sc-if>
+  </section>
+</sc-if>
+
+<!-- ═════════ HYMN (single) ═════════ -->
+<sc-if value="{{ isHymn }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Hymn" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(32px,5vw,56px) clamp(20px,4vw,48px) clamp(36px,5vw,56px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+        <div style="display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400);flex-wrap:wrap"><button onClick="{{ goHymns }}" style="all:unset;cursor:pointer;color:var(--color-neutral-300)" style-hover="color:var(--color-bg)">← The Hymns</button><span>{{ h.section }}</span><span style="color:var(--color-neutral-400)">{{ h.topic }}</span></div>
+        <h1 style="font-size:clamp(36px,5vw,64px);font-weight:400;margin:0;line-height:1.02;color:var(--color-bg)">{{ h.title }}</h1>
+        <span style="font-family:var(--font-heading);font-style:italic;font-size:22px;color:var(--color-neutral-300)">{{ h.subtitle }}</span>
+      </div>
+      <span style="font-family:var(--font-heading);font-size:clamp(64px,9vw,120px);line-height:.9;color:var(--color-accent-400);font-variant-numeric:tabular-nums">{{ h.n }}</span>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(36px,5vw,72px);align-items:start">
+    <div style="display:flex;flex-direction:column;gap:28px;grid-column:span 1">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 20px;font-size:14px;line-height:1.55;border-top:1px solid var(--color-divider);padding-top:16px">
+        <span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">WORDS</span><span>{{ h.author }}</span>
+        <span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">MUSIC</span><span>{{ h.composer }}</span>
+        <span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">TUNE</span><span><span style="letter-spacing:.08em">{{ h.tune }}</span> · <span style="font-variant-numeric:tabular-nums">{{ h.meter }}</span></span>
+        <span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">SCRIPTURE</span><span style="font-style:italic">{{ h.scripture }}</span>
+        <sc-if value="{{ isAncient }}" hint-placeholder-val="{{ false }}"><span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">ORIGIN</span><span><em>{{ ancientNote.orig }}</em> — {{ ancientNote.source }} · <button onClick="{{ goAncient }}" style="all:unset;cursor:pointer;color:var(--color-accent-700)">{{ ancientNote.era }} →</button></span></sc-if>
+        <sc-if value="{{ h.hasKind }}" hint-placeholder-val="{{ false }}"><span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">PSALM</span><span>Psalm {{ h.psalm }} — {{ h.kindLabel }} · <button onClick="{{ goArticle }}" style="all:unset;cursor:pointer;color:var(--color-accent-700)">what this means →</button></span></sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Topics</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ topicTags }}" as="tg" hint-placeholder-count="3"><button onClick="{{ tg.go }}" class="tag tag-outline" style="background:none;cursor:pointer;font-size:12px;padding:4px 10px;white-space:nowrap;flex:none;display:inline-flex" style-hover="background:var(--color-accent-100)">{{ tg.t }}</button></sc-for></div>
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700);margin-top:6px">Scripture</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ scriptureTags }}" as="sg" hint-placeholder-count="3"><button onClick="{{ sg.go }}" class="tag tag-neutral" style="cursor:pointer;font-size:12px;padding:4px 10px;border:0;white-space:nowrap;flex:none;display:inline-flex" style-hover="background:var(--color-neutral-200)">{{ sg.t }}</button></sc-for></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--color-neutral-700);border-top:1px solid var(--color-divider);padding-top:14px"><span>{{ h.pageLabel }} · {{ h.stanzaLabel }}</span><span>{{ h.rights }}</span><span>{{ h.rankLabel }}</span><span>{{ h.scheduledLabel }}</span></div>
+      <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Listen</span>
+        <div style="display:flex;align-items:center;gap:14px"><button class="btn btn-primary" style="background:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:18px" aria-label="Play">▶</button><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:2px;background:var(--color-divider);position:relative"><span style="position:absolute;left:0;top:0;height:2px;width:0;background:var(--color-accent)"></span></div><span style="font-size:12px;color:var(--color-neutral-700)">Organ · recording to come</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px">Downloads</span>
+        <sc-for list="{{ downloads }}" as="d" hint-placeholder-count="4"><a href="#" style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--color-divider);text-decoration:none;color:inherit;font-size:14px" style-hover="color:var(--color-accent-700)"><span>{{ d.label }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ d.kind }}</span></a></sc-for>
+      </div>
+    </div>
+    <div style="grid-column:span 1;display:flex;flex-direction:column;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <sc-for list="{{ stanzas }}" as="s" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:28px 1fr;gap:12px"><span style="font-family:var(--font-heading);font-size:20px;color:var(--color-accent-700);font-variant-numeric:tabular-nums;line-height:1.4">{{ s.n }}</span><p style="margin:0;font-size:17px;line-height:1.6;white-space:pre-line">{{ s.text }}</p></div>
+        </sc-for>
+        <sc-if value="{{ noText }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;line-height:1.65;color:var(--color-neutral-700);border:1px dashed var(--color-divider);padding:20px;border-radius:var(--radius-md)">Text to be added. Each hymn page will carry the full text as printed, with any alternate or omitted stanzas beneath it.</p></sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--color-divider);padding-top:24px">
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">About this hymn</span>
+        <p style="margin:0;font-size:15px;line-height:1.7;color:var(--color-neutral-700)">Notes on the text and tune, the author and composer, and why this hymn was chosen for the Covenant Hymnal will appear here.</p>
+      </div>
+    </div>
+  </section>
+  <section style="border-top:1px solid var(--color-divider)">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(36px,5vw,56px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:36px">
+      <sc-for list="{{ related }}" as="rel" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">{{ rel.title }}</span>
+          <sc-for list="{{ rel.rows }}" as="rr" hint-placeholder-count="2"><button onClick="{{ rr.go }}" style="all:unset;cursor:pointer;display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid var(--color-divider)" style-hover="color:var(--color-accent-700)"><span style="font-family:var(--font-heading);color:var(--color-accent-700);font-variant-numeric:tabular-nums;width:36px;flex:none">{{ rr.n }}</span><span style="font-family:var(--font-heading);font-size:18px;font-weight:600">{{ rr.title }}</span></button></sc-for>
+          <sc-if value="{{ rel.empty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--color-neutral-700);padding-top:8px;border-top:1px solid var(--color-divider)">None in this hymnal</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,48px) clamp(40px,5vw,56px);display:flex;justify-content:space-between;gap:16px">
+    <button onClick="{{ prevGo }}" class="btn btn-secondary" style="background:none;white-space:nowrap">← {{ prevLabel }}</button>
+    <button onClick="{{ nextGo }}" class="btn btn-secondary" style="background:none;white-space:nowrap">{{ nextLabel }} →</button>
+  </div>
+</sc-if>
+
 <footer style="background:#15283f;color:var(--color-neutral-300);margin-top:0">
   <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,4vw,48px) 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:36px">
     <div style="display:flex;flex-direction:column;gap:14px;grid-column:span 2;min-width:0">
@@ -529,12 +690,54 @@ const FAQS = [
 ];
 
 class Component extends DCLogic {
-  state = { page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
+  componentDidMount() { import('./hymns-data.js').then(m => this.setState({ hymns: m.HYMNS, texts: m.TEXTS, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS })); }
+  hymnVals() {
+    const { hymns = [], texts = {}, sectionOrder = [], q = '', view = 'sections', hymn } = this.state;
+    const norm = s => String(s ?? '').toLowerCase();
+    const ql = norm(q).trim();
+    const hit = h => !ql || [h.n, h.title, h.subtitle, h.tune, h.meter, h.author, h.composer, h.scripture, h.psalm && 'psalm ' + h.psalm, (h.topics || []).join(' '), (h.scriptures || []).join(' ')].some(v => norm(v).includes(ql));
+    const list = hymns.filter(hit);
+    const row = h => ({ n: h.n, title: h.title, subtitle: h.subtitle || h.scripture, tune: h.tune, meter: h.meter, authorShort: h.author.split(';')[0], composerShort: h.composer.split(';')[0], go: () => this.openHymn(h.n) });
+    const byKey = (key, label, sortNum) => { const m = new Map(); list.forEach(h => { const k = key(h) || '—'; (m.get(k) || m.set(k, []).get(k)).push(h); }); return [...m.entries()].sort((a, b) => sortNum ? a[0] - b[0] : String(a[0]).localeCompare(String(b[0]))).map(([k, rows]) => ({ name: label(k), meta: rows.length + (rows.length === 1 ? ' hymn' : ' hymns'), rows: rows.sort((a, b) => a.n - b.n).map(row) })); };
+    let groups;
+    if (view === 'sections') groups = (this.state.subsections || sectionOrder.map(s => ({ section: s, topic: '' }))).map(ss => ({ ss, rows: list.filter(h => h.section === ss.section && (!ss.topic || h.topic === ss.topic)) })).filter(g => g.rows.length).map(g => ({ name: g.ss.topic || g.ss.section, meta: g.ss.section + ' · ' + g.rows.length + (g.rows.length === 1 ? ' hymn' : ' hymns'), rows: g.rows.map(row) }));
+    else if (view === 'ancient') groups = [];
+    else if (view === 'topics') { const m = new Map(); list.forEach(h => (h.topics || []).forEach(t => (m.get(t) || m.set(t, []).get(t)).push(h))); groups = [...m.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([k, rows]) => ({ name: k, meta: rows.length + (rows.length === 1 ? ' hymn' : ' hymns'), rows: rows.sort((a, b) => a.n - b.n).map(row) })); }
+    else if (view === 'titles') { const m = new Map(); list.forEach(h => { const k = (h.sortTitle || h.title)[0].toUpperCase(); (m.get(k) || m.set(k, []).get(k)).push(h); }); groups = [...m.entries()].sort().map(([k, rows]) => ({ name: k, meta: rows.length + (rows.length === 1 ? ' hymn' : ' hymns'), rows: rows.sort((a, b) => (a.sortTitle || a.title).localeCompare(b.sortTitle || b.title)).map(row) })); }
+    else if (view === 'tunes') groups = byKey(h => h.tune, k => k).filter(g => g.name !== '—');
+    else if (view === 'authors') groups = byKey(h => h.authorName || h.author.split(/[;,]/)[0].trim(), k => k);
+    else if (view === 'composers') groups = byKey(h => h.composerName || h.composer.split(/[;,]/)[0].trim(), k => k);
+    else { const PI = this.state.psalmIndex || []; const byN = new Map(hymns.map(x => [x.n, x])); const m = new Map();
+      PI.forEach(r => r.hymns.forEach(n => { const x = byN.get(n); if (!x || !hit(x)) return; (m.get(r.psalm) || m.set(r.psalm, []).get(r.psalm)).push({ ...row(x), title: r.title, subtitle: r.kind + ' · ' + r.category, kind: r.kind, category: r.category }); }));
+      groups = [...m.entries()].sort((a, b) => a[0] - b[0]).map(([k, rows]) => ({ name: 'Psalm ' + k, meta: rows.length + (rows.length === 1 ? ' setting' : ' settings'), rows: rows.map(r => ({ ...r, author: hymns.find(x => x.n === r.n).author, kindShort: r.kind === 'Metrical setting' ? 'Metrical' : r.kind })) })); }
+    const views = [['sections', 'By section'], ['titles', 'Titles'], ['tunes', 'Tunes'], ['authors', 'Authors'], ['composers', 'Composers'], ['psalms', 'Psalms'], ['ancient', 'Ancient & Medieval'], ['topics', 'Topics']].map(([k, label]) => ({ label, go: () => this.setState({ view: k }), line: view === k ? 'var(--color-accent-400)' : 'transparent', color: view === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
+    const h = hymns.find(x => x.n === hymn) || hymns[0] || {};
+    const idx = hymns.indexOf(h); const prev = hymns[idx - 1], next = hymns[idx + 1];
+    const others = hymns.filter(x => x.n !== h.n);
+    const relRows = arr => arr.slice(0, 4).map(x => ({ n: x.n, title: x.title, go: () => this.openHymn(x.n) }));
+    const rel = (title, arr) => ({ title, rows: relRows(arr), empty: arr.length === 0 });
+    const stz = texts[h.n] || [];
+    const pi = (this.state.psalmIndex || []).find(r => r.hymns.includes(h.n));
+    const an = (this.state.ancient || []).find(a => a.n === h.n);
+    return {
+      q, setQ: e => this.setState({ q: e.target.value }), views, groups, isPsalmView: view === 'psalms', isAncientView: view === 'ancient', isListView: view !== 'ancient', isStdList: view !== 'ancient' && view !== 'psalms', psalmLayout: this.props.psalmLayout ?? 'table',
+      resultLabel: ql ? `${list.length} of ${hymns.length} hymns match “${q}”` : `${hymns.length} hymns`,
+      h: { ...h, hasKind: !!(h.kind || pi), kindLabel: pi ? pi.kind + (pi.category ? ' · ' + pi.category + ' psalm' : '') : (h.kind ? h.kind[0].toUpperCase() + h.kind.slice(1) : ''), pageLabel: h.page ? 'Page ' + h.page : '', stanzaLabel: h.stanzas ? h.stanzas + (h.stanzas === 1 ? ' stanza' : ' stanzas') + (h.refrain ? ' with refrain' : '') : '', rights: h.pd ? 'Public domain' : (h.copyright || 'Under copyright'), scheduledLabel: h.scheduled ? 'Sung at Covenant ' + h.scheduled + (h.scheduled === 1 ? ' time' : ' times') + ' since 2016' : '', rankLabel: h.hymnals ? 'In ' + h.hymnals + ' hymnals' : '' }, topicTags: (h.topics || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'topics', q: t }) })), ancientNote: an ? { orig: an.orig, source: an.source, german: an.viaGerman, era: an.era } : null, isAncient: !!an,
+      ancientGroups: (this.state.ancientEras || []).map(er => ({ ...er, rows: (this.state.ancient || []).filter(a => a.era === er.name).map(a => { const x = hymns.find(y => y.n === a.n); const sub = x && x.subtitle && x.subtitle.toLowerCase() !== a.orig.toLowerCase() ? x.subtitle : ''; return { ...a, subtitle: sub, titleTail: [a.orig, sub].filter(Boolean).join(' · '), hasGerman: !!a.viaGerman, go: () => this.openHymn(a.n) }; }) })),
+      scriptureTags: (h.scriptures || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'sections', q: t }) })), stanzas: stz.map((lines, i) => ({ n: i + 1, text: lines.join('\n') })), noText: stz.length === 0,
+      downloads: [{ label: 'Hymnal page', kind: 'PDF' }, { label: 'Leadsheet', kind: 'PDF' }, { label: 'Alternate key', kind: 'PDF' }, { label: 'Text only', kind: 'PDF' }],
+      related: [rel('Same tune · ' + (h.tune || ''), others.filter(x => x.tune === h.tune)), rel('Same meter · ' + (h.meter || ''), others.filter(x => x.meter === h.meter)), rel(h.psalm ? 'Also Psalm ' + h.psalm : 'Same topic · ' + (h.topic || ''), others.filter(x => h.psalm ? x.psalm === h.psalm : x.topic === h.topic))],
+      prevLabel: prev ? prev.n + ' · ' + prev.title : 'Hymns', prevGo: prev ? () => this.openHymn(prev.n) : this.go('hymns'),
+      nextLabel: next ? next.n + ' · ' + next.title : 'Hymns', nextGo: next ? () => this.openHymn(next.n) : this.go('hymns'),
+    };
+  }
+  openHymn(n) { this.setState({ hymn: n, page: 'hymn' }); try { localStorage.setItem('cvh2-page', 'hymn'); localStorage.setItem('cvh2-hymn', String(n)); } catch (_) {} window.scrollTo({ top: 0 }); }
+  state = { hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
   go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setState({ page }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
   cycle() {
     const now = new Date(); const m = now.getMonth();
     const start = m >= 7 ? now.getFullYear() : now.getFullYear() - 1;
-    const yi = (((start - 2026) % 5) + 5) % 5; const mi = (m - 7 + 12) % 12;
+    const yi = (((start - 2025) % 5) + 5) % 5; const mi = (m - 7 + 12) % 12; // cycle began August 2025, so 2026–27 is Year 2
     const nyi = mi === 11 ? (yi + 1) % 5 : yi; const nmi = (mi + 1) % 12;
     const next1 = new Date(now.getFullYear(), m + 1, 1);
     const days = Math.max(1, Math.ceil((next1 - now) / 864e5));
@@ -543,13 +746,14 @@ class Component extends DCLogic {
   renderVals() {
     const p = this.state.page; const c = this.cycle();
     const year = this.state.year ?? c.yi;
-    const labels = [['home','Home'],['about','About'],['hymnal','The Hymnal'],['order','Order'],['journal','Journal'],['faq','FAQ'],['contact','Contact']];
-    const active = p === 'article' ? 'journal' : p;
+    const labels = [['home','Home'],['about','About'],['hymnal','Inside'],['hymns','The Hymns'],['order','Order'],['journal','Journal'],['faq','FAQ'],['contact','Contact']];
+    const active = p === 'article' ? 'journal' : p === 'hymn' ? 'hymns' : p;
     const nav = labels.map(([k, label]) => ({ label, go: this.go(k), line: active === k ? 'var(--color-accent-400)' : 'transparent', color: active === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const hero = this.props.heroLayout ?? 'book-and-letter';
     const qtys = ['1', '2–10', '11–50', '50+']; const subs = ['Ordering', 'Permissions', 'Corrections', 'Other'];
     return {
       nav, showUtility: this.props.showUtilityBar ?? true,
+      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'),
       isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isContact: p === 'contact',
       heroLetter: hero === 'book-and-letter', heroCentered: hero === 'book-centered',
       goHome: this.go('home'), goAbout: this.go('about'), goHymnal: this.go('hymnal'), goOrder: this.go('order'), goJournal: this.go('journal'), goArticle: this.go('article'),
@@ -570,6 +774,15 @@ class Component extends DCLogic {
         { kicker: 'Psalms', title: 'Sung from the ESV', body: 'Metrical Psalm settings follow the English Standard Version — the one exception to restoring originals.' },
       ],
       sections: SECTIONS.map(([name, range, detail]) => ({ name, range, detail })),
+      goPsalms: () => this.go('hymns')() || this.setState({ view: 'psalms', q: '' }),
+      insideParts: [
+        { num: 'I', title: 'Hymns and psalm settings', body: '630 hymns in ten divisions, from across church history and the best of the present day, with original texts restored where possible.', link: 'Browse the hymns →', go: this.go('hymns') },
+        { num: 'II', title: 'Service music', body: 'Music for the opening and close of worship, prayers, praises, Amens, and the Apostles’ Creed, as sung each Lord’s Day.', link: 'See the service music →', go: () => this.go('hymns')() || this.setState({ q: 'Service Music', view: 'sections' }) },
+        { num: 'III', title: 'Creeds and standards', body: 'The Apostles’ and Nicene Creeds, the Westminster Confession of Faith, and the Shorter Catechism, bound in the back for public and family use.', link: 'Statements of faith →', go: this.go('about') },
+        { num: 'IV', title: 'Hymns of the Month', body: 'A five-year cycle of twelve hymns a year, chosen so that children and families learn the music of worship together.', link: 'The five-year cycle →', go: this.go('home') },
+        { num: 'V', title: 'Family worship', body: 'An introduction to worship in the home — why, what, and how — with a simple pattern of Scripture, hymn, and prayer.', link: 'Read the introduction →', go: this.go('about') },
+        { num: 'VI', title: 'Indexes', body: 'Titles and first lines, tunes, meters, authors and composers, Scripture, topics, and Psalms — every one searchable on this site.', link: 'Search the indexes →', go: this.go('hymns') },
+      ],
       backMatter: ['Indexes', 'Apostles’ & Nicene Creeds', 'Westminster Confession of Faith', 'Shorter Catechism', 'Hymns of the Month', 'Family Worship'],
       glance: [
         { mark: '①', label: 'Number', body: 'printed beside the title at the outer margin.' },
@@ -591,7 +804,7 @@ class Component extends DCLogic {
       submitOrder: (e) => { e.preventDefault(); this.setState({ orderSent: true }); },
       posts: [
         { kicker: 'About', title: 'Why a new hymnal?', body: 'Three reasons, from the Session’s introduction.', go: this.go('about') },
-        { kicker: 'The Hymnal', title: 'How to use this hymnal', body: 'Numbers, credits, tunes, meters, and the dots in the margin.', go: this.go('hymnal') },
+        { kicker: 'Inside', title: 'How to use this hymnal', body: 'Numbers, credits, tunes, meters, and the dots in the margin.', go: this.go('hymnal') },
         { kicker: 'FAQ', title: 'Why thee and thou?', body: 'On restoring original texts — and the one exception.', go: this.go('faq') },
       ],
       article: ARTICLE.map(([t, text]) => ({ isH: t === 'h', isP: t === 'p', text })),
@@ -603,7 +816,7 @@ class Component extends DCLogic {
       newsLabel: this.state.newsSent ? 'Subscribed' : 'Subscribe',
       submitNews: (e) => { e.preventDefault(); this.setState({ newsSent: true }); },
       footCols: [
-        { title: 'The Hymnal', links: [{ label: 'Inside the book', go: this.go('hymnal') }, { label: 'Hymns of the Month', go: this.go('home') }, { label: 'Order', go: this.go('order') }] },
+        { title: 'The Hymnal', links: [{ label: 'Inside', go: this.go('hymnal') }, { label: 'The Hymns', go: this.go('hymns') }, { label: 'Hymns of the Month', go: this.go('home') }, { label: 'Order', go: this.go('order') }] },
         { title: 'Read', links: [{ label: 'Introduction', go: this.go('about') }, { label: 'Journal', go: this.go('journal') }, { label: 'FAQ', go: this.go('faq') }] },
         { title: 'Contact', links: [{ label: 'Write to us', go: this.go('contact') }, { label: 'Permissions', go: this.go('contact') }] },
       ],
