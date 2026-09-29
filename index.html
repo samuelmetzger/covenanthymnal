@@ -20,6 +20,34 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-600)}
 button{font:inherit}
 em,i{font-synthesis:none}
 .photo{box-sizing:border-box;border:6px solid var(--color-surface);outline:1px solid var(--color-divider)}
+.m-nav{display:flex;justify-content:center;flex-wrap:wrap}
+.m-menu-btn{display:none}
+.hymn-row{display:grid;grid-template-columns:56px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:8px 18px}
+.psalm-head{display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:0 16px}
+.psalm-row{display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:4px 16px}
+.anc-grid{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:24px 48px}
+.anc-side{position:sticky;top:20px;align-self:start}
+.hymn-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:end}
+.abbr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+@media (max-width:760px){
+  .m-menu-btn{display:inline-flex}
+  .m-nav{display:none;flex-direction:column;align-items:stretch}
+  .m-nav.open{display:flex}
+  .m-nav button{text-align:left;padding:13px 4px!important;border-bottom:1px solid rgba(243,242,242,.12)!important}
+  .hymn-row{grid-template-columns:44px minmax(0,1fr);gap:4px 12px}
+  .hymn-row > :nth-child(3){grid-column:2}
+  .hymn-row > :nth-child(4){display:none}
+  .psalm-head{display:none}
+  .psalm-row{grid-template-columns:44px minmax(0,1fr);gap:2px 12px}
+  .psalm-row > :nth-child(n+3){grid-column:2}
+  .psalm-row > :nth-child(6){font-size:12px}
+  .anc-grid{grid-template-columns:minmax(0,1fr)}
+  .anc-side{position:static}
+  .hymn-hero{grid-template-columns:minmax(0,1fr)}
+  .hymn-hero > span{font-size:56px!important;line-height:1!important}
+  .abbr-grid{grid-template-columns:minmax(0,1fr)}
+  .utility-note{display:none}
+}
 button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
 </style>
 </helmet>
@@ -28,7 +56,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 <header data-screen-label="Header" style="background:#1f3c5d;color:var(--color-bg)">
   <sc-if value="{{ showUtility }}" hint-placeholder-val="{{ true }}">
     <div style="background:#15283f;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:8px clamp(20px,4vw,48px);font-size:12px;color:var(--color-neutral-300)">
-      <span style="font-family:var(--font-heading);font-style:italic;font-size:14px;color:var(--color-neutral-300)">Psalms, hymns, and spiritual songs — for public and daily worship</span>
+      <span class="utility-note" style="font-family:var(--font-heading);font-style:italic;font-size:14px;color:var(--color-neutral-300)">Psalms, hymns, and spiritual songs — for public and daily worship</span>
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
         <span>This month: <em style="color:var(--color-bg)">{{ hom.now.title }}</em></span>
         <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px">Reserve the first printing →</button>
@@ -43,7 +71,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <span style="font-family:var(--font-heading);font-size:17px;font-weight:500;letter-spacing:.02em;color:var(--color-accent-300)"><em style="font-style:italic;font-weight:500;font-synthesis:none">for</em> Public and Daily Worship</span>
       </span>
     </button>
-    <nav style="display:flex;justify-content:center;flex-wrap:wrap;gap:0;border-top:1px solid rgba(243,242,242,.16);width:100%;max-width:980px;margin-top:6px">
+    <button class="m-menu-btn" onClick="{{ toggleMenu }}" aria-label="Menu" style="align-items:center;gap:10px;background:none;border:1px solid rgba(243,242,242,.3);border-radius:var(--radius-md);color:var(--color-bg);padding:10px 16px;cursor:pointer;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:6px 0 14px">{{ menuLabel }}</button>
+    <nav class="m-nav {{ menuOpenClass }}" style="gap:0;border-top:1px solid rgba(243,242,242,.16);width:100%;max-width:980px;margin-top:6px">
       <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
         <button onClick="{{ n.go }}" style="background:none;border:0;border-bottom:2px solid {{ n.line }};cursor:pointer;color:{{ n.color }};padding:15px 18px 13px;font-size:12px;letter-spacing:.16em;text-transform:uppercase" style-hover="color:var(--color-accent-400)">{{ n.label }}</button>
       </sc-for>
@@ -291,7 +320,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
     <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(32px,5vw,72px)">
       <div>
         <h2 style="font-size:34px;font-weight:500;margin:0 0 18px">Abbreviations</h2>
-        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px">
+        <div class="abbr-grid">
           <sc-for list="{{ abbr }}" as="a" hint-placeholder-count="20">
             <div style="display:grid;grid-template-columns:72px 1fr;gap:10px;padding:7px 0;border-top:1px solid var(--color-divider);font-size:13px"><span style="font-style:italic">{{ a.k }}</span><span style="color:var(--color-neutral-700)">{{ a.v }}</span></div>
           </sc-for>
@@ -482,8 +511,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <sc-for list="{{ ancientGroups }}" as="e" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-size:22px;font-weight:600">{{ e.name }}</span><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ e.span }}</span></div></sc-for>
     </div>
     <sc-for list="{{ ancientGroups }}" as="e" hint-placeholder-count="3">
-      <div style="display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:24px 48px;margin-bottom:clamp(40px,5vw,64px)">
-        <div style="display:flex;flex-direction:column;gap:8px;position:sticky;top:20px;align-self:start"><span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">{{ e.span }}</span><h2 style="font-size:34px;font-weight:500;margin:0;line-height:1.05">{{ e.name }}</h2><p style="margin:0;font-size:14px;line-height:1.6;color:var(--color-neutral-700)">{{ e.blurb }}</p></div>
+      <div class="anc-grid" style="margin-bottom:clamp(40px,5vw,64px)">
+        <div class="anc-side" style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">{{ e.span }}</span><h2 style="font-size:34px;font-weight:500;margin:0;line-height:1.05">{{ e.name }}</h2><p style="margin:0;font-size:14px;line-height:1.6;color:var(--color-neutral-700)">{{ e.blurb }}</p></div>
         <div style="border-top:2px solid var(--color-text)">
           <sc-for list="{{ e.rows }}" as="a" hint-placeholder-count="6">
             <button onClick="{{ a.go }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 18px;width:100%;padding:14px 0;border-bottom:1px solid var(--color-divider);box-sizing:border-box;align-items:baseline" style-hover="background:var(--color-neutral-100)">
@@ -507,11 +536,11 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       </div>
     </sc-if>
     <sc-if value="{{ isPsalmView }}" hint-placeholder-val="{{ false }}">
-      <div style="display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:0 16px;padding:0 0 8px;border-bottom:2px solid var(--color-text);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-700)"><span>No.</span><span>Title</span><span>Setting</span><span>Category</span><span>Tune &amp; meter</span><span>Source &amp; author</span></div>
+      <div class="psalm-head" style="padding:0 0 8px;border-bottom:2px solid var(--color-text);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-700)"><span>No.</span><span>Title</span><span>Setting</span><span>Category</span><span>Tune &amp; meter</span><span>Source &amp; author</span></div>
       <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
         <div style="display:flex;align-items:baseline;gap:14px;padding:22px 0 6px"><span style="font-family:var(--font-heading);font-size:22px;font-weight:600">{{ g.name }}</span></div>
         <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="2">
-          <button onClick="{{ r.go }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:4px 16px;align-items:baseline;width:100%;padding:11px 0;border-top:1px solid var(--color-divider);box-sizing:border-box;font-size:13px" style-hover="background:var(--color-neutral-100)">
+          <button onClick="{{ r.go }}" class="psalm-row" style="all:unset;cursor:pointer;align-items:baseline;width:100%;padding:11px 0;border-top:1px solid var(--color-divider);box-sizing:border-box;font-size:13px" style-hover="background:var(--color-neutral-100)">
             <span style="font-family:var(--font-heading);font-size:19px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ r.n }}</span>
             <span style="font-family:var(--font-heading);font-size:19px;font-weight:600;line-height:1.15">{{ r.title }}</span>
             <span>{{ r.kindShort }}</span>
@@ -527,7 +556,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <div style="margin-bottom:28px">
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0 8px;border-bottom:2px solid var(--color-text);position:sticky;top:0;background:var(--color-bg);z-index:1"><span style="font-family:var(--font-heading);font-size:24px;font-weight:600">{{ g.name }}</span><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ g.meta }}</span></div>
         <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="4">
-          <button onClick="{{ r.go }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:8px 18px;align-items:baseline;width:100%;padding:12px 0;border-bottom:1px solid var(--color-divider);box-sizing:border-box" style-hover="background:var(--color-neutral-100)">
+          <button onClick="{{ r.go }}" class="hymn-row" style="all:unset;cursor:pointer;align-items:baseline;width:100%;padding:12px 0;border-bottom:1px solid var(--color-divider);box-sizing:border-box" style-hover="background:var(--color-neutral-100)">
             <span style="font-family:var(--font-heading);font-size:20px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ r.n }}</span>
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.15">{{ r.title }}</span><span style="font-size:12.5px;font-style:italic;color:var(--color-neutral-700)">{{ r.subtitle }}</span></span>
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:12px;letter-spacing:.08em">{{ r.tune }}</span><span style="font-size:12px;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">{{ r.meter }}</span></span>
@@ -543,7 +572,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 <!-- ═════════ HYMN (single) ═════════ -->
 <sc-if value="{{ isHymn }}" hint-placeholder-val="{{ false }}">
   <section data-screen-label="Hymn" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
-    <div style="max-width:1200px;margin:0 auto;padding:clamp(32px,5vw,56px) clamp(20px,4vw,48px) clamp(36px,5vw,56px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:end">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(32px,5vw,56px) clamp(20px,4vw,48px) clamp(36px,5vw,56px)" class="hymn-hero">
       <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
         <div style="display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400);flex-wrap:wrap"><button onClick="{{ goHymns }}" style="all:unset;cursor:pointer;color:var(--color-neutral-300)" style-hover="color:var(--color-bg)">← The Hymns</button><span>{{ h.section }}</span><span style="color:var(--color-neutral-400)">{{ h.topic }}</span></div>
         <h1 style="font-size:clamp(36px,5vw,64px);font-weight:400;margin:0;line-height:1.02;color:var(--color-bg)">{{ h.title }}</h1>
@@ -733,8 +762,8 @@ class Component extends DCLogic {
     };
   }
   openHymn(n) { this.setState({ hymn: n, page: 'hymn' }); try { localStorage.setItem('cvh2-page', 'hymn'); localStorage.setItem('cvh2-hymn', String(n)); } catch (_) {} window.scrollTo({ top: 0 }); }
-  state = { hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
-  go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setState({ page }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
+  state = { menuOpen: false, hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
+  go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setState({ page, menuOpen: false }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
   cycle() {
     const now = new Date(); const m = now.getMonth();
     const start = m >= 7 ? now.getFullYear() : now.getFullYear() - 1;
@@ -753,6 +782,7 @@ class Component extends DCLogic {
     const hero = this.props.heroLayout ?? 'book-and-letter';
     const qtys = ['1', '2–10', '11–50', '50+']; const subs = ['Ordering', 'Permissions', 'Corrections', 'Other'];
     return {
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), menuLabel: this.state.menuOpen ? 'Close ✕' : 'Menu ☰', menuOpenClass: this.state.menuOpen ? 'open' : '',
       nav, showUtility: this.props.showUtilityBar ?? true,
       ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'),
       isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isContact: p === 'contact',
