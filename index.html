@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Covenant Hymnal — for Public and Daily Worship</title>
+<meta name="description" content="The Covenant Hymnal: psalms, hymns and spiritual songs for public and daily worship, assembled by Covenant Presbyterian Church, Nashville, Tennessee.">
+<link rel="icon" href="assets/hymnal-seal-2.jpg">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -47,6 +50,40 @@ em,i{font-synthesis:none}
   .abbr-grid{grid-template-columns:minmax(0,1fr)}
   .utility-note{display:none}
 }
+.tl-scroll{overflow:auto;height:380px;touch-action:pan-x pan-y;cursor:grab;user-select:none;-webkit-user-select:none;scrollbar-width:thin}
+.tl-canvas{position:relative;width:var(--len);height:100%;min-width:100%}
+.tl-band{position:absolute;left:var(--pos);width:var(--size);top:0;bottom:0;border-left:1px solid var(--color-divider)}
+.tl-band-label{position:absolute;left:10px;top:10px;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);white-space:nowrap}
+.tl-axis{position:absolute;left:0;right:0;top:200px;height:1px;background:var(--color-neutral-600)}
+.tl-axis2{position:absolute;left:0;right:0;top:282px;height:0;border-top:1px dashed var(--color-neutral-400)}
+.tl-tick{position:absolute;left:var(--pos);top:200px;height:12px;border-left:1px solid var(--color-neutral-600)}
+.tl-tick-label{position:absolute;left:0;top:14px;transform:translateX(-50%);font-size:16px;color:var(--color-neutral-700);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-hymn,.tl-world{position:absolute;left:var(--pos);width:44px;height:44px;transform:translate(-50%,-50%);background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tl-hymn{top:200px}.tl-world{top:282px}
+.tl-leader{position:absolute;left:50%;bottom:50%;width:1px;height:calc(30px + var(--stag)*42px);background:var(--color-neutral-300)}
+.tl-hymn-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--color-accent-700);display:block;transition:transform .25s;position:relative;box-sizing:border-box}
+.tl-hymn-label{position:absolute;bottom:calc(50% + 32px + var(--stag)*42px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:16px;line-height:1.15;text-align:center;font-family:var(--font-heading);font-weight:600;background:var(--color-surface);padding:0 4px;transition:opacity .2s}
+.tl-world-dot{width:10px;height:10px;border-radius:50%;display:block}
+.tl-world-label{position:absolute;top:calc(50% + 12px + var(--stag)*22px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:16px;color:var(--color-neutral-700);line-height:1.15;transition:opacity .2s}
+.tl-card{animation:tlRise .35s ease}
+@keyframes tlRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:760px){
+  .tl-scroll{height:70vh;touch-action:pan-y}
+  .tl-canvas{width:100%;height:var(--len);min-width:0;min-height:100%}
+  .tl-band{left:0;right:0;width:auto;top:var(--pos);height:var(--size);bottom:auto;border-left:0;border-top:1px solid var(--color-divider)}
+  .tl-band-label{left:auto;right:8px;top:6px;background:var(--color-surface);padding:0 4px}
+  .tl-axis{left:44%;right:auto;width:1px;top:0;bottom:0;height:auto}
+  .tl-axis2{left:74%;right:auto;width:0;top:0;bottom:0;height:auto;border-top:0;border-left:1px dashed var(--color-neutral-400)}
+  .tl-tick{left:44%;top:var(--pos);width:12px;height:0;border-left:0;border-top:1px solid var(--color-neutral-600)}
+  .tl-tick-label{left:16px;top:0;transform:translateY(-50%)}
+  .tl-hymn{left:44%;top:var(--pos)}
+  .tl-leader{display:none}
+  .tl-hymn-label{bottom:auto;left:auto;right:calc(50% + 14px);top:50%;transform:translateY(-50%);text-align:right;white-space:normal;width:36vw;background:none;padding:0}
+  .tl-world{left:74%;top:var(--pos)}
+  .tl-world-label{top:50%;left:calc(50% + 10px);transform:translateY(-50%);white-space:normal;width:22vw;text-align:left}
+}
+@media (prefers-reduced-motion:reduce){.tl-hymn-dot,.tl-hymn-label,.tl-world-label,.tl-card{transition:none!important;animation:none!important}}
+@media print{.tl-print{display:block!important}}
 button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
 </style>
 </helmet>
@@ -58,7 +95,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <span class="utility-note" style="font-family:var(--font-heading);font-style:italic;font-size:14px;color:var(--color-neutral-300)">Psalms, hymns, and spiritual songs — for public and daily worship</span>
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
         <span>This month: <em style="color:var(--color-bg)">{{ hom.now.title }}</em></span>
-        <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px">Reserve the first printing →</button>
+        <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;white-space:nowrap">Reserve the first printing →</button>
         <button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button>
       </div>
     </div>
@@ -72,9 +109,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       </span>
     </button>
     <button class="m-menu-btn" onClick="{{ toggleMenu }}" aria-label="Menu" style="align-items:center;gap:10px;background:none;border:1px solid rgba(243,242,242,.3);border-radius:var(--radius-md);color:var(--color-bg);padding:10px 16px;cursor:pointer;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:6px 0 14px">{{ menuLabel }}</button>
-    <nav class="m-nav {{ menuOpenClass }}" style="gap:0;border-top:1px solid rgba(243,242,242,.16);width:100%;max-width:980px;margin-top:6px">
+    <nav class="m-nav {{ menuOpenClass }}" style="gap:0;border-top:1px solid rgba(243,242,242,.16);width:100%;max-width:1100px;margin-top:6px">
       <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
-        <button onClick="{{ n.go }}" style="background:none;border:0;border-bottom:2px solid {{ n.line }};cursor:pointer;color:{{ n.color }};padding:15px 18px 13px;font-size:12px;letter-spacing:.16em;text-transform:uppercase" style-hover="color:var(--color-accent-400)">{{ n.label }}</button>
+        <button onClick="{{ n.go }}" style="background:none;border:0;border-bottom:2px solid {{ n.line }};cursor:pointer;color:{{ n.color }};padding:15px clamp(8px,1.3vw,18px) 13px;font-size:12px;letter-spacing:clamp(.08em,.9vw,.16em);white-space:nowrap;text-transform:uppercase" style-hover="color:var(--color-accent-400)">{{ n.label }}</button>
       </sc-for>
     </nav>
   </div>
@@ -292,7 +329,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <h2 style="font-size:34px;font-weight:500;margin:0 0 18px">How the book is arranged</h2>
         <p style="margin:0 0 14px;font-size:15px;line-height:1.7;text-align:left">The hymns follow the shape of the faith: they begin with God our Father, move through the person and work of Jesus our Lord and the Holy Spirit, and on to the Word, the Church, the Gospel, and the Christian life, closing with hymns for special seasons and the service music sung each Lord's Day.</p>
         <p style="margin:0 0 14px;font-size:15px;line-height:1.7;text-align:left">Within each division the hymns are gathered under sub-topics — the hymnal's own headings, printed in small capitals at the top of every page — so that a hymn on assurance, or lament, or the Lord's Supper can be found by turning to its place in the book as readily as by its number.</p>
-        <p style="margin:0 0 18px;font-size:15px;line-height:1.7;text-align:left">Behind the hymns stand the indexes, the Apostles' and Nicene Creeds, the Westminster Confession of Faith and Shorter Catechism, the Hymns of the Month, and an introduction to family worship.</p>
+        <p style="margin:0 0 18px;font-size:15px;line-height:1.7;text-align:left">Behind the hymns stand the indices, the Apostles' and Nicene Creeds, the Westminster Confession of Faith and Shorter Catechism, the Hymns of the Month, and an introduction to family worship.</p>
         <button onClick="{{ goHymns }}" class="btn btn-secondary" style="background:none;white-space:nowrap">Browse the hymns by section →</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px">
@@ -489,6 +526,110 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       </div>
     </div>
   </section>
+</sc-if>
+
+<!-- ═════════ TIMELINE ═════════ -->
+<sc-if value="{{ isTimeline }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Timeline" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(32px,5vw,56px) clamp(20px,4vw,48px) 24px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:16px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-400)">Timeline</span><h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;margin:0;line-height:1;color:var(--color-bg)">Seventeen hundred years of singing</h1><p style="margin:0;font-size:18px;line-height:1.6;max-width:640px;color:var(--color-neutral-200);text-align:left">Every hymn in the book was written by someone, somewhere, at a particular moment. Move along the line to see when — and what else was happening in the world at the time.</p></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" role="group" aria-label="Jump to an era">
+        <sc-for list="{{ tlEras }}" as="er" hint-placeholder-count="6"><button onClick="{{ er.go }}" aria-pressed="{{ er.on }}" style="min-height:44px;padding:8px 16px;border:1px solid {{ er.border }};background:{{ er.bg }};color:{{ er.color }};border-radius:var(--radius-md);font-family:var(--font-body);font-size:16px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;text-align:left" style-hover="border-color:var(--color-accent-400);color:var(--color-accent-300)"><span>{{ er.label }}</span><span style="font-size:16px;color:var(--color-neutral-300);font-variant-numeric:tabular-nums">{{ er.range }}</span></button></sc-for>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:20px clamp(20px,4vw,48px) 0;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;font-size:16px;color:var(--color-neutral-700);flex:1 1 auto"><span style="display:flex;gap:8px;align-items:center;white-space:nowrap"><span style="width:14px;height:14px;border-radius:50%;background:var(--color-accent-400);border:2px solid var(--color-accent-700);display:inline-block;box-sizing:border-box"></span>Hymns</span><span style="display:flex;gap:8px;align-items:center;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;background:var(--color-neutral-500);display:inline-block"></span>What else was happening</span><sc-if value="{{ tlSample }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="font-size:16px;white-space:nowrap">Sample data · 12 hymns</span></sc-if></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;flex:none">
+        <button onClick="{{ tlZoomOut }}" aria-label="Zoom out" class="btn btn-secondary" style="background:none;min-width:44px;min-height:44px;font-size:22px;padding:0 14px">−</button>
+        <button onClick="{{ tlZoomIn }}" aria-label="Zoom in" class="btn btn-secondary" style="background:none;min-width:44px;min-height:44px;font-size:22px;padding:0 14px">+</button>
+        <button onClick="{{ tlSurprise }}" class="btn btn-primary" style="background:none;min-height:44px;font-size:16px;white-space:nowrap">Surprise me</button>
+        <button onClick="{{ tlPrint }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:16px;white-space:nowrap">Print a timeline strip</button>
+      </div>
+    </div>
+    <div class="tl-scroll" ref="{{ tlRef }}" onPointerDown="{{ tlDown }}" onPointerMove="{{ tlMove }}" onPointerUp="{{ tlUp }}" onPointerCancel="{{ tlUp }}" onPointerLeave="{{ tlUp }}" onTouchStart="{{ tlPinchStart }}" onTouchMove="{{ tlPinchMove }}" style="border:1px solid var(--color-divider);background:var(--color-surface)">
+      <div class="tl-canvas" style="--len:{{ tlLen }}px">
+        <sc-for list="{{ tlBands }}" as="b" hint-placeholder-count="6"><div class="tl-band" style="--pos:{{ b.pos }}px;--size:{{ b.size }}px;background:{{ b.bg }}"><span class="tl-band-label">{{ b.label }}</span></div></sc-for>
+        <div class="tl-axis"></div><div class="tl-axis2"></div>
+        <sc-for list="{{ tlTicks }}" as="t" hint-placeholder-count="6"><div class="tl-tick" style="--pos:{{ t.pos }}px"><span class="tl-tick-label">{{ t.label }}</span></div></sc-for>
+        <sc-for list="{{ tlHymnDots }}" as="d" hint-placeholder-count="6"><button class="tl-hymn" onClick="{{ d.go }}" aria-label="{{ d.aria }}" aria-pressed="{{ d.on }}" style="--pos:{{ d.pos }}px;--stag:{{ d.stag }}"><span class="tl-leader"></span><span class="tl-hymn-label" style="color:{{ d.labelColor }};opacity:{{ d.labelOp }}">{{ d.title }}<br>{{ d.yearLabel }}</span><span class="tl-hymn-dot" style="background:{{ d.bg }};transform:scale({{ d.scale }})"></span></button></sc-for>
+        <sc-for list="{{ tlWorldDots }}" as="w" hint-placeholder-count="6"><button class="tl-world" onClick="{{ w.go }}" aria-label="{{ w.aria }}" aria-pressed="{{ w.on }}" style="--pos:{{ w.pos }}px;--stag:{{ w.stag }}"><span class="tl-world-dot" style="background:{{ w.bg }}"></span><span class="tl-world-label" style="opacity:{{ w.labelOp }};color:{{ w.color }}">{{ w.year }} · {{ w.label }}</span></button></sc-for>
+      </div>
+    </div>
+    <span style="font-size:16px;color:var(--color-neutral-700)">{{ tlHint }}</span>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:8px clamp(20px,4vw,48px) 0">
+    <sc-if value="{{ tlHasSel }}" hint-placeholder-val="{{ false }}">
+      <div class="tl-card" style="border:1px solid var(--color-accent-300);border-radius:var(--radius-md);padding:clamp(20px,3vw,32px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px;background:var(--color-bg)">
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font-family:var(--font-heading);font-size:48px;line-height:1;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ tlSel.year }}</span><span style="font-size:16px;color:var(--color-neutral-700)">{{ tlSel.yearNote }}</span><span class="tag tag-accent" style="font-size:16px">{{ tlSel.age }}</span></div>
+          <h2 style="margin:0;font-size:clamp(28px,3.4vw,40px);font-weight:600;line-height:1.1">{{ tlSel.title }}</h2>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px;line-height:1.5"><span style="color:var(--color-neutral-700)">Words</span><span>{{ tlSel.author }}</span><span style="color:var(--color-neutral-700)">Music</span><span>{{ tlSel.composer }}</span></div>
+          <p style="margin:0;font-size:17px;line-height:1.65;text-align:left">{{ tlSel.story }}</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ tlSel.chips }}" as="c" hint-placeholder-count="2"><span class="tag tag-outline" style="font-size:16px">{{ c }}</span></sc-for></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><button onClick="{{ tlSel.open }}" class="btn btn-primary" style="background:none;min-height:44px;font-size:16px">{{ tlSel.findLabel }}</button><button onClick="{{ tlClose }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:16px">Close</button></div>
+        </div>
+        <sc-if value="{{ tlSel.hasStanza }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:10px;border-left:1px solid var(--color-divider);padding-left:24px"><span style="font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">First stanza</span><p style="margin:0;font-family:var(--font-heading);font-size:22px;line-height:1.5;white-space:pre-line;text-align:left">{{ tlSel.stanza }}</p></div></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ tlHasWorld }}" hint-placeholder-val="{{ false }}">
+      <div class="tl-card" style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:clamp(20px,3vw,28px);display:flex;flex-direction:column;gap:12px;background:var(--color-bg)">
+        <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">{{ tlWorld.year }}</span><span style="font-family:var(--font-heading);font-size:26px;font-weight:600;line-height:1.15">{{ tlWorld.label }}</span></div>
+        <span style="font-size:16px;color:var(--color-neutral-700)">Hymns from around the same time</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ tlWorld.near }}" as="nh" hint-placeholder-count="3"><button onClick="{{ nh.go }}" class="btn btn-secondary" style="background:none;min-height:44px;font-size:16px">{{ nh.label }}</button></sc-for></div>
+        <button onClick="{{ tlClose }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:16px;align-self:flex-start">Close</button>
+      </div>
+    </sc-if>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:clamp(36px,5vw,56px) clamp(20px,4vw,48px) clamp(48px,6vw,80px);display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Two short games</span><h2 style="margin:0;font-size:clamp(30px,4vw,44px);font-weight:400;line-height:1.05">Try what you’ve learned</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;align-items:start">
+      <div class="card" style="padding:clamp(20px,3vw,28px);display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:var(--font-heading);font-size:28px;font-weight:600;line-height:1.1">Put them in order</span>
+        <p style="margin:0;font-size:16px;line-height:1.6;color:var(--color-neutral-700);text-align:left">{{ g1Intro }}</p>
+        <sc-if value="{{ g1Idle }}" hint-placeholder-val="{{ true }}"><button onClick="{{ g1Start }}" class="btn btn-primary" style="background:none;min-height:44px;font-size:16px;align-self:flex-start">Start</button></sc-if>
+        <sc-if value="{{ g1Active }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:16px;line-height:1.5;color:var(--color-neutral-700)">Oldest first. Tap a hymn to put it in the next empty space, or drag it to where you think it goes. Tap a placed hymn to take it back.</span>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ g1Slots }}" as="s" hint-placeholder-count="5">
+                <div onDragOver="{{ s.over }}" onDrop="{{ s.drop }}" style="display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;min-height:52px;border:1px dashed {{ s.border }};border-radius:var(--radius-md);padding:4px 12px;background:{{ s.bg }}">
+                  <span style="font-family:var(--font-heading);font-size:22px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ s.i }}</span>
+                  <button onClick="{{ s.tap }}" disabled="{{ s.empty }}" style="all:unset;cursor:pointer;font-size:16px;line-height:1.3;min-height:44px;display:flex;align-items:center;color:{{ s.textColor }}">{{ s.text }}</button>
+                  <span style="font-size:16px;color:{{ s.markColor }};font-variant-numeric:tabular-nums;white-space:nowrap">{{ s.mark }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;min-height:44px">
+              <sc-for list="{{ g1Pool }}" as="p" hint-placeholder-count="5"><button draggable="true" onDragStart="{{ p.drag }}" onClick="{{ p.tap }}" class="btn btn-secondary" style="background:var(--color-bg);min-height:44px;font-size:16px;text-align:left;line-height:1.3;cursor:grab">{{ p.text }}</button></sc-for>
+            </div>
+            <sc-if value="{{ g1Done }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-family:var(--font-heading);font-size:22px;line-height:1.4;color:var(--color-accent-700);text-align:left">{{ g1Message }}</p></sc-if>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-if value="{{ g1CanCheck }}" hint-placeholder-val="{{ false }}"><button onClick="{{ g1Check }}" class="btn btn-primary" style="background:none;min-height:44px;font-size:16px">Check my order</button></sc-if><button onClick="{{ g1Start }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:16px">{{ g1AgainLabel }}</button></div>
+          </div>
+        </sc-if>
+      </div>
+      <div class="card" style="padding:clamp(20px,3vw,28px);display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:var(--font-heading);font-size:28px;font-weight:600;line-height:1.1">Who wrote it?</span>
+        <p style="margin:0;font-size:16px;line-height:1.6;color:var(--color-neutral-700);text-align:left">Four hymns, four writers. Tap a hymn, then tap the person you think wrote the words.</p>
+        <sc-if value="{{ g2Idle }}" hint-placeholder-val="{{ true }}"><button onClick="{{ g2Start }}" class="btn btn-primary" style="background:none;min-height:44px;font-size:16px;align-self:flex-start">Start</button></sc-if>
+        <sc-if value="{{ g2Active }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px">
+            <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ g2Hymns }}" as="gh" hint-placeholder-count="4"><button onClick="{{ gh.tap }}" aria-pressed="{{ gh.on }}" style="min-height:64px;padding:8px 12px;border:1px solid {{ gh.border }};background:{{ gh.bg }};border-radius:var(--radius-md);font-family:var(--font-body);font-size:16px;line-height:1.3;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;color:var(--color-text)"><span style="font-family:var(--font-heading);font-size:18px;font-weight:600">{{ gh.title }}</span><span style="font-size:16px;color:{{ gh.pairColor }}">{{ gh.pair }}</span></button></sc-for></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ g2Authors }}" as="ga" hint-placeholder-count="4"><button onClick="{{ ga.tap }}" style="min-height:64px;padding:8px 12px;border:1px solid {{ ga.border }};background:{{ ga.bg }};border-radius:var(--radius-md);font-family:var(--font-body);font-size:16px;line-height:1.3;text-align:left;cursor:pointer;color:{{ ga.color }}">{{ ga.name }}</button></sc-for></div>
+          </div>
+          <sc-if value="{{ g2Done }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-family:var(--font-heading);font-size:22px;line-height:1.4;color:var(--color-accent-700);text-align:left">{{ g2Message }}</p></sc-if>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-if value="{{ g2CanCheck }}" hint-placeholder-val="{{ false }}"><button onClick="{{ g2Check }}" class="btn btn-primary" style="background:none;min-height:44px;font-size:16px">Check my answers</button></sc-if><button onClick="{{ g2Start }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:16px">{{ g2AgainLabel }}</button></div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+  <div class="tl-print" ref="{{ tlPrintRef }}" style="display:none;padding:24px;font-family:var(--font-body);color:#201f1d;background:#fff">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:1px solid #999;padding-bottom:8px;margin-bottom:12px"><span style="font-family:var(--font-heading);font-size:20pt">Covenant Hymnal · Timeline strip</span><span style="font-size:12pt">Cut along the dotted lines and tape the cards end to end, oldest on the left.</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:0">
+      <sc-for list="{{ tlPrintCards }}" as="pc" hint-placeholder-count="6"><div style="width:2.5in;height:2.4in;border:1px dashed #777;padding:10px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;break-inside:avoid;background:{{ pc.bg }}"><span style="font-family:var(--font-heading);font-size:24pt;line-height:1;color:{{ pc.yearColor }}">{{ pc.year }}</span><span style="font-family:var(--font-heading);font-size:14pt;line-height:1.15;font-weight:600">{{ pc.title }}</span><span style="font-size:12pt;line-height:1.3">{{ pc.sub }}</span><span style="font-size:12pt;margin-top:auto;color:#555">{{ pc.foot }}</span></div></sc-for>
+    </div>
+  </div>
 </sc-if>
 
 <!-- ═════════ HYMNS (index) ═════════ -->
@@ -708,6 +849,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
   </section>
 </sc-if>
 
+<!-- ═════════ HISTORY ═════════ -->
+<sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}"><dc-import name="History" open-hymn="{{ openHymnFn }}" go-timeline="{{ goTimelineFn }}" hint-size="100%,1400px"></dc-import></sc-if>
+
 <footer style="background:#15283f;color:var(--color-neutral-300);margin-top:0">
   <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,4vw,48px) 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:36px">
     <div style="display:flex;flex-direction:column;gap:14px;grid-column:span 2;min-width:0">
@@ -791,7 +935,7 @@ const FAQS = [
 ];
 
 class Component extends DCLogic {
-  componentDidMount() { this.readHash(); window.addEventListener('hashchange', () => this.readHash()); import('./hymn-notes.js').then(m => this.setState({ notes: m.NOTES, downloadsMap: m.DOWNLOADS, listenMap: m.LISTEN })).catch(() => {}); import('./hymns-data.js').then(m => this.setState({ hymns: m.HYMNS, texts: m.TEXTS, refrains: m.REFRAINS || {}, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS })); }
+  componentDidMount() { this.readHash(); window.addEventListener('hashchange', () => this.readHash()); import('./hymn-notes.js').then(m => this.setState({ notes: m.NOTES, downloadsMap: m.DOWNLOADS, listenMap: m.LISTEN })).catch(() => {}); import('./hymns-data.js').then(m => { this.setState({ hymns: m.HYMNS, texts: m.TEXTS, refrains: m.REFRAINS || {}, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS }); this.tlLoad(m); }); }
   hymnVals() {
     const { hymns = [], texts = {}, sectionOrder = [], q = '', view = 'sections', hymn } = this.state;
     const norm = s => String(s ?? '').toLowerCase();
@@ -811,7 +955,7 @@ class Component extends DCLogic {
     else { const PI = this.state.psalmIndex || []; const byN = new Map(hymns.map(x => [x.n, x])); const m = new Map();
       PI.forEach(r => r.hymns.forEach(n => { const x = byN.get(n); if (!x || !hit(x)) return; (m.get(r.psalm) || m.set(r.psalm, []).get(r.psalm)).push({ ...row(x), title: r.title, subtitle: r.kind + ' · ' + r.category, kind: r.kind, category: r.category }); }));
       groups = [...m.entries()].sort((a, b) => a[0] - b[0]).map(([k, rows]) => ({ name: 'Psalm ' + k, meta: rows.length + (rows.length === 1 ? ' setting' : ' settings'), rows: rows.map(r => ({ ...r, author: hymns.find(x => x.n === r.n).author, kindShort: r.kind === 'Metrical setting' ? 'Metrical' : r.kind })) })); }
-    const views = [['sections', 'By section'], ['titles', 'Titles'], ['tunes', 'Tunes'], ['authors', 'Authors'], ['composers', 'Composers'], ['psalms', 'Psalms'], ['ancient', 'Ancient & Medieval'], ['topics', 'Topics']].map(([k, label]) => ({ label, go: () => this.setState({ view: k }), line: view === k ? 'var(--color-accent-400)' : 'transparent', color: view === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
+    const views = [['sections', 'By section'], ['titles', 'Titles'], ['tunes', 'Tunes'], ['authors', 'Authors'], ['composers', 'Composers'], ['psalms', 'Psalms'], ['topics', 'Topics']].map(([k, label]) => ({ label, go: () => this.setState({ view: k }), line: view === k ? 'var(--color-accent-400)' : 'transparent', color: view === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const h = hymns.find(x => x.n === hymn) || hymns[0] || {};
     const idx = hymns.indexOf(h); const prev = hymns[idx - 1], next = hymns[idx + 1];
     const others = hymns.filter(x => x.n !== h.n);
@@ -885,7 +1029,7 @@ class Component extends DCLogic {
       listen: { hasVideo: !!id, noVideo: !id, embed: id ? 'https://www.youtube-nocookie.com/embed/' + id : '', label: (L && L.label) || 'Lyric video to come' },
     };
   }
-  readHash() { const m = (location.hash || '').replace(/^#\/?/, ''); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','order','journal','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
+  readHash() { const m = (location.hash || '').replace(/^#\/?/, ''); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','history','timeline','order','journal','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
   setHash(s) { try { if (('#' + s) !== location.hash) history.replaceState(null, '', '#' + s); } catch (_) {} }
   shareVals(p, h, N) {
     const base = location.href.split('#')[0]; const url = base + '#' + (p === 'hymn' ? 'hymn/' + h.n : p === 'home' ? '' : p);
@@ -893,6 +1037,85 @@ class Component extends DCLogic {
     const title = p === 'hymn' ? `${h.n} · ${h.title} — Covenant Hymnal` : names[p] || 'Covenant Hymnal';
     const text = p === 'hymn' && N && N.blurb ? N.blurb.replace(/\[\^\d+\]/g, '') : '';
     return { shareLabel: this.state.shared ? 'Link copied' : 'Share', share: async () => { const data = { title, text, url }; try { if (navigator.share && (!navigator.canShare || navigator.canShare(data))) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; } try { await navigator.clipboard.writeText(url); } catch (_) { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } this.setState({ shared: true }); setTimeout(() => this.setState({ shared: false }), 1800); } };
+  }
+  // ── Timeline page ──
+  tlRef = React.createRef(); tlPrintRef = React.createRef();
+  tlLoad(m) {
+    const real = m.ERAS && m.WORLD_EVENTS && (m.HYMNS || []).some(h => h.featured && h.year);
+    if (real) this.setState({ tl: { hymns: m.HYMNS.filter(h => h.featured && h.year), eras: m.ERAS, events: m.WORLD_EVENTS, sample: false } });
+    else import('./timeline-sample.js').then(s => this.setState({ tl: { hymns: s.SAMPLE_HYMNS.map(x => ({ ...(m.HYMNS.find(h => h.n === x.n) || {}), ...x })), eras: s.SAMPLE_ERAS, events: s.SAMPLE_WORLD_EVENTS, sample: true } })).catch(() => {});
+  }
+  tlV() { return typeof window !== 'undefined' && window.matchMedia('(max-width:760px)').matches; }
+  tlZoomVal() { return this.state.tlZoom || (this.tlV() ? 0.9 : 1.1); }
+  tlPos(y) { return (y - 300) * this.tlZoomVal() + (this.tlV() ? 48 : 240); }
+  tlScrollTo(pos, smooth = true) { const el = this.tlRef.current; if (!el) return; const b = smooth && !window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'; if (this.tlV()) el.scrollTo({ top: pos - el.clientHeight / 2, behavior: b }); else el.scrollTo({ left: pos - el.clientWidth / 2, behavior: b }); }
+  tlSetZoom(z) { z = Math.max(0.5, Math.min(6, z)); const el = this.tlRef.current; const cur = this.tlZoomVal(); let cy = null; if (el) { const c = this.tlV() ? el.scrollTop + el.clientHeight / 2 : el.scrollLeft + el.clientWidth / 2; cy = (c - (this.tlV() ? 48 : 240)) / cur + 300; } this.setState({ tlZoom: z }, () => { if (cy != null) this.tlScrollTo(this.tlPos(cy), false); }); }
+  tlSelect(n) { this.setState({ tlSel: n, tlWorld: null }); const h = ((this.state.tl || {}).hymns || []).find(x => x.n === n); if (h) this.tlScrollTo(this.tlPos(h.year)); }
+  tlName(s) { const t = String(s || '').replace(/,\s*(ca\. )?\d{3,4}.*$/, '').replace(/:.*$/, '').replace(/\s*\(.*$/, '').trim(); return t || 'Unknown'; }
+  tlDown = e => { if (e.pointerType !== 'mouse') return; const el = this.tlRef.current; this.tlDrag = { x: e.clientX, y: e.clientY, sl: el.scrollLeft, st: el.scrollTop, moved: false }; };
+  tlMove = e => { const d = this.tlDrag; if (!d) return; const el = this.tlRef.current; const dx = e.clientX - d.x, dy = e.clientY - d.y; if (Math.abs(dx) + Math.abs(dy) > 4) d.moved = true; if (this.tlV()) el.scrollTop = d.st - dy; else el.scrollLeft = d.sl - dx; };
+  tlUp = () => { if (this.tlDrag && this.tlDrag.moved) { this.tlDragged = true; setTimeout(() => { this.tlDragged = false; }, 60); } this.tlDrag = null; };
+  tlPinchStart = e => { if (e.touches.length === 2) this.tlPinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); };
+  tlPinchMove = e => { if (e.touches.length === 2 && this.tlPinch) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); if (Math.abs(d / this.tlPinch - 1) > 0.08) { this.tlSetZoom(this.tlZoomVal() * d / this.tlPinch); this.tlPinch = d; } } };
+  tlPrintStrip() {
+    const el = this.tlPrintRef.current; if (!el) return; const hidden = []; let node = el;
+    while (node && node.parentElement && node !== document.body) { const parent = node.parentElement; for (const sib of parent.children) if (sib !== node) { hidden.push([sib, sib.style.display]); sib.style.display = 'none'; } node = parent; }
+    el.style.display = 'block';
+    const restore = () => { el.style.display = 'none'; while (hidden.length) { const [s, d] = hidden.pop(); s.style.display = d; } window.removeEventListener('afterprint', restore); };
+    window.addEventListener('afterprint', restore);
+    setTimeout(() => { window.print(); setTimeout(restore, 800); }, 60);
+  }
+  tlVals() {
+    const tl = this.state.tl; const texts = this.state.texts || {};
+    if (!tl) return { tlEras: [], tlBands: [], tlTicks: [], tlHymnDots: [], tlWorldDots: [], tlLen: 2000, tlSample: false, tlHint: 'Loading the timeline…', tlRef: this.tlRef, tlPrintRef: this.tlPrintRef, tlPrintCards: [], tlSel: {}, tlWorld: {}, g1Idle: true, g2Idle: true, g1Intro: '' };
+    const { hymns, eras, events } = tl; const z = this.tlZoomVal(); const pos = y => this.tlPos(y); const V = this.tlV();
+    const sorted = hymns.slice().sort((a, b) => a.year - b.year);
+    const eraOf = h => eras.find(e => e.id === h.eraId) || eras.find(e => h.year >= e.start && h.year < e.end) || eras[eras.length - 1];
+    const era = eras.find(e => e.id === this.state.tlEra) || null;
+    const half = () => { const el = this.tlRef.current; return el ? (V ? el.clientHeight : el.clientWidth) / 2 : 400; };
+    const tlEras = eras.map(e => { const on = era && era.id === e.id; return { label: e.label, range: e.start <= 300 ? 'to ' + e.end : e.start + '–' + (e.end >= 2030 ? 'today' : e.end), on: !!on, border: on ? 'var(--color-accent-400)' : 'rgba(243,242,242,.35)', bg: on ? 'rgba(182,130,53,.18)' : 'transparent', color: on ? 'var(--color-accent-300)' : 'var(--color-bg)', go: () => { this.setState({ tlEra: e.id }); this.tlScrollTo(pos(Math.max(300, e.start)) - 24 + half()); } }; });
+    const tlBands = eras.map((e, i) => { const a = pos(Math.max(300, e.start)), b = pos(Math.min(2030, e.end)); return { pos: a, size: b - a, label: e.label, bg: era && era.id === e.id ? 'var(--color-accent-100)' : i % 2 ? 'var(--color-neutral-100)' : 'transparent' }; });
+    const step = z < 0.8 ? 200 : 100; const tlTicks = []; for (let y = 400; y <= 2000; y += step) tlTicks.push({ pos: pos(y), label: y });
+    const labelOp = z < 0.7 ? 0 : 1;
+    const tlHymnDots = sorted.map((h, i) => { const on = this.state.tlSel === h.n; return { pos: pos(h.year), stag: i % 3, title: h.title.length > 34 ? h.title.slice(0, 32).trim() + '…' : h.title, yearLabel: h.yearNote || String(h.year), aria: `${h.title}, ${h.yearNote || h.year}`, on, bg: on ? 'var(--color-accent-700)' : 'var(--color-accent-400)', scale: on ? 1.5 : 1, labelColor: on ? 'var(--color-accent-700)' : 'var(--color-text)', labelOp: on ? 1 : labelOp, go: () => { if (this.tlDragged) return; this.tlSelect(h.n); } }; });
+    const evs = events.slice().sort((a, b) => a.year - b.year);
+    const tlWorldDots = evs.map((ev, i) => { const on = this.state.tlWorld === ev.year; return { pos: pos(ev.year), stag: i % 2, year: ev.year, label: ev.label, aria: `${ev.year}, ${ev.label}`, on, bg: on ? 'var(--color-neutral-800)' : 'var(--color-neutral-500)', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', labelOp: on ? 1 : labelOp, go: () => { if (this.tlDragged) return; this.setState({ tlWorld: ev.year, tlSel: null }); this.tlScrollTo(pos(ev.year)); } }; });
+    const sel = hymns.find(h => h.n === this.state.tlSel); const now = new Date().getFullYear();
+    const age = y => { const a = now - y; return a < 10 ? 'brand new' : 'about ' + (a < 100 ? Math.round(a / 5) * 5 : Math.round(a / 10) * 10) + ' years old'; };
+    const stz = sel && texts[sel.n] && texts[sel.n][0];
+    const tlSel = sel ? { year: sel.year, yearNote: sel.yearNote && sel.yearNote !== String(sel.year) ? sel.yearNote : '', age: age(sel.year), title: sel.title, author: this.tlName(sel.authorName), composer: this.tlName(sel.composerName) === 'Unknown' ? '—' : this.tlName(sel.composerName), story: sel.story || '', chips: (sel.scriptures || []).slice(0, 3), hasStanza: !!stz, stanza: stz ? stz.join('\n') : '', findLabel: `Find it in the hymnal: No. ${sel.n}, page ${sel.page}`, open: () => this.openHymn(sel.n) } : {};
+    const wev = evs.find(e => e.year === this.state.tlWorld);
+    const tlWorld = wev ? { year: wev.year, label: wev.label, near: sorted.map(h => ({ h, d: Math.abs(h.year - wev.year) })).sort((a, b) => a.d - b.d).slice(0, 3).map(x => ({ label: `${x.h.year} · ${x.h.title}`, go: () => this.tlSelect(x.h.n) })) } : {};
+    const tlPrintCards = [...sorted.map(h => ({ year: h.year, title: h.title, sub: 'Words: ' + this.tlName(h.authorName) + (this.tlName(h.composerName) !== 'Unknown' ? ' · Music: ' + this.tlName(h.composerName) : ''), foot: `No. ${h.n} · page ${h.page}`, bg: '#fff', yearColor: '#8a5a1f' })), ...evs.map(e => ({ year: e.year, title: e.label, sub: 'What else was happening', foot: '', bg: '#f0eee9', yearColor: '#555' }))].sort((a, b) => a.year - b.year);
+    // Game 1 — put them in order
+    const shuf = a => a.slice().sort(() => Math.random() - .5); const ORD = ['first', 'second', 'third', 'fourth', 'fifth'];
+    const g1 = this.state.g1; const byN = n => hymns.find(h => h.n === n);
+    const g1Start = () => { let cands = era ? sorted.filter(h => eraOf(h).id === era.id) : sorted; if (cands.length < 5) { const mid = era ? (era.start + era.end) / 2 : 1500; const rest = sorted.filter(h => !cands.includes(h)).sort((a, b) => Math.abs(a.year - mid) - Math.abs(b.year - mid)); cands = cands.concat(rest.slice(0, 5 - cands.length)); } const seen = new Set(); const picks = shuf(cands).filter(h => !seen.has(h.year) && seen.add(h.year)).slice(0, 5); this.setState({ g1: { answer: picks.slice().sort((a, b) => a.year - b.year).map(h => h.n), pool: shuf(picks).map(h => h.n), slots: [null, null, null, null, null], done: false, correct: 0 } }); };
+    const g1Place = (n, i) => this.setState(s => { const g = s.g1; if (!g || g.done) return null; const slots = g.slots.slice(); let pool = g.pool.filter(x => x !== n); const from = slots.indexOf(n); if (from >= 0) slots[from] = null; if (slots[i]) pool = pool.concat(slots[i]); slots[i] = n; return { g1: { ...g, slots, pool } }; });
+    const g1Return = n => this.setState(s => { const g = s.g1; if (!g || g.done) return null; return { g1: { ...g, slots: g.slots.map(x => x === n ? null : x), pool: g.pool.concat(n) } }; });
+    const tile = n => { const h = byN(n); return h ? `${h.title} — ${this.tlName(h.authorName)}` : ''; };
+    const g1Slots = g1 ? g1.slots.map((n, i) => { const h = n && byN(n); const ok = g1.done && n === g1.answer[i]; return { i: i + 1, empty: !n, text: h ? tile(n) : 'Empty', textColor: h ? 'var(--color-text)' : 'var(--color-neutral-500)', border: g1.done ? (ok ? 'var(--color-accent)' : 'var(--color-neutral-500)') : n ? 'var(--color-accent-300)' : 'var(--color-neutral-400)', bg: n ? 'var(--color-bg)' : 'transparent', mark: g1.done && h ? (ok ? `✓ ${h.year}` : `${h.year} · goes ${ORD[g1.answer.indexOf(n)]}`) : '', markColor: ok ? 'var(--color-accent-700)' : 'var(--color-neutral-700)', tap: () => n && g1Return(n), over: e => e.preventDefault(), drop: e => { e.preventDefault(); const d = Number(e.dataTransfer.getData('text/plain')); if (d) g1Place(d, i); } }; }) : [];
+    const g1Pool = g1 ? g1.pool.map(n => ({ text: tile(n), tap: () => { const i = g1.slots.indexOf(null); if (i >= 0) g1Place(n, i); }, drag: e => e.dataTransfer.setData('text/plain', String(n)) })) : [];
+    const g1Msg = c => c === 5 ? 'All five in the right order — you know your hymn history!' : c >= 3 ? `${c} of five in the right place — very close. The years are shown beside each one.` : c >= 1 ? `${c} of five — these are tricky ones. Now you can see the order they were written.` : 'None this time — but now you know! Have another go, or pick a different era.';
+    // Game 2 — who wrote it?
+    const g2 = this.state.g2;
+    const g2Start = () => { const seen = new Set(); const cands = shuf(sorted).filter(h => { const a = this.tlName(h.authorName); return /^[A-Z][a-z]+ .*[A-Z]/.test(a) && !/^(Latin|Trad|Anon|Plainsong|Irish|John Rippon|Genevan)/i.test(h.authorName) && !seen.has(a) && seen.add(a); }).slice(0, 4); this.setState({ g2: { hymns: cands.map(h => h.n), authors: shuf(cands.map(h => this.tlName(h.authorName))), pairs: {}, active: null, done: false, correct: 0 } }); };
+    const g2Hymns = g2 ? g2.hymns.map(n => { const h = byN(n); const right = this.tlName(h.authorName); const p = g2.pairs[n]; const on = g2.active === n; const ok = g2.done && p === right; return { title: h.title, on, border: on ? 'var(--color-accent)' : p ? 'var(--color-accent-300)' : 'var(--color-neutral-400)', bg: on ? 'var(--color-accent-100)' : 'transparent', pair: g2.done ? (ok ? `✓ ${p}` : `${p} — it was ${right}`) : (p || 'Tap, then choose a writer →'), pairColor: ok ? 'var(--color-accent-700)' : 'var(--color-neutral-700)', tap: () => { if (g2.done) return; if (on) { const pairs = { ...g2.pairs }; delete pairs[n]; this.setState({ g2: { ...g2, pairs, active: null } }); } else this.setState({ g2: { ...g2, active: n } }); } }; }) : [];
+    const g2Authors = g2 ? g2.authors.map(name => { const usedBy = Object.keys(g2.pairs).find(k => g2.pairs[k] === name); return { name, border: usedBy ? 'var(--color-accent-300)' : 'var(--color-neutral-400)', bg: usedBy ? 'var(--color-neutral-100)' : 'transparent', color: usedBy ? 'var(--color-neutral-700)' : 'var(--color-text)', tap: () => { if (g2.done || !g2.active) return; const pairs = { ...g2.pairs }; if (usedBy) delete pairs[usedBy]; pairs[g2.active] = name; this.setState({ g2: { ...g2, pairs, active: null } }); } }; }) : [];
+    const g2Msg = c => c === 4 ? 'All four right — you know who wrote them!' : c >= 2 ? `${c} of four — well done. The right names are shown now.` : `${c} of four — those were hard ones. Have a look at who wrote what and try again.`;
+    return {
+      tlRef: this.tlRef, tlPrintRef: this.tlPrintRef, tlSample: tl.sample, tlEras, tlBands, tlTicks, tlHymnDots, tlWorldDots, tlLen: (2030 - 300) * z + (V ? 96 : 480), tlPrintCards,
+      tlHint: sel || wev ? '' : V ? 'Scroll down the line and tap a gold dot to open a hymn. Pinch, or use − and +, to zoom.' : 'Drag or scroll sideways and tap a gold dot to open a hymn. Use − and + to zoom.',
+      tlHasSel: !!sel, tlSel, tlHasWorld: !!wev, tlWorld, tlClose: () => this.setState({ tlSel: null, tlWorld: null }),
+      tlSurprise: () => { const pool = hymns.filter(h => h.n !== this.state.tlSel); const h = pool[Math.floor(Math.random() * pool.length)]; if (h) this.tlSelect(h.n); },
+      tlZoomIn: () => this.tlSetZoom(z * 1.4), tlZoomOut: () => this.tlSetZoom(z / 1.4), tlPrint: () => this.tlPrintStrip(),
+      tlDown: this.tlDown, tlMove: this.tlMove, tlUp: this.tlUp, tlPinchStart: this.tlPinchStart, tlPinchMove: this.tlPinchMove,
+      g1Intro: era ? `Five hymns from ${era.label}. Which came first?` : 'Five hymns from across the centuries. Which came first? Pick an era above to play with hymns from one time.',
+      g1Idle: !g1, g1Active: !!g1, g1Slots, g1Pool, g1Done: !!(g1 && g1.done), g1Message: g1 ? g1Msg(g1.correct) : '', g1CanCheck: !!(g1 && !g1.done && g1.slots.every(Boolean)), g1AgainLabel: g1 && g1.done ? 'Play again' : 'New set', g1Start,
+      g1Check: () => this.setState(s => ({ g1: { ...s.g1, done: true, correct: s.g1.slots.filter((n, i) => n === s.g1.answer[i]).length } })),
+      g2Idle: !g2, g2Active: !!g2, g2Hymns, g2Authors, g2Done: !!(g2 && g2.done), g2Message: g2 ? g2Msg(g2.correct) : '', g2CanCheck: !!(g2 && !g2.done && g2.hymns.every(n => g2.pairs[n])), g2AgainLabel: g2 && g2.done ? 'Play again' : 'New set', g2Start,
+      g2Check: () => this.setState(s => ({ g2: { ...s.g2, done: true, correct: s.g2.hymns.filter(n => s.g2.pairs[n] === this.tlName(byN(n).authorName)).length } })),
+    };
   }
   openHymn(n) { this.setHash('hymn/' + n); this.setState({ hymn: n, page: 'hymn', noteOpen: {}, downloadsOpen: false }); try { localStorage.setItem('cvh2-page', 'hymn'); localStorage.setItem('cvh2-hymn', String(n)); } catch (_) {} window.scrollTo({ top: 0 }); }
   state = { menuOpen: false, hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
@@ -909,15 +1132,15 @@ class Component extends DCLogic {
   renderVals() {
     const p = this.state.page; const c = this.cycle();
     const year = this.state.year ?? c.yi;
-    const labels = [['home','Home'],['about','About'],['hymnal','Inside'],['hymns','The Hymns'],['order','Order'],['journal','Journal'],['faq','FAQ'],['contact','Contact']];
-    const active = p === 'article' ? 'journal' : p === 'hymn' ? 'hymns' : p;
+    const labels = [['home','Home'],['about','About'],['hymnal','Inside'],['hymns','The Hymns'],['history','History'],['order','Order'],['journal','Journal'],['faq','FAQ'],['contact','Contact']];
+    const active = p === 'article' ? 'journal' : p === 'hymn' ? 'hymns' : p === 'timeline' ? 'history' : p;
     const nav = labels.map(([k, label]) => ({ label, go: this.go(k), line: active === k ? 'var(--color-accent-400)' : 'transparent', color: active === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const hero = this.props.heroLayout ?? 'book-and-letter';
     const qtys = ['1', '2–10', '11–50', '50+']; const subs = ['Ordering', 'Permissions', 'Corrections', 'Other'];
     return {
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), menuLabel: this.state.menuOpen ? 'Close ✕' : 'Menu ☰', menuOpenClass: this.state.menuOpen ? 'open' : '',
       nav, showUtility: this.props.showUtilityBar ?? true, ...this.shareVals(p, (this.state.hymns || []).find(x => x.n === this.state.hymn) || {}, (this.state.notes || {})[this.state.hymn]),
-      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'), goContact: this.go('contact'),
+      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', isTimeline: p === 'timeline', isHistory: p === 'history', openHymnFn: n => this.openHymn(n), goTimelineFn: () => this.go('timeline')(), ...this.tlVals(), goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'), goContact: this.go('contact'),
       isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isSources: p === 'sources', isContact: p === 'contact',
       heroLetter: hero === 'book-and-letter', heroCentered: hero === 'book-centered',
       goHome: this.go('home'), goAbout: this.go('about'), goHymnal: this.go('hymnal'), goOrder: this.go('order'), goJournal: this.go('journal'), goArticle: this.go('article'),
@@ -945,9 +1168,9 @@ class Component extends DCLogic {
         { num: 'III', title: 'Creeds and standards', body: 'The Apostles’ and Nicene Creeds, the Westminster Confession of Faith, and the Shorter Catechism, bound in the back for public and family use.', link: 'Statements of faith →', go: this.go('about') },
         { num: 'IV', title: 'Hymns of the Month', body: 'A five-year cycle of twelve hymns a year, chosen so that children and families learn the music of worship together.', link: 'The five-year cycle →', go: this.go('home') },
         { num: 'V', title: 'Family worship', body: 'An introduction to worship in the home — why, what, and how — with a simple pattern of Scripture, hymn, and prayer.', link: 'Read the introduction →', go: this.go('about') },
-        { num: 'VI', title: 'Indexes', body: 'Titles and first lines, tunes, meters, authors and composers, Scripture, topics, and Psalms — every one searchable on this site.', link: 'Search the indexes →', go: this.go('hymns') },
+        { num: 'VI', title: 'Indices', body: 'Titles and first lines, tunes, meters, authors and composers, Scripture, topics, and Psalms — every one searchable on this site.', link: 'Search the indices →', go: this.go('hymns') },
       ],
-      backMatter: ['Indexes', 'Apostles’ & Nicene Creeds', 'Westminster Confession of Faith', 'Shorter Catechism', 'Hymns of the Month', 'Family Worship'],
+      backMatter: ['Indices', 'Apostles’ & Nicene Creeds', 'Westminster Confession of Faith', 'Shorter Catechism', 'Hymns of the Month', 'Family Worship'],
       glance: [
         { mark: '①', label: 'Number', body: 'printed beside the title at the outer margin.' },
         { mark: '②', label: 'Section and sub-topic', body: 'in small capitals above the hymn, section at left and sub-topic at right.' },
@@ -961,7 +1184,7 @@ class Component extends DCLogic {
         { kicker: 'For home', title: 'Single copies', body: 'For family and personal worship — the Hymns of the Month and an introduction to family worship are bound in.', unit: 'per copy' },
         { kicker: 'For congregations', title: 'Pew quantities', body: 'For churches placing the hymnal in the pew rack. Note your church and the number of copies on the reservation.', unit: 'by the case' },
       ],
-      included: ['Hymns, psalm settings, and service music in ten sections', 'Indexes of the hymnal', 'The Apostles’ and Nicene Creeds', 'The Westminster Confession of Faith and Shorter Catechism', 'Hymns of the Month, a five-year cycle', 'Family Worship: an introduction'],
+      included: ['Hymns, psalm settings, and service music in ten sections', 'Indices of the hymnal', 'The Apostles’ and Nicene Creeds', 'The Westminster Confession of Faith and Shorter Catechism', 'Hymns of the Month, a five-year cycle', 'Family Worship: an introduction'],
       qtyOpts: qtys.map(q => ({ label: q, checked: this.state.qty === q, pick: () => this.setState({ qty: q }) })),
       qty: this.state.qty,
       orderOpen: !this.state.orderSent, orderSent: this.state.orderSent,

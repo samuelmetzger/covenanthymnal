@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/classical-209a1473-d8f0-4fef-9222-5ea2b81c993d/styles.css">
+<style>
+.hx-row{position:relative}
+@media (max-width:1100px){
+  .hx-band-seg > span:first-child{white-space:normal!important;overflow:visible!important;font-size:12px!important;letter-spacing:.04em!important;line-height:1.25;min-height:2.5em}
+}
+@media (max-width:760px){
+  .hx-row{flex-direction:column!important;overflow:visible!important;scroll-snap-type:none!important}
+  .hx-row > button{width:100%!important}
+  .hx-erahead{position:sticky;top:44px;z-index:15}
+  .hx-band-tick{display:none!important}
+  .hx-band-track{overflow-x:auto;scrollbar-width:none}
+  .hx-band-seg{flex:none!important;padding:12px 14px 10px!important}
+  .hx-band-seg > span:first-child{white-space:nowrap!important;min-height:0!important}
+  .hx-grid > button{grid-column:span 1!important}
+  .hx-listrow{grid-template-columns:1fr!important}
+}
+@media (prefers-reduced-motion:reduce){.hx-root *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div class="hx-root" data-screen-label="History" style="font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(28px,4vw,48px) clamp(16px,3vw,40px) 0">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px 32px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px">
+        <span style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-700)">History</span>
+        <h1 style="font-family:var(--font-heading);font-weight:500;font-size:clamp(34px,5vw,60px);letter-spacing:.06em;text-transform:uppercase;margin:0;line-height:1.02">The Hymnal in History</h1>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);text-align:left">From the Psalms to today: the hymns of the Covenant Hymnal set in the story of the church, of music and of the world.</p>
+      </div>
+      <div role="group" aria-label="View" style="display:flex;border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden;flex-wrap:wrap">
+        <sc-for list="{{ views }}" as="v" hint-placeholder-count="4"><button onClick="{{ v.go }}" aria-pressed="{{ v.pressed }}" style="min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--color-divider);background:{{ v.bg }};color:{{ v.fg }};font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">{{ v.label }}</button></sc-for>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px 24px;flex-wrap:wrap;align-items:center;margin-top:24px">
+      <div style="position:relative;flex:1 1 300px;max-width:520px">
+        <input type="search" value="{{ q }}" onChange="{{ setQ }}" aria-label="Search the history" placeholder="Find a hymn, author, composer or event" style="width:100%;box-sizing:border-box;min-height:48px;padding:10px 16px;font-size:16px;font-family:var(--font-body);border:1px solid var(--color-neutral-400);border-radius:var(--radius-md);background:var(--color-surface, #fff);color:var(--color-text)">
+        <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
+          <div role="listbox" style="position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-md);box-shadow:0 10px 28px rgba(0,0,0,.12);z-index:40;display:flex;flex-direction:column;max-height:360px;overflow-y:auto">
+            <sc-for list="{{ results }}" as="r" hint-placeholder-count="3"><button onClick="{{ r.go }}" role="option" style="all:unset;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:10px 16px;border-bottom:1px solid var(--color-divider)" style-hover="background:#e9e3d8" style-focus="background:#e9e3d8;outline:2px solid var(--color-accent);outline-offset:-2px"><span style="font-family:var(--font-heading);font-size:19px;font-weight:600">{{ r.label }}</span><span style="font-size:14px;color:var(--color-neutral-700)">{{ r.meta }}</span></button></sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:12px 16px;font-size:15px;color:var(--color-neutral-700);z-index:40">Nothing found for “{{ q }}”.</div></sc-if>
+      </div>
+      <div role="group" aria-label="Lanes" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;font-size:15px;color:var(--color-neutral-700)"><span style="width:10px;height:10px;border-radius:50%;background:var(--color-accent)"></span>Hymns and tunes</span>
+        <sc-for list="{{ laneToggles }}" as="lt" hint-placeholder-count="3"><button onClick="{{ lt.go }}" aria-pressed="{{ lt.pressed }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid {{ lt.border }};border-radius:999px;background:{{ lt.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:14px;height:14px;border-radius:3px;border:1px solid {{ lt.color }};background:{{ lt.fill }};color:#fff;font-size:11px;line-height:14px;text-align:center">{{ lt.mark }}</span>{{ lt.label }}</button></sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ sample }}" hint-placeholder-val="{{ false }}"><p style="margin:16px 0 0;font-size:14px;font-style:italic;color:var(--color-neutral-700)">Sample entries ({{ sampleCount }}) are shown until the full history is added to the hymn data.</p></sc-if>
+  </section>
+
+  <div style="position:sticky;top:0;z-index:20;background:var(--color-bg);border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);margin-top:22px">
+    <nav class="hx-band-track" aria-label="Eras" style="max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px);display:flex">
+      <sc-for list="{{ band }}" as="b" hint-placeholder-count="8">
+        <button onClick="{{ b.go }}" class="hx-band-seg" aria-current="{{ b.current }}" title="{{ b.label }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:1 1 0;min-width:0;padding:10px 6px 6px;border-bottom:3px solid {{ b.line }};background:{{ b.bg }};display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--color-divider)" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">
+          <span style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:{{ b.color }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.short }}</span>
+          <span class="hx-band-tick" style="position:relative;height:9px;display:block">
+            <sc-for list="{{ b.ticks }}" as="t" hint-placeholder-count="3"><span style="position:absolute;left:{{ t.pct }}%;bottom:0;width:1px;height:{{ t.h }}px;background:{{ t.bg }}"></span></sc-for>
+          </span>
+        </button>
+      </sc-for>
+    </nav>
+  </div>
+
+  <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}"><div style="max-width:1280px;margin:0 auto;padding:60px clamp(16px,3vw,40px);font-size:16px;color:var(--color-neutral-700)">Loading the history…</div></sc-if>
+
+  <sc-if value="{{ isTimeline }}" hint-placeholder-val="{{ false }}">
+    <section id="hx-stage" style="max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 24px">
+      <div class="hx-erahead" onTouchStart="{{ tStart }}" onTouchEnd="{{ tEnd }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0 16px;background:var(--color-bg);flex-wrap:wrap">
+        <h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.1"><span style="font-variant-numeric:lining-nums">{{ era.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ era.label }}</h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button onClick="{{ prevEra }}" aria-label="Previous era" disabled="{{ atFirst }}" style="width:48px;height:48px;border:1px solid var(--color-neutral-400);border-radius:50%;background:none;color:var(--color-text);font-size:20px;cursor:pointer;opacity:{{ prevOp }}" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">←</button>
+          <span style="font-size:15px;color:var(--color-neutral-700);min-width:56px;text-align:center;font-variant-numeric:tabular-nums">{{ eraCount }}</span>
+          <button onClick="{{ nextEra }}" aria-label="Next era" disabled="{{ atLast }}" style="width:48px;height:48px;border:1px solid var(--color-neutral-400);border-radius:50%;background:none;color:var(--color-text);font-size:20px;cursor:pointer;opacity:{{ nextOp }}" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">→</button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Hymns and tunes</span>
+        <sc-if value="{{ hymnsEmpty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:22px 20px;border:1px dashed var(--color-neutral-400);font-size:16px;color:var(--color-neutral-700)">{{ hymnsEmptyText }}</p></sc-if>
+        <div class="hx-row" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 14px;align-items:stretch">
+          <sc-for list="{{ hymnCards }}" as="c" hint-placeholder-count="4">
+            <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:272px;background:#e9e3d8;outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;scroll-snap-align:start" style-hover="background:#e3dccf" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span>
+              <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:150px;object-fit:cover;display:block"></sc-if>
+              <span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
+                <span style="font-family:var(--font-heading);font-size:46px;line-height:1;color:var(--color-accent-700);font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
+                <span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span>
+                <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span>
+                <sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div onTouchStart="{{ tStart }}" onTouchEnd="{{ tEnd }}" style="position:relative;height:92px;margin:4px 0 8px" aria-hidden="true">
+          <div style="position:absolute;left:0;right:0;top:26px;height:1px;background:var(--color-text)"></div>
+          <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="6"><div style="position:absolute;left:{{ t.pct }}%;top:22px;height:9px;border-left:1px solid var(--color-text)"><span style="position:absolute;top:12px;left:0;transform:translateX(-50%);font-size:13px;color:var(--color-neutral-700);white-space:nowrap;font-variant-numeric:lining-nums">{{ t.label }}</span></div></sc-for>
+          <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6"><button onClick="{{ d.go }}" tabindex="-1" title="{{ d.title }}" style="position:absolute;left:{{ d.pct }}%;top:{{ d.top }}px;width:{{ d.size }}px;height:{{ d.size }}px;border-radius:50%;background:{{ d.bg }};border:0;padding:0;transform:translate(-50%,-50%);cursor:pointer;box-shadow:0 0 0 2px var(--color-bg)"></button></sc-for>
+        </div>
+
+        <sc-for list="{{ ctxLanes }}" as="ln" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+            <span style="display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-700)"><span style="width:8px;height:8px;border-radius:50%;background:{{ ln.color }}"></span>{{ ln.label }}</span>
+            <sc-if value="{{ ln.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 8px;padding:18px 20px;border:1px dashed var(--color-divider);font-size:16px;color:var(--color-neutral-700)">{{ ln.emptyText }}</p></sc-if>
+            <div class="hx-row" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 14px;align-items:stretch">
+              <sc-for list="{{ ln.cards }}" as="c" hint-placeholder-count="3">
+                <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:272px;background:#efeae1;outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;scroll-snap-align:start" style-hover="background:#e9e3d8" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+                  <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:150px;object-fit:cover;display:block"></sc-if>
+                  <span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
+                    <span style="font-family:var(--font-heading);font-size:34px;line-height:1;color:var(--color-neutral-800);font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
+                    <span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.2">{{ c.title }}</span>
+                    <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isPin }}" hint-placeholder-val="{{ false }}">
+    <section style="max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 24px">
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+        <div id="{{ g.anchor }}" style="padding-top:28px">
+          <h2 style="margin:0 0 16px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1;border-bottom:1px solid var(--color-divider);padding-bottom:10px"><span style="font-variant-numeric:lining-nums">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
+          <sc-if value="{{ g.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:16px;color:var(--color-neutral-700)">Nothing shown for these years with the current lanes and colour filter.</p></sc-if>
+          <div class="hx-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));grid-auto-flow:dense;gap:16px">
+            <sc-for list="{{ g.pin }}" as="c" hint-placeholder-count="4">
+              <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;grid-column:span {{ c.span }};background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column" style-hover="background:#e3dccf" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+                <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span>
+                <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:260px;object-fit:cover;display:block"></sc-if>
+                <span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px">
+                  <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
+                  <span style="font-family:var(--font-heading);font-size:40px;line-height:1;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
+                  <span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.2">{{ c.title }}</span>
+                  <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span>
+                  <sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+    <section style="max-width:1000px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 24px">
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+        <div id="{{ g.anchor }}" style="padding-top:28px">
+          <h2 style="margin:0 0 6px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1"><span style="font-variant-numeric:lining-nums">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
+          <sc-if value="{{ g.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:8px 0 0;font-size:16px;color:var(--color-neutral-700)">Nothing shown for these years with the current lanes and colour filter.</p></sc-if>
+          <sc-for list="{{ g.rows }}" as="c" hint-placeholder-count="4">
+            <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;margin-top:10px;background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px" style-hover="background:#e3dccf" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block"></span>
+              <span class="hx-listrow" style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:6px 24px;padding:14px 18px 16px;align-items:baseline">
+                <span style="font-family:var(--font-heading);font-size:34px;line-height:1;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
+                <span style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                  <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
+                  <span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span>
+                  <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}<sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="letter-spacing:.08em;color:var(--color-neutral-700)"> · {{ c.tune }}</span></sc-if></span>
+                </span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-for>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isRoad }}" hint-placeholder-val="{{ false }}">
+    <section style="max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px">
+      <div style="position:relative;height:min(640px,78vh);min-height:460px;perspective:760px;perspective-origin:50% 16%;overflow:hidden;background:linear-gradient(180deg,var(--color-bg) 0%,var(--color-bg) 22%,#ebe5da 100%);border:1px solid var(--color-divider)">
+        <div style="position:absolute;left:50%;top:66%;width:0;height:0;transform-style:preserve-3d;transform:translateZ({{ roadZ }}px);transition:transform .7s cubic-bezier(.3,.1,.2,1)">
+          <div style="position:absolute;left:-110px;top:0;width:220px;height:{{ roadLen }}px;transform-origin:50% 0;transform:rotateX(-90deg);background:#d9d0c1;border-left:2px solid #c4b8a5;border-right:2px solid #c4b8a5">
+            <div style="position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:repeating-linear-gradient(180deg,#f3f2f2 0 60px,transparent 60px 120px)"></div>
+          </div>
+          <sc-for list="{{ roadCards }}" as="c" hint-placeholder-count="4">
+            <span style="position:absolute;left:0;top:0;transform:{{ c.mk }};opacity:{{ c.op }};font-family:var(--font-heading);font-size:34px;color:#7a5a25;white-space:nowrap;font-variant-numeric:lining-nums;transition:opacity .5s;transform-origin:50% 100%">{{ c.year }}</span>
+            <button id="{{ c.rid }}" onClick="{{ c.go }}" tabindex="{{ c.tab }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:0;top:0;width:240px;background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;transform:{{ c.tf }};opacity:{{ c.op }};visibility:{{ c.vis }};transition:opacity .5s;box-shadow:0 18px 28px -18px rgba(0,0,0,.35)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block"></span>
+              <span style="padding:12px 16px 16px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
+                <span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span>
+                <span style="font-size:15px;line-height:1.45;color:var(--color-neutral-800)">{{ c.sub }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;flex-wrap:wrap">
+        <button onClick="{{ roadBack }}" class="btn btn-secondary" style="background:none;min-height:48px;font-size:16px">← Back in time</button>
+        <span style="font-size:16px;color:var(--color-neutral-700);min-width:90px;text-align:center;font-variant-numeric:tabular-nums">{{ roadCount }}</span>
+        <button onClick="{{ roadFwd }}" class="btn btn-primary" style="background:none;min-height:48px;font-size:16px">Walk forward →</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <section style="max-width:1280px;margin:0 auto;padding:28px clamp(16px,3vw,40px) clamp(40px,5vw,64px);border-top:1px solid var(--color-divider);display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Colour key · tap to show one tradition</span><sc-if value="{{ tradOn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearTrad }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:15px">Show all traditions</button></sc-if></div>
+    <div role="group" aria-label="Traditions" style="display:flex;flex-wrap:wrap;gap:8px">
+      <sc-for list="{{ legend }}" as="t" hint-placeholder-count="7"><button onClick="{{ t.go }}" aria-pressed="{{ t.pressed }}" style="display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border:1px solid {{ t.border }};border-radius:var(--radius-md);background:{{ t.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer;opacity:{{ t.op }}" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:22px;height:5px;background:{{ t.color }}"></span>{{ t.label }}<span style="color:var(--color-neutral-700);font-size:14px">{{ t.count }}</span></button></sc-for>
+    </div>
+    <p style="margin:6px 0 0;font-size:15px;color:var(--color-neutral-700)">Classroom games and a printable timeline strip are on the <button onClick="{{ goTimeline }}" style="all:unset;cursor:pointer;color:var(--color-accent-700);text-decoration:underline;text-underline-offset:3px" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">Timeline page</button>.</p>
+  </section>
+
+  <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSel }}" style="position:fixed;inset:0;background:rgba(21,40,63,.24);z-index:60"></div>
+    <aside role="dialog" aria-modal="true" aria-label="{{ d.title }}" style="position:fixed;top:0;right:0;bottom:0;width:min(480px,100vw);background:var(--color-bg);z-index:61;display:flex;flex-direction:column;box-shadow:-14px 0 36px rgba(0,0,0,.16)">
+      <span style="height:5px;background:{{ d.bar }};display:block;flex:none"></span>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px 10px;border-bottom:1px solid var(--color-divider)">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)"><span style="width:18px;height:5px;background:{{ d.tagColor }}"></span>{{ d.tag }}</span>
+        <button onClick="{{ closeSel }}" ref="{{ closeRef }}" aria-label="Close" style="width:44px;height:44px;border:1px solid var(--color-divider);border-radius:50%;background:none;font-size:18px;cursor:pointer;color:var(--color-text)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">✕</button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:22px 24px 28px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700);font-variant-numeric:lining-nums">{{ d.year }}</span>
+          <sc-if value="{{ d.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:var(--color-neutral-700)">{{ d.note }}</span></sc-if>
+          <h3 style="margin:6px 0 0;font-family:var(--font-heading);font-size:30px;font-weight:600;line-height:1.1">{{ d.title }}</h3>
+        </div>
+        <sc-if value="{{ d.hasImg }}" hint-placeholder-val="{{ false }}"><figure style="margin:0"><img src="{{ d.img }}" alt="{{ d.imgAlt }}" style="width:100%;max-height:320px;object-fit:contain;display:block;background:#e9e3d8"><sc-if value="{{ d.hasCredit }}" hint-placeholder-val="{{ false }}"><figcaption style="font-size:13px;color:var(--color-neutral-700);margin-top:6px">{{ d.credit }}</figcaption></sc-if></figure></sc-if>
+        <sc-if value="{{ d.isH }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;line-height:1.5;border-top:1px solid var(--color-divider);padding-top:12px">
+            <sc-for list="{{ d.meta }}" as="m" hint-placeholder-count="3"><span style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);padding-top:3px">{{ m.k }}</span><span>{{ m.v }}</span></sc-for>
+          </div>
+        </sc-if>
+        <sc-for list="{{ d.secs }}" as="sec" hint-placeholder-count="2">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-if value="{{ sec.hasH }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">{{ sec.h }}</span></sc-if>
+            <p style="margin:0;font-size:16px;line-height:1.7;text-align:left">{{ sec.t }}</p>
+          </div>
+        </sc-for>
+        <sc-if value="{{ d.hasStanza }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">First stanza</span><p style="margin:0;font-family:var(--font-heading);font-size:19px;line-height:1.55;white-space:pre-line">{{ d.stanza }}</p></div>
+        </sc-if>
+        <sc-if value="{{ d.isH }}" hint-placeholder-val="{{ false }}"><button onClick="{{ d.openHymn }}" class="btn btn-primary" style="background:none;min-height:48px;font-size:16px;align-self:flex-start">{{ d.linkLabel }} →</button></sc-if>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--color-divider)">
+        <button onClick="{{ stepPrev }}" aria-label="Previous card" style="width:48px;height:48px;border:1px solid var(--color-neutral-400);border-radius:50%;background:none;font-size:20px;cursor:pointer;color:var(--color-text)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">←</button>
+        <span style="font-size:15px;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">{{ d.count }}</span>
+        <button onClick="{{ stepNext }}" aria-label="Next card" style="width:48px;height:48px;border:1px solid var(--color-neutral-400);border-radius:50%;background:none;font-size:20px;cursor:pointer;color:var(--color-text)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">→</button>
+      </div>
+    </aside>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;openHymn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(n: number) =&gt; void&quot;},&quot;goTimeline&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { ready: false, sample: true, eraI: 0, view: 'timeline', lanes: { church: true, music: true, world: true }, trad: null, q: '', sel: null, roadI: 0 };
+  closeRef = React.createRef();
+  LANE = { hymn: { label: 'Hymns and tunes', color: '#b68235' }, church: { label: 'Church history', color: '#39465a' }, music: { label: 'Music history', color: '#7d6c57' }, world: { label: 'World events', color: '#a39d93' } };
+  componentDidMount() {
+    Promise.all([import('./hymns-data.js'), import('./hymn-notes.js').catch(() => ({})), import('./history-sample.js')]).then(([d, n, s]) => {
+      const real = !!(d.ERAS && (d.HYMNS || []).some(h => h.featured && h.year != null));
+      const pick = k => real ? (d[k] || []) : (s[k] || []);
+      const eras = pick('ERAS').slice().sort((a, b) => a.start - b.start);
+      const trads = pick('TRADITIONS');
+      const base = real ? d.HYMNS.filter(h => h.featured && h.year != null) : s.SAMPLE_HYMNS.map(x => ({ ...(d.HYMNS.find(h => h.n === x.n) || {}), ...x })).filter(h => h.title);
+      const notes = n.NOTES || {}, texts = d.TEXTS || {};
+      const strip = t => String(t || '').replace(/\[\^\d+\]/g, '').replace(/\s+/g, ' ').trim();
+      const eraOf = (y, id) => (id && eras.find(e => e.id === id)) || eras.find(e => y >= e.start && y < e.end) || eras[y < eras[0].start ? 0 : eras.length - 1];
+      const items = [];
+      base.forEach(h => {
+        const N = notes[h.n] || {};
+        const st = (N.lyrics_lines && N.lyrics_lines[0]) || (texts[h.n] && texts[h.n][0] && texts[h.n][0].join('\n')) || '';
+        const first = st ? st.split('\n')[0].replace(/[,;:.—–-]+$/, '') : h.title;
+        items.push({ key: 'h' + h.n, kind: 'hymn', n: h.n, year: h.year, note: h.yearNote || '', era: eraOf(h.year, h.eraId).id, trad: h.traditionId, title: h.title, first, author: h.authorName || '', composer: h.composerName || '', tune: h.tune || '', page: h.page || '', story: strip(h.story), blurb: strip(N.blurb), tuneOrigin: strip(N.composer && N.composer[0]), stanza: st, image: h.image || '', imageAlt: h.imageAlt || '', credit: h.imageCredit || '' });
+      });
+      [['church', 'CHURCH_EVENTS'], ['music', 'MUSIC_EVENTS'], ['world', 'WORLD_EVENTS']].forEach(([kind, k]) => pick(k).forEach((e, i) => items.push({ key: kind[0] + i, kind, year: e.year, note: e.yearNote || '', era: eraOf(e.year, e.eraId).id, title: e.title, text: strip(e.text), image: e.image || '', imageAlt: e.imageAlt || e.title, credit: e.credit || '' })));
+      const order = { hymn: 0, church: 1, music: 2, world: 3 };
+      items.sort((a, b) => a.year - b.year || order[a.kind] - order[b.kind]);
+      this.D = { eras, trads, items, tmap: Object.fromEntries(trads.map(t => [t.id, t])) };
+      const start = Math.max(0, eras.findIndex(e => e.id === 'reformation'));
+      this.setState({ ready: true, sample: !real, eraI: start });
+    });
+    this.onKey = e => {
+      if (!this.D) return; const tg = e.target;
+      if (e.key === 'Escape' && this.state.sel) { this.close(); return; }
+      if (tg && /INPUT|TEXTAREA|SELECT/.test(tg.tagName)) return;
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      const dir = e.key === 'ArrowRight' ? 1 : -1;
+      if (this.state.sel) { this.step(dir); e.preventDefault(); }
+      else if (this.state.view === 'road') { this.roadStep(dir); e.preventDefault(); }
+      else if (this.state.view === 'timeline' && !(tg && tg.closest && tg.closest('.hx-row'))) { this.goEra(this.state.eraI + dir); e.preventDefault(); }
+    };
+    document.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { document.removeEventListener('keydown', this.onKey); }
+  fy(y) { return y < 0 ? `${-y} BC` : y === 0 ? 'AD 1' : String(y); }
+  visOf(s) { return this.D.items.filter(it => it.kind === 'hymn' ? (!s.trad || it.trad === s.trad) : s.lanes[it.kind]); }
+  eraDates(e, last) { return last ? `Since ${this.fy(e.start)}` : `${this.fy(e.start)} – ${this.fy(e.end)}`; }
+  close() { const k = this.state.sel; this.setState({ sel: null }, () => { const el = k && document.getElementById((this.state.view === 'road' ? 'hr-' : 'hx-') + k); if (el) el.focus({ preventScroll: true }); }); }
+  open(key) {
+    const it = this.D.items.find(i => i.key === key); if (!it) return;
+    const eraI = this.D.eras.findIndex(e => e.id === it.era); const ri = this.visOf(this.state).findIndex(x => x.key === key);
+    this.setState(s => ({ sel: key, eraI: eraI < 0 ? s.eraI : eraI, roadI: ri < 0 ? s.roadI : ri }), () => { this.scrollToCard(key); setTimeout(() => this.closeRef.current && this.closeRef.current.focus({ preventScroll: true }), 30); });
+  }
+  step(dir) { const v = this.visOf(this.state); const i = v.findIndex(x => x.key === this.state.sel); if (i < 0) return; const j = Math.max(0, Math.min(v.length - 1, i + dir)); if (j !== i) this.open(v[j].key); }
+  scrollToCard(key) {
+    setTimeout(() => {
+      const el = document.getElementById('hx-' + key); if (!el) return;
+      const row = el.parentElement;
+      if (row && row.scrollWidth > row.clientWidth + 4) row.scrollTo({ left: Math.max(0, el.offsetLeft - 8), behavior: 'smooth' });
+      if (this.state.view !== 'timeline' || row.scrollWidth <= row.clientWidth + 4) { const r = el.getBoundingClientRect(); if (r.top < 70 || r.bottom > window.innerHeight) window.scrollTo({ top: window.scrollY + r.top - 120, behavior: 'smooth' }); }
+    }, 60);
+  }
+  goEra(i) {
+    const n = this.D.eras.length; if (i < 0 || i >= n) return;
+    this.setState({ eraI: i }, () => {
+      if (this.state.view === 'pin' || this.state.view === 'list') { const el = document.getElementById('hx-era-' + this.D.eras[i].id); if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 60, behavior: 'smooth' }); }
+      else if (this.state.view === 'timeline') { const el = document.getElementById('hx-stage'); if (el) { const r = el.getBoundingClientRect(); if (r.top < 0) window.scrollTo({ top: window.scrollY + r.top - 50, behavior: 'smooth' }); } }
+      else if (this.state.view === 'road') { const v = this.visOf(this.state); const ri = v.findIndex(x => x.era === this.D.eras[i].id); if (ri >= 0) this.setState({ roadI: ri }); }
+    });
+  }
+  roadStep(dir) { const n = this.visOf(this.state).length; this.setState(s => ({ roadI: Math.max(0, Math.min(n - 1, s.roadI + dir)) })); }
+  jump(it) {
+    this.setState(s => ({ q: '', view: s.view, lanes: it.kind === 'hymn' ? s.lanes : { ...s.lanes, [it.kind]: true }, trad: it.kind === 'hymn' && s.trad && s.trad !== it.trad ? null : s.trad }), () => this.open(it.key));
+  }
+  card(it) {
+    const s = this.state; const isH = it.kind === 'hymn'; const T = this.D.tmap[it.trad] || {};
+    const who = [it.author, it.composer].filter((v, i, a) => v && a.indexOf(v) === i).join(' · ');
+    return {
+      id: 'hx-' + it.key, rid: 'hr-' + it.key, bar: isH ? (T.color || '#b68235') : 'transparent', barH: isH ? 5 : 0,
+      kicker: (isH ? (T.label || 'Hymn') : this.LANE[it.kind].label) + (it.note ? ' · ' + it.note : ''),
+      year: this.fy(it.year), title: isH ? it.first : it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
+      img: it.image, hasImg: !!it.image, imgAlt: it.imageAlt || it.title, span: it.image ? 2 : 1,
+      tint: isH ? '#e9e3d8' : '#efeae1', yearColor: isH ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+      border: s.sel === it.key ? 'var(--color-accent)' : 'transparent', go: () => this.open(it.key),
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const views = [['timeline', 'Timeline'], ['pin', 'Pinboard'], ['list', 'List'], ['road', 'Road']].map(([k, label]) => ({ label, pressed: s.view === k ? 'true' : 'false', bg: s.view === k ? '#1f3c5d' : 'transparent', fg: s.view === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setState({ view: k }, () => k !== 'timeline' && k !== 'road' && this.goEra(this.state.eraI)) }));
+    const laneToggles = ['church', 'music', 'world'].map(k => ({ label: this.LANE[k].label, color: this.LANE[k].color, pressed: s.lanes[k] ? 'true' : 'false', mark: s.lanes[k] ? '✓' : '', fill: s.lanes[k] ? this.LANE[k].color : 'transparent', bg: s.lanes[k] ? '#efeae1' : 'transparent', border: s.lanes[k] ? this.LANE[k].color : 'var(--color-divider)', go: () => this.setState(st => ({ lanes: { ...st.lanes, [k]: !st.lanes[k] } })) }));
+    const common = { views, laneToggles, q: s.q, setQ: e => this.setState({ q: e.target.value }), goTimeline: () => this.props.goTimeline && this.props.goTimeline(), closeRef: this.closeRef, closeSel: () => this.close() };
+    if (!s.ready || !this.D) return { ...common, loading: true, band: [], legend: [], results: [], hasResults: false };
+    const { eras, trads, items, tmap } = this.D;
+    const vis = this.visOf(s);
+    const eraI = Math.min(s.eraI, eras.length - 1); const E = eras[eraI]; const lastI = eras.length - 1;
+    const inE = vis.filter(it => it.era === E.id);
+    const hymnCards = inE.filter(it => it.kind === 'hymn').map(it => this.card(it));
+    const trLabel = s.trad ? (tmap[s.trad] || {}).label : '';
+    const ctxLanes = ['church', 'music', 'world'].filter(k => s.lanes[k]).map(k => { const cards = inE.filter(it => it.kind === k).map(it => this.card(it)); return { label: this.LANE[k].label, color: this.LANE[k].color, cards, empty: cards.length === 0, emptyText: `No ${this.LANE[k].label.toLowerCase()} entries for these years yet.` }; });
+    const span = E.end - E.start; const step = span <= 40 ? 5 : span <= 100 ? 10 : span <= 300 ? 50 : span <= 1000 ? 100 : 200;
+    const tk = []; for (let y = Math.ceil(E.start / step) * step; y <= E.end; y += step) tk.push(y);
+    const ticks = tk.map((y, i) => ({ pct: (y - E.start) / span * 100, label: tk.length > 7 && i % 2 ? '' : this.fy(y) }));
+    const laneY = { hymn: 12, church: 64, music: 74, world: 84 };
+    const dots = inE.map(it => ({ pct: Math.max(0.5, Math.min(99.5, (it.year - E.start) / span * 100)), top: laneY[it.kind], size: s.sel === it.key ? 16 : it.kind === 'hymn' ? 11 : 8, bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || '#b68235') : this.LANE[it.kind].color, title: `${this.fy(it.year)} · ${it.title}`, go: () => this.open(it.key) }));
+    const band = eras.map((e, i) => { const sp = e.end - e.start; const on = i === eraI; return { label: this.eraDates(e, i === lastI) + ' · ' + e.label, short: e.short || e.label, current: on ? 'true' : 'false', bg: on ? '#efeae1' : 'transparent', line: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', ticks: vis.filter(it => it.era === e.id).map(it => ({ pct: Math.max(0, Math.min(99, (it.year - e.start) / sp * 100)), bg: it.kind === 'hymn' ? 'var(--color-accent)' : 'var(--color-neutral-500)', h: it.kind === 'hymn' ? 9 : 5 })), go: () => this.goEra(i) }; });
+    const groups = eras.map((e, i) => { const its = vis.filter(it => it.era === e.id); return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.image), ...its.filter(x => !x.image)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
+    const ri = Math.max(0, Math.min(s.roadI, vis.length - 1)); const SP = 360; const stageW = Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const off = Math.max(130, Math.min(200, stageW / 2 - 150));
+    const roadCards = vis.map((it, i) => { const dd = i - ri; const c = this.card(it); const side = i % 2 === 0 ? -1 : 1; const shown = dd >= 0 && dd <= 7; return { ...c, tf: `translate3d(${side * off - 120}px, -250px, ${-i * SP}px)`, mk: `translate3d(-50%, 0, ${-i * SP + 60}px) rotateX(-90deg) translateY(-18px)`, op: shown ? (1 - dd * 0.1).toFixed(2) : 0, vis: shown ? 'visible' : 'hidden', tab: dd === 0 ? '0' : '-1' }; });
+    const ql = s.q.trim().toLowerCase();
+    const results = ql.length < 2 ? [] : items.filter(it => [it.title, it.first, it.author, it.composer, it.tune, it.text, String(it.year)].some(v => String(v || '').toLowerCase().includes(ql))).slice(0, 8).map(it => ({ label: it.title, meta: `${this.fy(it.year)} · ${it.kind === 'hymn' ? (it.author || 'Hymn') : this.LANE[it.kind].label}`, go: () => this.jump(it) }));
+    const legend = trads.map(t => { const on = s.trad === t.id; return { label: t.label, color: t.color, count: items.filter(i => i.kind === 'hymn' && i.trad === t.id).length, pressed: on ? 'true' : 'false', border: on ? 'var(--color-text)' : 'var(--color-divider)', bg: on ? '#efeae1' : 'transparent', op: s.trad && !on ? .6 : 1, go: () => this.setState(st => ({ trad: st.trad === t.id ? null : t.id })) }; });
+    const cur = s.sel ? items.find(i => i.key === s.sel) : null; let d = {};
+    if (cur) {
+      const isH = cur.kind === 'hymn'; const T = tmap[cur.trad] || {};
+      const secs = (isH ? [['The story', cur.story], ['About this hymn', cur.blurb], ['Where the tune comes from', cur.tuneOrigin]] : [['', cur.text]]).filter(x => x[1]).map(([h, t]) => ({ h, t, hasH: !!h }));
+      const vi = vis.findIndex(x => x.key === cur.key);
+      d = { tag: isH ? (T.label || 'Hymn') : this.LANE[cur.kind].label, tagColor: isH ? (T.color || '#b68235') : this.LANE[cur.kind].color, bar: isH ? (T.color || '#b68235') : 'var(--color-divider)', year: this.fy(cur.year), note: cur.note, hasNote: !!cur.note, title: cur.title, isH, meta: isH ? [['Words', cur.author], ['Music', cur.composer], ['Tune', cur.tune]].filter(x => x[1]).map(([k, v]) => ({ k, v })) : [], img: cur.image, hasImg: !!cur.image, imgAlt: cur.imageAlt || cur.title, credit: cur.credit, hasCredit: !!cur.credit, secs, stanza: cur.stanza, hasStanza: isH && !!cur.stanza, linkLabel: `Open the hymn page · No. ${cur.n}${cur.page ? ', page ' + cur.page : ''}`, openHymn: () => { this.setState({ sel: null }); this.props.openHymn && this.props.openHymn(cur.n); }, count: vi < 0 ? '' : `${vi + 1} of ${vis.length}` };
+    }
+    return {
+      ...common, loading: false, sample: s.sample, sampleCount: `${items.filter(i => i.kind === 'hymn').length} hymns, ${items.filter(i => i.kind !== 'hymn').length} events`,
+      isTimeline: s.view === 'timeline', isPin: s.view === 'pin', isList: s.view === 'list', isRoad: s.view === 'road',
+      era: { dates: this.eraDates(E, eraI === lastI), label: E.label }, eraCount: `${eraI + 1} of ${eras.length}`,
+      atFirst: eraI === 0, atLast: eraI === lastI, prevOp: eraI === 0 ? .35 : 1, nextOp: eraI === lastI ? .35 : 1,
+      prevEra: () => this.goEra(eraI - 1), nextEra: () => this.goEra(eraI + 1),
+      tStart: e => { this.tx = e.touches[0].clientX; }, tEnd: e => { const dx = e.changedTouches[0].clientX - (this.tx || 0); if (Math.abs(dx) > 60) this.goEra(eraI + (dx < 0 ? 1 : -1)); },
+      hymnCards, hymnsEmpty: hymnCards.length === 0, hymnsEmptyText: s.trad ? `No ${trLabel} hymns in these years. Tap “Show all traditions” below to see the rest.` : 'No hymns from these years are in the timeline yet.',
+      ctxLanes, ticks, dots, band, groups,
+      roadCards, roadZ: ri * SP, roadLen: (vis.length + 3) * SP, roadCount: vis.length ? `${ri + 1} of ${vis.length}` : '', roadBack: () => this.roadStep(-1), roadFwd: () => this.roadStep(1),
+      results, hasResults: results.length > 0, noResults: ql.length >= 2 && results.length === 0,
+      legend, tradOn: !!s.trad, clearTrad: () => this.setState({ trad: null }),
+      hasSel: !!cur, d, stepPrev: () => this.step(-1), stepNext: () => this.step(1),
+    };
+  }
+}
+</script>
+</body>
+</html>
