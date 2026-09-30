@@ -3,9 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Covenant Hymnal — for Public and Daily Worship</title>
-<meta name="description" content="The Covenant Hymnal: psalms, hymns and spiritual songs for public and daily worship, assembled by Covenant Presbyterian Church, Nashville, Tennessee.">
-<link rel="icon" href="assets/hymnal-seal-2.jpg">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -13,6 +10,7 @@
 <helmet>
 <link rel="stylesheet" href="_ds/classical-209a1473-d8f0-4fef-9222-5ea2b81c993d/styles.css">
 <script src="_ds/classical-209a1473-d8f0-4fef-9222-5ea2b81c993d/_ds_bundle.js"></script>
+<script src="esv-links.js" data-manual></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
 body{margin:0;background:var(--color-bg);text-wrap:pretty}
@@ -27,7 +25,7 @@ em,i{font-synthesis:none}
 .psalm-row{display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:4px 16px}
 .anc-grid{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:24px 48px}
 .anc-side{position:sticky;top:20px;align-self:start}
-.hymn-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:end}
+.hymn-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto;column-gap:48px;align-items:start}
 .abbr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
 @media (max-width:760px){
   .m-menu-btn{display:inline-flex}
@@ -44,7 +42,8 @@ em,i{font-synthesis:none}
   .anc-grid{grid-template-columns:minmax(0,1fr)}
   .anc-side{position:static}
   .hymn-hero{grid-template-columns:minmax(0,1fr)}
-  .hymn-hero > span{font-size:56px!important;line-height:1!important}
+  .hymn-hero .hymn-num{grid-column:1;grid-row:4;justify-self:start;font-size:56px!important;margin-top:18px!important}
+  .hymn-hero .hymn-share{grid-column:1;grid-row:5;justify-self:start;margin-top:14px}
   .abbr-grid{grid-template-columns:minmax(0,1fr)}
   .utility-note{display:none}
 }
@@ -60,12 +59,13 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
         <span>This month: <em style="color:var(--color-bg)">{{ hom.now.title }}</em></span>
         <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px">Reserve the first printing →</button>
+        <button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button>
       </div>
     </div>
   </sc-if>
   <div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px clamp(20px,4vw,48px) 0">
     <button onClick="{{ goHome }}" aria-label="Covenant Hymnal — home" style="background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:14px;color:inherit">
-      <img src="assets/hymnal-seal-2.jpg" alt="" style="width:74px;height:74px;border-radius:50%;display:block;box-shadow:0 0 0 1px var(--color-accent-400),0 0 0 5px #1f3c5d,0 0 0 6px var(--color-accent-600)">
+      <img src="assets/hymnal-seal-2.png" alt="" style="width:74px;height:74px;border-radius:50%;display:block;box-shadow:0 0 0 1px var(--color-accent-400),0 0 0 5px #1f3c5d,0 0 0 6px var(--color-accent-600)">
       <span style="display:flex;flex-direction:column;align-items:center;gap:4px">
         <span style="font-family:var(--font-heading);font-size:26px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;padding-left:.32em;line-height:1">Covenant Hymnal</span>
         <span style="font-family:var(--font-heading);font-size:17px;font-weight:500;letter-spacing:.02em;color:var(--color-accent-300)"><em style="font-style:italic;font-weight:500;font-synthesis:none">for</em> Public and Daily Worship</span>
@@ -280,7 +280,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <figure style="margin:0"><img class="photo" src="assets/photo-choir-3758.jpg" alt="The choir before the organ and cross" style="width:100%;height:clamp(260px,34vw,420px);object-fit:cover;object-position:62% 50%;display:block"><figcaption style="font-size:12px;color:var(--color-neutral-700);margin-top:8px">The Covenant Choir</figcaption></figure>
       <div style="display:flex;flex-direction:column;gap:16px">
         <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Singing the Psalms</span>
-        <h2 style="font-size:clamp(30px,3.4vw,40px);font-weight:400;margin:0;line-height:1.1">Nearly a hundred psalm settings, sung from the ESV.</h2>
+        <h2 style="font-size:clamp(30px,3.4vw,40px);font-weight:400;margin:0;line-height:1.1">Nearly a hundred psalm settings, sung in meter.</h2>
         <p style="margin:0;font-size:15px;line-height:1.7;text-align:left">The hymnal draws substantially from the Psalms, the inspired hymns of Scripture. Each setting's credit line tells you how closely it follows the Psalm — a metrical setting, a paraphrase, a Christianized paraphrase, or a hymn based on it — and the Index of Psalms gathers them psalm by psalm.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap"><button onClick="{{ goPsalms }}" class="btn btn-primary" style="background:none;white-space:nowrap">Index of Psalms</button><button onClick="{{ goArticle }}" class="btn btn-ghost" style="background:none;white-space:nowrap">How the hymnal sings the Psalms →</button></div>
       </div>
@@ -573,16 +573,15 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 <sc-if value="{{ isHymn }}" hint-placeholder-val="{{ false }}">
   <section data-screen-label="Hymn" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(32px,5vw,56px) clamp(20px,4vw,48px) clamp(36px,5vw,56px)" class="hymn-hero">
-      <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
-        <div style="display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400);flex-wrap:wrap"><button onClick="{{ goHymns }}" style="all:unset;cursor:pointer;color:var(--color-neutral-300)" style-hover="color:var(--color-bg)">← The Hymns</button><span>{{ h.section }}</span><span style="color:var(--color-neutral-400)">{{ h.topic }}</span></div>
-        <h1 style="font-size:clamp(36px,5vw,64px);font-weight:400;margin:0;line-height:1.02;color:var(--color-bg)">{{ h.title }}</h1>
-        <span style="font-family:var(--font-heading);font-style:italic;font-size:22px;color:var(--color-neutral-300)">{{ h.subtitle }}</span>
-      </div>
-      <span style="font-family:var(--font-heading);font-size:clamp(64px,9vw,120px);line-height:.9;color:var(--color-accent-400);font-variant-numeric:tabular-nums">{{ h.n }}</span>
+      <div style="grid-column:1;display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400);flex-wrap:wrap;margin-bottom:14px"><button onClick="{{ goHymns }}" style="all:unset;cursor:pointer;color:var(--color-neutral-300)" style-hover="color:var(--color-bg)">← The Hymns</button><span>{{ h.section }}</span><span style="color:var(--color-neutral-400)">{{ h.topic }}</span></div>
+      <h1 style="grid-column:1;font-size:clamp(36px,5vw,64px);font-weight:400;margin:0;line-height:1.02;color:var(--color-bg)">{{ h.title }}</h1>
+      <span class="hymn-num" style="grid-column:2;grid-row:2;font-family:var(--font-heading);font-size:clamp(64px,9vw,120px);line-height:1;color:var(--color-accent-400);font-variant-numeric:lining-nums tabular-nums;margin-top:-0.13em;justify-self:end">{{ h.n }}</span>
+      <span style="grid-column:1;font-family:var(--font-heading);font-style:italic;font-size:22px;color:var(--color-neutral-300);margin-top:14px">{{ h.subtitle }}</span>
+      <div class="hymn-share" style="grid-column:2;grid-row:3;justify-self:end;align-self:end"><button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button></div>
     </div>
   </section>
   <section style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(36px,5vw,72px);align-items:start">
-    <div style="display:flex;flex-direction:column;gap:28px;grid-column:span 1">
+    <div style="display:flex;flex-direction:column;gap:28px;grid-column:span 1;order:2">
       <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 20px;font-size:14px;line-height:1.55;border-top:1px solid var(--color-divider);padding-top:16px">
         <span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">WORDS</span><span>{{ h.author }}</span>
         <span style="letter-spacing:.1em;font-size:11px;color:var(--color-neutral-700);padding-top:3px">MUSIC</span><span>{{ h.composer }}</span>
@@ -595,30 +594,62 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Topics</span>
         <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ topicTags }}" as="tg" hint-placeholder-count="3"><button onClick="{{ tg.go }}" class="tag tag-outline" style="background:none;cursor:pointer;font-size:12px;padding:4px 10px;white-space:nowrap;flex:none;display:inline-flex" style-hover="background:var(--color-accent-100)">{{ tg.t }}</button></sc-for></div>
         <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700);margin-top:6px">Scripture</span>
-        <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ scriptureTags }}" as="sg" hint-placeholder-count="3"><button onClick="{{ sg.go }}" class="tag tag-neutral" style="cursor:pointer;font-size:12px;padding:4px 10px;border:0;white-space:nowrap;flex:none;display:inline-flex" style-hover="background:var(--color-neutral-200)">{{ sg.t }}</button></sc-for></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ scriptureTags }}" as="sg" hint-placeholder-count="3"><a href="{{ sg.href }}" target="_blank" rel="noopener" class="tag tag-neutral esv" style="font-size:12px;padding:4px 10px;border:0;white-space:nowrap;flex:none;display:inline-flex;text-decoration:none;color:inherit" style-hover="background:var(--color-neutral-200)">{{ sg.t }}</a></sc-for></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--color-neutral-700);border-top:1px solid var(--color-divider);padding-top:14px"><span>{{ h.pageLabel }} · {{ h.stanzaLabel }}</span><span>{{ h.rights }}</span><span>{{ h.rankLabel }}</span><span>{{ h.scheduledLabel }}</span></div>
       <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:18px 20px;display:flex;flex-direction:column;gap:12px">
-        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Listen</span>
-        <div style="display:flex;align-items:center;gap:14px"><button class="btn btn-primary" style="background:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:18px" aria-label="Play">▶</button><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:2px;background:var(--color-divider);position:relative"><span style="position:absolute;left:0;top:0;height:2px;width:0;background:var(--color-accent)"></span></div><span style="font-size:12px;color:var(--color-neutral-700)">Organ · recording to come</span></div></div>
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Lyric video</span>
+        <sc-if value="{{ listen.hasVideo }}" hint-placeholder-val="{{ false }}"><div style="aspect-ratio:16/9;background:#000"><iframe src="{{ listen.embed }}" title="Lyric video" style="width:100%;height:100%;border:0;display:block" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div></sc-if>
+        <sc-if value="{{ listen.noVideo }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:14px"><span style="width:44px;height:44px;border:1px solid var(--color-divider);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--color-neutral-400);font-size:15px;flex:none">▶</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ listen.label }}</span></div></sc-if>
       </div>
-      <div style="display:flex;flex-direction:column;gap:0">
-        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px">Downloads</span>
-        <sc-for list="{{ downloads }}" as="d" hint-placeholder-count="4"><a href="#" style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--color-divider);text-decoration:none;color:inherit;font-size:14px" style-hover="color:var(--color-accent-700)"><span>{{ d.label }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ d.kind }}</span></a></sc-for>
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid var(--color-divider)">
+        <button onClick="{{ toggleDownloads }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;box-sizing:border-box;width:100%" style-hover="color:var(--color-accent-700)"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Resources and Downloads</span><span style="font-family:var(--font-heading);font-size:22px;color:var(--color-accent-700);line-height:1">{{ downloadsMark }}</span></button>
+        <sc-if value="{{ downloadsOpen }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;padding-bottom:8px"><sc-for list="{{ downloads }}" as="d" hint-placeholder-count="4"><a href="{{ d.href }}" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--color-divider);text-decoration:none;color:inherit;font-size:14px" style-hover="color:var(--color-accent-700)"><span>{{ d.label }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ d.kind }}</span></a></sc-for></div></sc-if>
       </div>
     </div>
-    <div style="grid-column:span 1;display:flex;flex-direction:column;gap:32px">
+    <div style="grid-column:span 1;display:flex;flex-direction:column;gap:32px;order:1">
       <div style="display:flex;flex-direction:column;gap:22px">
         <sc-for list="{{ stanzas }}" as="s" hint-placeholder-count="3">
           <div style="display:grid;grid-template-columns:28px 1fr;gap:12px"><span style="font-family:var(--font-heading);font-size:20px;color:var(--color-accent-700);font-variant-numeric:tabular-nums;line-height:1.4">{{ s.n }}</span><p style="margin:0;font-size:17px;line-height:1.6;white-space:pre-line">{{ s.text }}</p></div>
         </sc-for>
-        <sc-if value="{{ noText }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;line-height:1.65;color:var(--color-neutral-700);border:1px dashed var(--color-divider);padding:20px;border-radius:var(--radius-md)">Text to be added. Each hymn page will carry the full text as printed, with any alternate or omitted stanzas beneath it.</p></sc-if>
+        <sc-if value="{{ noText }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;line-height:1.65;color:var(--color-neutral-700);border:1px dashed var(--color-divider);padding:20px;border-radius:var(--radius-md)">{{ noTextMsg }}</p></sc-if>
       </div>
-      <div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--color-divider);padding-top:24px">
-        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">About this hymn</span>
-        <p style="margin:0;font-size:15px;line-height:1.7;color:var(--color-neutral-700)">Notes on the text and tune, the author and composer, and why this hymn was chosen for the Covenant Hymnal will appear here.</p>
-      </div>
+
     </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,48px) clamp(40px,5vw,64px)">
+      <div style="display:flex;flex-direction:column;gap:18px;border-top:1px solid var(--color-divider);padding-top:28px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">About this hymn</span><span style="font-size:12px;font-style:italic;color:var(--color-neutral-700)">For bulletins and church emails</span></div>
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+          <p style="margin:0;font-family:var(--font-heading);font-size:19px;line-height:1.5;text-align:left"><sc-for list="{{ blurbParts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup style="font-size:.68em;line-height:0;margin-left:1px"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" style="color:var(--color-accent-700);text-decoration:none">{{ pt.n }}</a></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-size:12px;color:var(--color-neutral-700)">Free to reprint</span><button onClick="{{ copyBlurb }}" class="btn btn-secondary" style="background:none;padding:6px 14px;font-size:12px">{{ copyLabel }}</button></div>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ notes }}" as="nt" hint-placeholder-count="3">
+            <div style="border-top:1px solid var(--color-divider)">
+              <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;padding:14px 0">
+                <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                  <button onClick="{{ nt.toggle }}" style="all:unset;cursor:pointer;font-family:var(--font-heading);font-size:22px;font-weight:600;line-height:1.2;text-align:left" style-hover="color:var(--color-accent-700)">{{ nt.title }}</button>
+                  <span style="font-size:12.5px;color:var(--color-neutral-700)">{{ nt.sub }}<sc-if value="{{ nt.hasLink }}" hint-placeholder-val="{{ false }}"><a href="{{ nt.subHref }}" target="_blank" rel="noopener" style="color:var(--color-accent-700)">{{ nt.subLinkText }}</a></sc-if></span>
+                </div>
+                <button onClick="{{ nt.toggle }}" aria-label="Open or close" style="all:unset;cursor:pointer;font-family:var(--font-heading);font-size:24px;color:var(--color-accent-700);line-height:1;padding:2px 4px">{{ nt.mark }}</button>
+              </div>
+              <sc-if value="{{ nt.open }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:16px;padding:2px 0 28px">
+                  <sc-if value="{{ nt.hasLead }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14.5px;line-height:1.65;font-style:italic;color:var(--color-neutral-700);text-align:left">{{ nt.lead }}</p></sc-if>
+                  <sc-for list="{{ nt.paras }}" as="pp" hint-placeholder-count="2">
+                    <sc-if value="{{ pp.isQuote }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 2px 28px;font-family:var(--font-heading);font-style:italic;font-size:19px;line-height:1.5;white-space:pre-line;text-align:left"><sc-for list="{{ pp.parts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup style="font-size:.68em;line-height:0;margin-left:1px"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" style="color:var(--color-accent-700);text-decoration:none">{{ pt.n }}</a></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p></sc-if>
+                    <sc-if value="{{ pp.isProse }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-size:17px;line-height:1.75;text-align:left"><sc-for list="{{ pp.parts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup style="font-size:.68em;line-height:0;margin-left:1px"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" style="color:var(--color-accent-700);text-decoration:none">{{ pt.n }}</a></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p></sc-if>
+                  </sc-for>
+                  <sc-if value="{{ nt.isTable }}" hint-placeholder-val="{{ false }}"><div style="overflow-x:auto"><table class="table" style="min-width:640px;width:100%;font-size:14px;line-height:1.55"><thead><tr><th style="text-align:left;width:32px"></th><sc-for list="{{ nt.columns }}" as="cl" hint-placeholder-count="3"><th style="text-align:left;font-weight:600">{{ cl }}</th></sc-for></tr></thead><tbody><sc-for list="{{ nt.rows }}" as="rw" hint-placeholder-count="4"><tr><td style="font-family:var(--font-heading);font-size:18px;color:var(--color-accent-700);vertical-align:top">{{ rw.n }}</td><sc-for list="{{ rw.cells }}" as="cel" hint-placeholder-count="3"><td style="white-space:pre-line;vertical-align:top;text-align:left">{{ cel }}</td></sc-for></tr></sc-for></tbody></table></div></sc-if>
+                  <sc-if value="{{ nt.isSources }}" hint-placeholder-val="{{ false }}"><ol style="margin:0;padding-left:26px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.55"><sc-for list="{{ nt.sources }}" as="sr" hint-placeholder-count="3"><li id="src-{{ sr.n }}" style="text-align:left">{{ sr.text }}</li></sc-for></ol></sc-if>
+                  <sc-if value="{{ nt.hasCredit }}" hint-placeholder-val="{{ false }}"><p style="margin:6px 0 0;font-size:13.5px;font-style:italic;color:var(--color-neutral-700);text-align:left;border-top:1px solid var(--color-divider);padding-top:12px">{{ nt.credit }}<a href="{{ nt.creditHref }}" target="_blank" rel="noopener" style="color:var(--color-accent-700)">{{ nt.creditLinkText }}</a>.</p></sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <div style="border-top:1px solid var(--color-divider)"></div>
+        </div>
+      </div>
   </section>
   <section style="border-top:1px solid var(--color-divider)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(36px,5vw,56px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:36px">
@@ -637,10 +668,50 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
   </div>
 </sc-if>
 
+<!-- ═════════ SOURCES & PERMISSIONS ═════════ -->
+<sc-if value="{{ isSources }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Sources" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">About this site</span>
+      <h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;margin:0;line-height:1;color:var(--color-bg)">Sources &amp; Permissions</h1>
+    </div>
+  </section>
+  <section style="max-width:860px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:36px;font-size:16px;line-height:1.7">
+    <p style="margin:0;font-family:var(--font-heading);font-size:21px;line-height:1.5;text-align:left">The notes on this site — the bulletin notes, the pages on the words and the music, and the longer studies — were written for the Covenant Hymnal by Covenant Presbyterian Church, Nashville. They draw on the standard works of hymnology and on the hymnal’s own research library, and every page lists the sources it rests on. Where a source is quoted, the quotation is brief and credited; where a source is available online, the citation links to the page consulted, so that anything said here can be checked.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:24px">
+      <h2 style="font-size:28px;font-weight:600;margin:0">Hymn texts</h2>
+      <p style="margin:0;text-align:left">Most hymns in the Covenant Hymnal are in the public domain, and their words appear here in full. Hymns still under copyright are quoted only briefly, in the course of commentary, and their full texts are published on this site only where the copyright holder has granted permission for that use; the credit line on each page names the holder. The Covenant Hymnal’s own license to print a text does not extend to this website, and no copyrighted text is reproduced here in reliance on it.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:24px">
+      <h2 style="font-size:28px;font-weight:600;margin:0">Scripture</h2>
+      <p style="margin:0;text-align:left">Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved.</p>
+      <p style="margin:0;text-align:left">Scripture references on this site link to the passage at <a href="https://www.esv.org" target="_blank" rel="noopener">ESV.org</a>, and the verse pop-ups are provided by the ESV CrossReference Tool, courtesy of Crossway.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:24px">
+      <h2 style="font-size:28px;font-weight:600;margin:0">Studies reproduced by permission</h2>
+      <p style="margin:0;text-align:left">The <em>Hymns for Him</em> studies by Dr. Larry Roff are reproduced in full from Hymns4Him by the author’s permission, and each is linked to its page on his site. Where a study discusses a tune the Covenant Hymnal does not use, that portion is omitted and the page says so.</p>
+      <p style="margin:0;text-align:left">The hymn notes of Mark McConathy are reproduced in full by the author’s permission from <em>Mark McConathy Program Notes</em>, and each is linked to his site.</p>
+      <p style="margin:0;text-align:left">Neither may be reproduced from this site without the author’s own consent.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:24px">
+      <h2 style="font-size:28px;font-weight:600;margin:0">Reference works</h2>
+      <p style="margin:0;text-align:left">The pages cite, among others, <em>The Canterbury Dictionary of Hymnology</em> (Canterbury Press), John Julian’s <em>A Dictionary of Hymnology</em> (1907), the <em>Lutheran Service Book: Companion to the Hymns</em> (Concordia, 2019), the <em>Psalter Hymnal Handbook</em> (CRC Publications, 1998), C. Michael Hawn’s <em>Sing with Understanding</em> (GIA, 3rd ed.), and the hymn-story collections of Kenneth W. Osbeck, Robert J. Morgan and others, together with the text and tune pages of <a href="https://hymnary.org/" target="_blank" rel="noopener">Hymnary.org</a>. These works are quoted only in short passages, with attribution; the facts drawn from them are stated in our own words. Links to books point to a bookseller’s or publisher’s page, or to a free scan of a work out of copyright, so that readers can find the book itself; the site earns nothing from those links.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:24px">
+      <h2 style="font-size:28px;font-weight:600;margin:0">Images</h2>
+      <p style="margin:0;text-align:left">Images are reproduced under the license stated in each caption — most from Wikimedia Commons, in the public domain or under a Creative Commons license — with the credit the license requires.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:24px">
+      <h2 style="font-size:28px;font-weight:600;margin:0">Corrections</h2>
+      <p style="margin:0;text-align:left">If you hold rights in any material on this site and believe it has been used without proper permission or credit, or if you find an error of fact, please <button onClick="{{ goContact }}" style="all:unset;cursor:pointer;color:var(--color-accent-700);text-decoration:underline;text-underline-offset:3px">write to the church office</button> at Covenant Presbyterian Church, 33 Burton Hills Boulevard, Nashville, Tennessee 37215, and it will be put right.</p>
+    </div>
+  </section>
+</sc-if>
+
 <footer style="background:#15283f;color:var(--color-neutral-300);margin-top:0">
   <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,4vw,48px) 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:36px">
     <div style="display:flex;flex-direction:column;gap:14px;grid-column:span 2;min-width:0">
-      <div style="display:flex;align-items:center;gap:14px"><img src="assets/hymnal-seal-2.jpg" alt="" style="width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--color-accent-500)"><span style="font-family:var(--font-heading);font-size:18px;letter-spacing:.24em;text-transform:uppercase;color:var(--color-bg)">Covenant Hymnal</span></div>
+      <div style="display:flex;align-items:center;gap:14px"><img src="assets/hymnal-seal-2.png" alt="" style="width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--color-accent-500)"><span style="font-family:var(--font-heading);font-size:18px;letter-spacing:.24em;text-transform:uppercase;color:var(--color-bg)">Covenant Hymnal</span></div>
       <span style="font-size:13px;line-height:1.6">Hymn of the Month and new articles, by email once a month.</span>
       <form onSubmit="{{ submitNews }}" style="display:flex;gap:8px;max-width:420px">
         <input class="input" type="email" required placeholder="Email address" style="background:transparent;color:var(--color-bg);border-color:rgba(243,242,242,.3)">
@@ -687,7 +758,7 @@ const INTRO = [
   'While we often speak our praise, Scripture also instructs us to sing our praise: “Shout for joy to God, all the earth; sing the glory of his name; give to him glorious praise!” (Psalm 66:1) We believe that we are to sing praise because God wants us to worship him with heart, mind, and body. Since music engages all of these, singing our worship brings together our whole being as we glorify him.',
   'It is with thankfulness and by God’s gracious providence that the Covenant Hymnal is in your hands. One could ask, why is a new hymnal needed? First, while we deeply appreciate the Trinity Hymnal (1990 edition), it does not include many hymns that our congregation sings regularly and includes others that we do not sing. Second, we wanted to provide a hymnal for our congregation that was more readily and intentionally useful for family and personal worship. Third, God has provided a time in the life of our congregation marked by a robust music ministry and gifted staff able to contribute to this project. While this hymnal is primarily intended to serve a local congregation in public, family, and daily worship, if there is benefit to the visible church beyond our congregation, then praise be to God!',
   'There were several principles that informed the selection and presentation of hymns in the Covenant Hymnal. For public worship at Covenant Presbyterian Church in Nashville, we use hymns from across church history and wisely incorporate the best modern hymns. Using the Trinity Hymnal as the foundation and drawing inspiration from other churches that have undertaken similar projects, we have assembled a collection of music that we hope will magnify and exalt our Lord while comforting, instructing, and forming our congregation. In a multigenerational context, there are many songs, hymns, and tunes that resonate at an individual level. Several hymns that have deeply consoled our congregation are included. This hymnal also draws substantially from the Psalms, the inspired hymns of Scripture.',
-  'Hymns have historically been modified by strengthening theology, removing stanzas, and updating language. For example, the Trinity Hymnal updated some pronouns from the historic “Thee/Thou” to “You/Your.” Many contemporary hymnologists, publishers, and musicians are returning to original texts. The Covenant Hymnal follows this recovery, restoring original texts where possible. One exception is our metrical Psalm settings, which follow the English Standard Version (ESV).',
+  'Hymns have historically been modified by strengthening theology, removing stanzas, and updating language. For example, the Trinity Hymnal updated some pronouns from the historic “Thee/Thou” to “You/Your.” Many contemporary hymnologists, publishers, and musicians are returning to original texts. The Covenant Hymnal follows this recovery, restoring original texts where possible.',
   'As we train children in the Scriptures and catechisms, we also want to teach them the music of worship. The Hymns of the Month in the Covenant Hymnal will be a musical resource in our children’s ministry, and we encourage all members and families to use them.',
   'Most of all, we want those who use this hymnal to be drawn to the majesty of our holy, triune, and covenant-keeping God and to the beauty of music sung to honor him. The Holy Spirit works through the songs of the Church to bring glory to God, soften the hearts of sinners, and encourage the saints to rest on Jesus Christ alone for salvation. Praise him from whom all blessings flow! It is our prayer that the Covenant Hymnal will be a blessing flowing to you and Christ’s Church for generations to come, until he comes again or a future church improves it.',
   'We want to thank the many people on our staff and others in and outside of our congregation who generously contributed to the development of the Covenant Hymnal. We are grateful.',
@@ -711,7 +782,7 @@ const ARTICLE = [
 const FAQS = [
   ['What is the Covenant Hymnal?','A hymnal compiled by Covenant Presbyterian Church in Nashville for public, family, and daily worship. It uses the Trinity Hymnal (1990) as its foundation, draws substantially from the Psalms, and includes hymns from across church history alongside the best modern hymns.'],
   ['Why does the hymnal keep “thee” and “thou”?','Many hymnologists, publishers, and musicians are returning to original texts, and the Covenant Hymnal follows this recovery, restoring original texts where possible. Where a text differs from its original, “alt.” follows the author’s name.'],
-  ['Why do the Psalm settings read differently?','The one exception to restoring original texts: the metrical Psalm settings follow the English Standard Version (ESV), in step with the congregation’s translation of Scripture.'],
+  ['How are the Psalms sung?','In meter — the psalm text is set in regular stanzas so a congregation can sing it to a hymn tune. Each setting’s credit line tells how closely it follows the psalm: a metrical setting keeps the whole psalm in order, a paraphrase follows it freely, and a hymn based on a psalm takes its theme.'],
   ['What is on this website that is not in the book?','Alternate stanzas, leadsheets and alternate keys, video and sound samples, biographies of the authors and composers, and fuller articles on the hymn texts and their music.'],
   ['What are the Hymns of the Month?','A five-year cycle of twelve hymns a year, running August to July. They are a musical resource for the children’s ministry, and every member and family is encouraged to learn them at home.'],
   ['What do the dots in the left margin mean?','When six or more stanzas are set between the staves, dots mark the second stanza from the top and the second from the bottom — and the middle stanza where seven are set — to help the singer find the right line at each new stave.'],
@@ -720,7 +791,7 @@ const FAQS = [
 ];
 
 class Component extends DCLogic {
-  componentDidMount() { import('./hymns-data.js').then(m => this.setState({ hymns: m.HYMNS, texts: m.TEXTS, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS })); }
+  componentDidMount() { this.readHash(); window.addEventListener('hashchange', () => this.readHash()); import('./hymn-notes.js').then(m => this.setState({ notes: m.NOTES, downloadsMap: m.DOWNLOADS, listenMap: m.LISTEN })).catch(() => {}); import('./hymns-data.js').then(m => this.setState({ hymns: m.HYMNS, texts: m.TEXTS, refrains: m.REFRAINS || {}, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS })); }
   hymnVals() {
     const { hymns = [], texts = {}, sectionOrder = [], q = '', view = 'sections', hymn } = this.state;
     const norm = s => String(s ?? '').toLowerCase();
@@ -755,15 +826,77 @@ class Component extends DCLogic {
       h: { ...h, hasKind: !!(h.kind || pi), kindLabel: pi ? pi.kind + (pi.category ? ' · ' + pi.category + ' psalm' : '') : (h.kind ? h.kind[0].toUpperCase() + h.kind.slice(1) : ''), pageLabel: h.page ? 'Page ' + h.page : '', stanzaLabel: h.stanzas ? h.stanzas + (h.stanzas === 1 ? ' stanza' : ' stanzas') + (h.refrain ? ' with refrain' : '') : '', rights: h.pd ? 'Public domain' : (h.copyright || 'Under copyright'), scheduledLabel: h.scheduled ? 'Sung at Covenant ' + h.scheduled + (h.scheduled === 1 ? ' time' : ' times') + ' since 2016' : '', rankLabel: h.hymnals ? 'In ' + h.hymnals + ' hymnals' : '' }, topicTags: (h.topics || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'topics', q: t }) })), ancientNote: an ? { orig: an.orig, source: an.source, german: an.viaGerman, era: an.era } : null, isAncient: !!an,
       ancientGroups: (this.state.ancientEras || []).map(er => ({ ...er, rows: (this.state.ancient || []).filter(a => a.era === er.name).map(a => { const x = hymns.find(y => y.n === a.n); const sub = x && x.subtitle && x.subtitle.toLowerCase() !== a.orig.toLowerCase() ? x.subtitle : ''; return { ...a, subtitle: sub, titleTail: [a.orig, sub].filter(Boolean).join(' · '), hasGerman: !!a.viaGerman, go: () => this.openHymn(a.n) }; }) })),
       scriptureTags: (h.scriptures || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'sections', q: t }) })), stanzas: stz.map((lines, i) => ({ n: i + 1, text: lines.join('\n') })), noText: stz.length === 0,
-      downloads: [{ label: 'Hymnal page', kind: 'PDF' }, { label: 'Leadsheet', kind: 'PDF' }, { label: 'Alternate key', kind: 'PDF' }, { label: 'Text only', kind: 'PDF' }],
+      ...this.noteVals(h),
       related: [rel('Same tune · ' + (h.tune || ''), others.filter(x => x.tune === h.tune)), rel('Same meter · ' + (h.meter || ''), others.filter(x => x.meter === h.meter)), rel(h.psalm ? 'Also Psalm ' + h.psalm : 'Same topic · ' + (h.topic || ''), others.filter(x => h.psalm ? x.psalm === h.psalm : x.topic === h.topic))],
       prevLabel: prev ? prev.n + ' · ' + prev.title : 'Hymns', prevGo: prev ? () => this.openHymn(prev.n) : this.go('hymns'),
       nextLabel: next ? next.n + ' · ' + next.title : 'Hymns', nextGo: next ? () => this.openHymn(next.n) : this.go('hymns'),
     };
   }
-  openHymn(n) { this.setState({ hymn: n, page: 'hymn' }); try { localStorage.setItem('cvh2-page', 'hymn'); localStorage.setItem('cvh2-hymn', String(n)); } catch (_) {} window.scrollTo({ top: 0 }); }
+  esvHref(t) { if (typeof window === 'undefined' || !window.linkScripture) return null; const d = document.createElement('div'); d.textContent = t; window.linkScripture(d); const a = d.querySelector('a'); return a ? a.href : null; }
+  segs(str) {
+    const out = []; const re = /\[\^(\d+)\]/g; let last = 0, m; str = String(str || '');
+    const push = t => { if (!t) return; if (typeof window !== 'undefined' && window.linkScripture) { const d = document.createElement('div'); d.textContent = t; window.linkScripture(d); d.childNodes.forEach(nd => nd.nodeType === 3 ? out.push({ isText: true, text: nd.nodeValue }) : out.push({ isEsv: true, text: nd.textContent, href: nd.href })); } else out.push({ isText: true, text: t }); };
+    while ((m = re.exec(str))) { push(str.slice(last, m.index)); out.push({ isFn: true, n: m[1], go: this.fnGo(m[1]) }); last = m.index + m[0].length; }
+    push(str.slice(last)); return out;
+  }
+  fnGo(n) { return e => { e.preventDefault(); this.setState(s => ({ noteOpen: { ...(s.noteOpen || {}), sources: true } })); setTimeout(() => { const el = document.getElementById('src-' + n); if (el) { const r = el.getBoundingClientRect(); window.scrollTo({ top: r.top + window.scrollY - 96, behavior: 'smooth' }); el.style.color = 'var(--color-accent-700)'; } }, 80); }; }
+  abbrevLead(s) {
+    // Abbreviate only the opening reference of the bulletin note, e.g. “(Psalm 100:1)” → “(Ps. 100:1)”; later references stay in full.
+    const AB = { Genesis: 'Gen.', Exodus: 'Ex.', Leviticus: 'Lev.', Numbers: 'Num.', Deuteronomy: 'Deut.', Joshua: 'Josh.', Judges: 'Judg.', '1 Samuel': '1 Sam.', '2 Samuel': '2 Sam.', '1 Kings': '1 Kgs.', '2 Kings': '2 Kgs.', '1 Chronicles': '1 Chron.', '2 Chronicles': '2 Chron.', Nehemiah: 'Neh.', Psalms: 'Ps.', Psalm: 'Ps.', Proverbs: 'Prov.', Ecclesiastes: 'Eccles.', 'Song of Solomon': 'Song', Isaiah: 'Isa.', Jeremiah: 'Jer.', Lamentations: 'Lam.', Ezekiel: 'Ezek.', Daniel: 'Dan.', Hosea: 'Hos.', Obadiah: 'Obad.', Micah: 'Mic.', Nahum: 'Nah.', Habakkuk: 'Hab.', Zephaniah: 'Zeph.', Haggai: 'Hag.', Zechariah: 'Zech.', Malachi: 'Mal.', Matthew: 'Matt.', Romans: 'Rom.', '1 Corinthians': '1 Cor.', '2 Corinthians': '2 Cor.', Galatians: 'Gal.', Ephesians: 'Eph.', Philippians: 'Phil.', Colossians: 'Col.', '1 Thessalonians': '1 Thess.', '2 Thessalonians': '2 Thess.', '1 Timothy': '1 Tim.', '2 Timothy': '2 Tim.', Philemon: 'Philem.', Hebrews: 'Heb.', '1 Peter': '1 Pet.', '2 Peter': '2 Pet.', Revelation: 'Rev.' };
+    const re = new RegExp('\\((' + Object.keys(AB).sort((x, y) => y.length - x.length).join('|') + ')\\s+(\\d)');
+    return String(s || '').replace(re, (m, book, d) => '(' + AB[book] + ' ' + d);
+  }
+  noteVals(h) {
+    const N = (this.state.notes || {})[h.n]; const D = (this.state.downloadsMap || {})[h.n]; const L = (this.state.listenMap || {})[h.n];
+    const a = (h.author || '').split(/[;,]/)[0].trim() || 'the author';
+    const c = (h.composer || '').split(/[;,]/)[0].trim() || 'the composer';
+    const blurb = N ? N.blurb : `${h.title || 'This hymn'} sets words by ${a} to the tune ${h.tune || ''}, ${c}. Written for congregations to sing as one voice, it draws on ${h.scripture || 'Scripture'} and has been sung in churches for generations. Look for it in worship this month, and sing it at home through the week.`;
+    const open = this.state.noteOpen || {};
+    const para = p => ({ parts: this.segs(p), isQuote: p.includes('\n'), isProse: !p.includes('\n') });
+    const mk = (id, title, sub, paras, x = {}) => ({ id, title, sub, paras: (paras || []).map(para), hasLink: !!x.href && !x.credit, subHref: x.href || '', subLinkText: x.linkText || '', hasCredit: !!x.credit, credit: x.credit || '', creditHref: x.href || '', creditLinkText: x.linkText || '', lead: x.lead || '', hasLead: !!x.lead, isTable: !!x.columns, columns: x.columns || [], rows: (x.rows || []).map((cells, i) => ({ n: i + 1, cells })), isSources: !!x.sources, sources: (x.sources || []).map((s, i) => ({ n: i + 1, text: s.text, url: s.url || '', hasUrl: !!s.url, noUrl: !s.url })), open: !!open[id], mark: open[id] ? '−' : '+', toggle: () => this.setState(s => ({ noteOpen: { ...(s.noteOpen || {}), [id]: !(s.noteOpen || {})[id] } })) });
+    const notes = [];
+    if (N) {
+      if (N.children) notes.push(mk('children', 'For Children', 'A short note to read together', [N.children]));
+      notes.push(mk('author', 'The Words', a, N.author));
+      notes.push(mk('composer', 'The Music', c + (h.tune ? ' · ' + h.tune : ''), N.composer));
+      if (N.roff) { const src = (N.sources || []).find(s => /hymns4him/i.test(s.text) || /hymns4him/i.test(s.url || '')); notes.push(mk('roff', 'A Study by Dr. Larry Roff', '', N.roff, { credit: 'Reproduced with permission from ', href: (src && src.url) || 'https://www.hymns4him.org/', linkText: 'Hymns4Him', lead: N.roff_note })); }
+      if (N.mcconathy) notes.push(mk('mcconathy', 'Hymn Notes by Mark McConathy', '', N.mcconathy, { credit: 'Reproduced in full by the author’s permission from ', href: 'https://markmcconathyprogramnotes.com/', linkText: 'Mark McConathy Program Notes' }));
+      if (N.depth) notes.push(mk('depth', 'In Depth', 'Text, tune, and theology', N.depth));
+      if (N.comparison) notes.push(mk('compare', 'The Text Compared', (N.comparison.columns || []).join(' · '), [N.comparison.note], { columns: N.comparison.columns, rows: N.comparison.rows }));
+      if (N.sources && N.sources.length) notes.push(mk('sources', 'Sources', N.sources.length + ' works cited', [], { sources: N.sources }));
+    } else {
+      notes.push(mk('author', 'The Words', a, ['A short life of the author will appear here: where and when they lived, the church they served, and the circumstances in which the text was written.', 'Where the text has been altered for this hymnal, this section notes what changed and why.']));
+      notes.push(mk('composer', 'The Music', c + (h.tune ? ' · ' + h.tune : ''), ['A short account of the composer and the tune: its first appearance, the text it was first paired with, and what makes it suited to these words.']));
+      notes.push(mk('depth', 'In Depth', 'Text, tune, and theology', ['A longer study for those who want more than the bulletin note: the hymn’s place in Scripture and in the history of the church’s song, and how the tune serves the words.']));
+    }
+    const lyr = N && N.show_lyrics !== false && N.lyrics_lines && N.lyrics_lines.length ? N.lyrics_lines : ((this.state.texts || {})[h.n] || []).map(l => l.join('\n'));
+    const tags = N && N.scripture_tags && N.scripture_tags.length ? N.scripture_tags : (h.scriptures || []);
+    const yt = L && L.youtube; const id = yt ? ((String(yt).match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/) || [])[1] || (/^[\w-]{11}$/.test(yt) ? yt : null)) : null;
+    const plain = blurb.replace(/\[\^\d+\]/g, '');
+    return {
+      blurbParts: this.segs(this.abbrevLead(blurb)), copyLabel: this.state.copied ? 'Copied' : 'Copy text',
+      copyBlurb: () => { try { navigator.clipboard.writeText(plain); } catch (_) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      downloadsOpen: !!this.state.downloadsOpen, downloadsMark: this.state.downloadsOpen ? '−' : '+', toggleDownloads: () => this.setState(s => ({ downloadsOpen: !s.downloadsOpen })),
+      notes,
+      stanzas: (() => { const items = lyr.map((t, i) => ({ n: i + 1, text: t })); const rf = ((this.state.refrains || {})[h.n]); if (rf && rf.lines && items.length) { const r = { n: 'R', text: rf.lines.join('\n') }; if (rf.pos === 'before_first') items.unshift(r); else if (rf.pos === 'after_last') items.push(r); else items.splice(1, 0, r); } return items; })(), noText: lyr.length === 0,
+      noTextMsg: (N && N.show_lyrics === false) || !h.pd ? 'This text is under copyright and is not reproduced here; the hymnal page carries it in full.' : 'Text to be added. Each hymn page will carry the full text as printed.',
+      scriptureTags: tags.map(t => ({ t, href: this.esvHref(t) || '#' })),
+      downloads: (() => { let list = (D || ['Hymnal page', 'Leadsheet (G)', 'Chord chart (G)'].map(label => ({ label, kind: 'to come', file: null }))).slice(); const txt = list.find(d => /^text only$/i.test(d.label)); list = list.filter(d => d !== txt); if (!list.some(d => /lyric sheet/i.test(d.label))) list.unshift(txt ? { ...txt, label: 'Lyric sheet' } : { label: 'Lyric sheet', kind: 'to come', file: null }); return list.map(d => ({ label: d.label, kind: d.kind, href: d.file || '#' })); })(),
+      listen: { hasVideo: !!id, noVideo: !id, embed: id ? 'https://www.youtube-nocookie.com/embed/' + id : '', label: (L && L.label) || 'Lyric video to come' },
+    };
+  }
+  readHash() { const m = (location.hash || '').replace(/^#\/?/, ''); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','order','journal','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
+  setHash(s) { try { if (('#' + s) !== location.hash) history.replaceState(null, '', '#' + s); } catch (_) {} }
+  shareVals(p, h, N) {
+    const base = location.href.split('#')[0]; const url = base + '#' + (p === 'hymn' ? 'hymn/' + h.n : p === 'home' ? '' : p);
+    const names = { home: 'Covenant Hymnal', about: 'About the Covenant Hymnal', hymnal: 'Inside the Covenant Hymnal', hymns: 'The Hymns — Covenant Hymnal', order: 'Order the Covenant Hymnal', journal: 'Journal — Covenant Hymnal', article: 'Journal — Covenant Hymnal', faq: 'FAQ — Covenant Hymnal', contact: 'Contact — Covenant Hymnal', sources: 'Sources & Permissions — Covenant Hymnal' };
+    const title = p === 'hymn' ? `${h.n} · ${h.title} — Covenant Hymnal` : names[p] || 'Covenant Hymnal';
+    const text = p === 'hymn' && N && N.blurb ? N.blurb.replace(/\[\^\d+\]/g, '') : '';
+    return { shareLabel: this.state.shared ? 'Link copied' : 'Share', share: async () => { const data = { title, text, url }; try { if (navigator.share && (!navigator.canShare || navigator.canShare(data))) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; } try { await navigator.clipboard.writeText(url); } catch (_) { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } this.setState({ shared: true }); setTimeout(() => this.setState({ shared: false }), 1800); } };
+  }
+  openHymn(n) { this.setHash('hymn/' + n); this.setState({ hymn: n, page: 'hymn', noteOpen: {}, downloadsOpen: false }); try { localStorage.setItem('cvh2-page', 'hymn'); localStorage.setItem('cvh2-hymn', String(n)); } catch (_) {} window.scrollTo({ top: 0 }); }
   state = { menuOpen: false, hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
-  go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setState({ page, menuOpen: false }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
+  go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setHash(page === 'home' ? '' : page); this.setState({ page, menuOpen: false }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
   cycle() {
     const now = new Date(); const m = now.getMonth();
     const start = m >= 7 ? now.getFullYear() : now.getFullYear() - 1;
@@ -783,9 +916,9 @@ class Component extends DCLogic {
     const qtys = ['1', '2–10', '11–50', '50+']; const subs = ['Ordering', 'Permissions', 'Corrections', 'Other'];
     return {
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), menuLabel: this.state.menuOpen ? 'Close ✕' : 'Menu ☰', menuOpenClass: this.state.menuOpen ? 'open' : '',
-      nav, showUtility: this.props.showUtilityBar ?? true,
-      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'),
-      isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isContact: p === 'contact',
+      nav, showUtility: this.props.showUtilityBar ?? true, ...this.shareVals(p, (this.state.hymns || []).find(x => x.n === this.state.hymn) || {}, (this.state.notes || {})[this.state.hymn]),
+      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'), goContact: this.go('contact'),
+      isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isSources: p === 'sources', isContact: p === 'contact',
       heroLetter: hero === 'book-and-letter', heroCentered: hero === 'book-centered',
       goHome: this.go('home'), goAbout: this.go('about'), goHymnal: this.go('hymnal'), goOrder: this.go('order'), goJournal: this.go('journal'), goArticle: this.go('article'),
       hom: { now: { month: MONTHS[c.mi], title: HOM[c.yi][c.mi] }, next: { month: MONTHS[c.nmi], title: HOM[c.nyi][c.nmi] }, yearLabel: `Year ${c.yi + 1}`, days: c.days, daysLabel: c.days === 1 ? 'day until' : 'days until' },
@@ -802,7 +935,7 @@ class Component extends DCLogic {
       principles: [
         { kicker: 'Foundation', title: 'The Trinity Hymnal', body: 'The 1990 edition as the foundation, with the hymns this congregation sings added and those it does not sing set aside.' },
         { kicker: 'Texts', title: 'Original words restored', body: 'Original texts restored where possible, including the older forms thee and thou.' },
-        { kicker: 'Psalms', title: 'Sung from the ESV', body: 'Metrical Psalm settings follow the English Standard Version — the one exception to restoring originals.' },
+        { kicker: 'Psalms', title: 'Sung in meter', body: 'Nearly a hundred Psalm settings, each set in regular stanzas to be sung by the whole congregation to a hymn tune.' },
       ],
       sections: SECTIONS.map(([name, range, detail]) => ({ name, range, detail })),
       goPsalms: () => this.go('hymns')() || this.setState({ view: 'psalms', q: '' }),
@@ -849,7 +982,7 @@ class Component extends DCLogic {
       footCols: [
         { title: 'The Hymnal', links: [{ label: 'Inside', go: this.go('hymnal') }, { label: 'The Hymns', go: this.go('hymns') }, { label: 'Hymns of the Month', go: this.go('home') }, { label: 'Order', go: this.go('order') }] },
         { title: 'Read', links: [{ label: 'Introduction', go: this.go('about') }, { label: 'Journal', go: this.go('journal') }, { label: 'FAQ', go: this.go('faq') }] },
-        { title: 'Contact', links: [{ label: 'Write to us', go: this.go('contact') }, { label: 'Permissions', go: this.go('contact') }] },
+        { title: 'Contact', links: [{ label: 'Write to us', go: this.go('contact') }, { label: 'Sources & Permissions', go: this.go('sources') }] },
       ],
     };
   }
