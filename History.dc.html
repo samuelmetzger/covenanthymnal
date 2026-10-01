@@ -185,14 +185,14 @@
 
   <sc-if value="{{ isRoad }}" hint-placeholder-val="{{ false }}">
     <section style="max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px">
-      <div style="position:relative;height:min(640px,78vh);min-height:460px;perspective:760px;perspective-origin:50% 16%;overflow:hidden;background:linear-gradient(180deg,var(--color-bg) 0%,var(--color-bg) 22%,#ebe5da 100%);border:1px solid var(--color-divider)">
+      <div class="hx-road" style="touch-action:pan-x;position:relative;height:min(640px,78vh);min-height:460px;perspective:760px;perspective-origin:50% 16%;overflow:hidden;background:linear-gradient(180deg,var(--color-bg) 0%,var(--color-bg) 22%,#ebe5da 100%);border:1px solid var(--color-divider)">
         <div style="position:absolute;left:50%;top:66%;width:0;height:0;transform-style:preserve-3d;transform:translateZ({{ roadZ }}px);transition:transform .7s cubic-bezier(.3,.1,.2,1)">
           <div style="position:absolute;left:-110px;top:0;width:220px;height:{{ roadLen }}px;transform-origin:50% 0;transform:rotateX(-90deg);background:#d9d0c1;border-left:2px solid #c4b8a5;border-right:2px solid #c4b8a5">
             <div style="position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:repeating-linear-gradient(180deg,#f3f2f2 0 60px,transparent 60px 120px)"></div>
           </div>
           <sc-for list="{{ roadCards }}" as="c" hint-placeholder-count="4">
-            <span style="position:absolute;left:0;top:0;transform:{{ c.mk }};opacity:{{ c.op }};font-family:var(--font-heading);font-size:34px;color:#7a5a25;white-space:nowrap;font-variant-numeric:lining-nums;transition:opacity .5s;transform-origin:50% 100%">{{ c.year }}</span>
-            <button id="{{ c.rid }}" onClick="{{ c.go }}" tabindex="{{ c.tab }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:0;top:0;width:240px;background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;transform:{{ c.tf }};opacity:{{ c.op }};visibility:{{ c.vis }};transition:opacity .5s;box-shadow:0 18px 28px -18px rgba(0,0,0,.35)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+            <span style="position:absolute;left:0;top:0;transform:{{ c.mk }};opacity:{{ c.mop }};font-family:var(--font-heading);font-size:34px;color:#7a5a25;white-space:nowrap;font-variant-numeric:lining-nums;transition:opacity .5s;transform-origin:50% 100%">{{ c.year }}</span>
+            <button id="{{ c.rid }}" onClick="{{ c.go }}" tabindex="{{ c.tab }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:0;top:0;width:280px;background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;transform:{{ c.tf }};opacity:{{ c.op }};visibility:{{ c.vis }};transition:opacity .5s;box-shadow:0 18px 28px -18px rgba(0,0,0,.35)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
               <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block"></span>
               <span style="padding:12px 16px 16px;display:flex;flex-direction:column;gap:6px">
                 <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
@@ -281,11 +281,12 @@ class Component extends DCLogic {
         const first = st ? st.split('\n')[0].replace(/[,;:.—–-]+$/, '') : h.title;
         items.push({ key: 'h' + h.n, kind: 'hymn', n: h.n, year: h.year, note: h.yearNote || '', era: eraOf(h.year, h.eraId).id, trad: h.traditionId, title: h.title, first, author: h.authorName || '', composer: h.composerName || '', tune: h.tune || '', page: h.page || '', story: strip(h.story), blurb: strip(N.blurb), tuneOrigin: strip(N.composer && N.composer[0]), stanza: st, image: h.image || '', imageAlt: h.imageAlt || '', credit: h.imageCredit || '' });
       });
-      [['church', 'CHURCH_EVENTS'], ['music', 'MUSIC_EVENTS'], ['world', 'WORLD_EVENTS']].forEach(([kind, k]) => pick(k).forEach((e, i) => items.push({ key: kind[0] + i, kind, year: e.year, note: e.yearNote || '', era: eraOf(e.year, e.eraId).id, title: e.title, text: strip(e.text), image: e.image || '', imageAlt: e.imageAlt || e.title, credit: e.credit || '' })));
+      (real ? (d.PSALM_CARDS || []) : []).forEach(p => items.push({ key: p.key || ('ps' + p.psalm), kind: 'hymn', psalmCard: true, n: p.n, year: p.year, note: p.yearNote || '', era: eraOf(p.year).id, trad: 'psalter', title: p.title, first: p.title, author: p.author, composer: '', tune: `Sung as No. ${p.n} · ${p.hymnTitle}`, page: p.page || '', story: strip(p.story), blurb: '', tuneOrigin: '', stanza: p.verse, image: '', imageAlt: '', credit: '' }));
+      [['church', 'CHURCH_EVENTS'], ['music', 'MUSIC_EVENTS'], ['world', 'WORLD_EVENTS']].forEach(([kind, k]) => pick(k).forEach((e, i) => items.push({ key: kind[0] + i, kind, year: e.year, prologue: e.tag === 'prologue', note: e.tag === 'prologue' ? '' : (e.yearNote || ''), era: eraOf(e.year, e.eraId).id, title: e.title, text: strip(e.text), image: e.image || '', imageAlt: e.imageAlt || e.title, credit: e.credit || '' })));
       const order = { hymn: 0, church: 1, music: 2, world: 3 };
       items.sort((a, b) => a.year - b.year || order[a.kind] - order[b.kind]);
       this.D = { eras, trads, items, tmap: Object.fromEntries(trads.map(t => [t.id, t])) };
-      const start = Math.max(0, eras.findIndex(e => e.id === 'reformation'));
+      const start = 0;
       this.setState({ ready: true, sample: !real, eraI: start });
     });
     this.onKey = e => {
@@ -299,8 +300,25 @@ class Component extends DCLogic {
       else if (this.state.view === 'timeline' && !(tg && tg.closest && tg.closest('.hx-row'))) { this.goEra(this.state.eraI + dir); e.preventDefault(); }
     };
     document.addEventListener('keydown', this.onKey);
+    this.wheelAcc = 0; this.wheelT = 0;
+    this.onWheel = e => {
+      if (this.state.view !== 'road' || !(e.target && e.target.closest && e.target.closest('.hx-road'))) return;
+      e.preventDefault();
+      const now = Date.now(); if (now - this.wheelT > 400) this.wheelAcc = 0;
+      this.wheelAcc += e.deltaY;
+      if (Math.abs(this.wheelAcc) >= 80 && now - this.wheelT > 260) { this.roadStep(this.wheelAcc > 0 ? 1 : -1); this.wheelAcc = 0; this.wheelT = now; }
+    };
+    this.onTouchStart = e => { if (e.target && e.target.closest && e.target.closest('.hx-road')) this.touchY = e.touches[0].clientY; else this.touchY = null; };
+    this.onTouchMove = e => {
+      if (this.touchY == null || this.state.view !== 'road') return;
+      const dy = this.touchY - e.touches[0].clientY; e.preventDefault();
+      if (Math.abs(dy) > 50) { this.roadStep(dy > 0 ? 1 : -1); this.touchY = e.touches[0].clientY; }
+    };
+    document.addEventListener('wheel', this.onWheel, { passive: false });
+    document.addEventListener('touchstart', this.onTouchStart, { passive: true });
+    document.addEventListener('touchmove', this.onTouchMove, { passive: false });
   }
-  componentWillUnmount() { document.removeEventListener('keydown', this.onKey); }
+  componentWillUnmount() { document.removeEventListener('wheel', this.onWheel); document.removeEventListener('touchstart', this.onTouchStart); document.removeEventListener('touchmove', this.onTouchMove); document.removeEventListener('keydown', this.onKey); }
   fy(y) { return y < 0 ? `${-y} BC` : y === 0 ? 'AD 1' : String(y); }
   visOf(s) { return this.D.items.filter(it => it.kind === 'hymn' ? (!s.trad || it.trad === s.trad) : s.lanes[it.kind]); }
   eraDates(e, last) { return last ? `Since ${this.fy(e.start)}` : `${this.fy(e.start)} – ${this.fy(e.end)}`; }
@@ -337,7 +355,7 @@ class Component extends DCLogic {
     return {
       id: 'hx-' + it.key, rid: 'hr-' + it.key, bar: isH ? (T.color || '#b68235') : 'transparent', barH: isH ? 5 : 0,
       kicker: (isH ? (T.label || 'Hymn') : this.LANE[it.kind].label) + (it.note ? ' · ' + it.note : ''),
-      year: this.fy(it.year), title: isH ? it.first : it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
+      year: it.prologue ? 'In the beginning' : this.fy(it.year), title: isH ? it.first : it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
       img: it.image, hasImg: !!it.image, imgAlt: it.imageAlt || it.title, span: it.image ? 2 : 1,
       tint: isH ? '#e9e3d8' : '#efeae1', yearColor: isH ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
       border: s.sel === it.key ? 'var(--color-accent)' : 'transparent', go: () => this.open(it.key),
@@ -360,20 +378,20 @@ class Component extends DCLogic {
     const tk = []; for (let y = Math.ceil(E.start / step) * step; y <= E.end; y += step) tk.push(y);
     const ticks = tk.map((y, i) => ({ pct: (y - E.start) / span * 100, label: tk.length > 7 && i % 2 ? '' : this.fy(y) }));
     const laneY = { hymn: 12, church: 64, music: 74, world: 84 };
-    const dots = inE.map(it => ({ pct: Math.max(0.5, Math.min(99.5, (it.year - E.start) / span * 100)), top: laneY[it.kind], size: s.sel === it.key ? 16 : it.kind === 'hymn' ? 11 : 8, bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || '#b68235') : this.LANE[it.kind].color, title: `${this.fy(it.year)} · ${it.title}`, go: () => this.open(it.key) }));
+    const dots = inE.map(it => ({ pct: Math.max(0.5, Math.min(99.5, (it.year - E.start) / span * 100)), top: laneY[it.kind], size: s.sel === it.key ? 16 : it.kind === 'hymn' ? 11 : 8, bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || '#b68235') : this.LANE[it.kind].color, title: `${it.prologue ? 'In the beginning' : this.fy(it.year)} · ${it.title}`, go: () => this.open(it.key) }));
     const band = eras.map((e, i) => { const sp = e.end - e.start; const on = i === eraI; return { label: this.eraDates(e, i === lastI) + ' · ' + e.label, short: e.short || e.label, current: on ? 'true' : 'false', bg: on ? '#efeae1' : 'transparent', line: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', ticks: vis.filter(it => it.era === e.id).map(it => ({ pct: Math.max(0, Math.min(99, (it.year - e.start) / sp * 100)), bg: it.kind === 'hymn' ? 'var(--color-accent)' : 'var(--color-neutral-500)', h: it.kind === 'hymn' ? 9 : 5 })), go: () => this.goEra(i) }; });
-    const groups = eras.map((e, i) => { const its = vis.filter(it => it.era === e.id); return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.image), ...its.filter(x => !x.image)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
-    const ri = Math.max(0, Math.min(s.roadI, vis.length - 1)); const SP = 360; const stageW = Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const off = Math.max(130, Math.min(200, stageW / 2 - 150));
-    const roadCards = vis.map((it, i) => { const dd = i - ri; const c = this.card(it); const side = i % 2 === 0 ? -1 : 1; const shown = dd >= 0 && dd <= 7; return { ...c, tf: `translate3d(${side * off - 120}px, -250px, ${-i * SP}px)`, mk: `translate3d(-50%, 0, ${-i * SP + 60}px) rotateX(-90deg) translateY(-18px)`, op: shown ? (1 - dd * 0.1).toFixed(2) : 0, vis: shown ? 'visible' : 'hidden', tab: dd === 0 ? '0' : '-1' }; });
+    const groups = eras.map((e, i) => { const its = vis.filter(it => it.era === e.id); return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.prologue), ...its.filter(x => x.image && !x.prologue), ...its.filter(x => !x.image && !x.prologue)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
+    const ri = Math.max(0, Math.min(s.roadI, vis.length - 1)); const SP = 360; const stageW = Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const off = Math.max(150, Math.min(250, stageW / 2 - 220));
+    const roadCards = vis.map((it, i) => { const dd = i - ri; const c = this.card(it); const side = i % 2 === 0 ? -1 : 1; const shown = dd >= 0 && dd <= 7; return { ...c, tf: `translate3d(${side * off - 140}px, -270px, ${-i * SP + 230}px)`, mk: `translate3d(-50%, 0, ${-i * SP - 70}px) rotateX(-90deg) translateY(-18px)`, op: shown ? (1 - dd * 0.1).toFixed(2) : 0, mop: shown && dd > 0 ? (1 - dd * 0.1).toFixed(2) : 0, vis: shown ? 'visible' : 'hidden', tab: dd === 0 ? '0' : '-1' }; });
     const ql = s.q.trim().toLowerCase();
-    const results = ql.length < 2 ? [] : items.filter(it => [it.title, it.first, it.author, it.composer, it.tune, it.text, String(it.year)].some(v => String(v || '').toLowerCase().includes(ql))).slice(0, 8).map(it => ({ label: it.title, meta: `${this.fy(it.year)} · ${it.kind === 'hymn' ? (it.author || 'Hymn') : this.LANE[it.kind].label}`, go: () => this.jump(it) }));
+    const results = ql.length < 2 ? [] : items.filter(it => [it.title, it.first, it.author, it.composer, it.tune, it.text, String(it.year)].some(v => String(v || '').toLowerCase().includes(ql))).slice(0, 8).map(it => ({ label: it.title, meta: `${it.prologue ? 'In the beginning' : this.fy(it.year)} · ${it.kind === 'hymn' ? (it.author || 'Hymn') : this.LANE[it.kind].label}`, go: () => this.jump(it) }));
     const legend = trads.map(t => { const on = s.trad === t.id; return { label: t.label, color: t.color, count: items.filter(i => i.kind === 'hymn' && i.trad === t.id).length, pressed: on ? 'true' : 'false', border: on ? 'var(--color-text)' : 'var(--color-divider)', bg: on ? '#efeae1' : 'transparent', op: s.trad && !on ? .6 : 1, go: () => this.setState(st => ({ trad: st.trad === t.id ? null : t.id })) }; });
     const cur = s.sel ? items.find(i => i.key === s.sel) : null; let d = {};
     if (cur) {
       const isH = cur.kind === 'hymn'; const T = tmap[cur.trad] || {};
       const secs = (isH ? [['The story', cur.story], ['About this hymn', cur.blurb], ['Where the tune comes from', cur.tuneOrigin]] : [['', cur.text]]).filter(x => x[1]).map(([h, t]) => ({ h, t, hasH: !!h }));
       const vi = vis.findIndex(x => x.key === cur.key);
-      d = { tag: isH ? (T.label || 'Hymn') : this.LANE[cur.kind].label, tagColor: isH ? (T.color || '#b68235') : this.LANE[cur.kind].color, bar: isH ? (T.color || '#b68235') : 'var(--color-divider)', year: this.fy(cur.year), note: cur.note, hasNote: !!cur.note, title: cur.title, isH, meta: isH ? [['Words', cur.author], ['Music', cur.composer], ['Tune', cur.tune]].filter(x => x[1]).map(([k, v]) => ({ k, v })) : [], img: cur.image, hasImg: !!cur.image, imgAlt: cur.imageAlt || cur.title, credit: cur.credit, hasCredit: !!cur.credit, secs, stanza: cur.stanza, hasStanza: isH && !!cur.stanza, linkLabel: `Open the hymn page · No. ${cur.n}${cur.page ? ', page ' + cur.page : ''}`, openHymn: () => { this.setState({ sel: null }); this.props.openHymn && this.props.openHymn(cur.n); }, count: vi < 0 ? '' : `${vi + 1} of ${vis.length}` };
+      d = { tag: isH ? (T.label || 'Hymn') : this.LANE[cur.kind].label, tagColor: isH ? (T.color || '#b68235') : this.LANE[cur.kind].color, bar: isH ? (T.color || '#b68235') : 'var(--color-divider)', year: cur.prologue ? 'In the beginning' : this.fy(cur.year), note: cur.note, hasNote: !!cur.note, title: cur.title, isH, meta: isH ? (cur.psalmCard ? [['Written by', cur.author], ['In the hymnal', cur.tune.replace('Sung as ', '')]] : [['Words', cur.author], ['Music', cur.composer], ['Tune', cur.tune]]).filter(x => x[1]).map(([k, v]) => ({ k, v })) : [], img: cur.image, hasImg: !!cur.image, imgAlt: cur.imageAlt || cur.title, credit: cur.credit, hasCredit: !!cur.credit, secs, stanza: cur.stanza, hasStanza: isH && !!cur.stanza, linkLabel: `Open the hymn page · No. ${cur.n}${cur.page ? ', page ' + cur.page : ''}`, openHymn: () => { this.setState({ sel: null }); this.props.openHymn && this.props.openHymn(cur.n); }, count: vi < 0 ? '' : `${vi + 1} of ${vis.length}` };
     }
     return {
       ...common, loading: false, sample: s.sample, sampleCount: `${items.filter(i => i.kind === 'hymn').length} hymns, ${items.filter(i => i.kind !== 'hymn').length} events`,
