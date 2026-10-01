@@ -149,17 +149,17 @@ function drawCard(it, img) {
     const sw = iw / s, sh = ih / s; g.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, TW - iw, 16, iw, ih);
     w = TW - iw - 80;
   }
-  g.fillStyle = '#5d6470'; g.font = '600 24px Lora'; g.textBaseline = 'top';
+  g.fillStyle = '#5d6470'; g.font = '600 30px Lora'; g.textBaseline = 'top';
   const kick = (it.kind === 'hymn' ? it.tradLabel : LANE[it.kind].label).toUpperCase();
-  g.fillText(kick, x, 44);
+  g.fillText(kick, x, 40);
   g.fillStyle = it.kind === 'hymn' ? '#8a6024' : '#2b3340';
-  const dt = it.dateText; g.font = (dt.length > 14 ? '500 44px' : '500 68px') + ' "Cormorant Garamond"';
+  const dt = it.dateText; g.font = (dt.length > 14 ? '500 56px' : '500 92px') + ' "Cormorant Garamond"';
   g.fillText(dt, x, 80);
-  let y = dt.length > 14 ? 138 : 162;
-  g.fillStyle = '#1d2430'; g.font = '600 46px "Cormorant Garamond"'; y = wrap(g, it.title, x, y, w, 50, 2) + 6;
-  if (it.sub) { g.fillStyle = '#3c4350'; g.font = '28px Lora'; y = wrap(g, it.sub, x, y, w, 36, 2) + 4; }
-  if (it.kind === 'hymn' && it.tune) { g.fillStyle = '#5d6470'; g.font = '600 22px Lora'; y = wrap(g, it.tune.toUpperCase(), x, y + 4, w, 30, 2); }
-  else if (it.text) { g.fillStyle = '#3c4350'; g.font = '27px Lora'; wrap(g, it.text, x, y, w, 37, Math.max(1, Math.floor((TH - 30 - y) / 37))); }
+  let y = dt.length > 14 ? 150 : 184;
+  g.fillStyle = '#1d2430'; g.font = '600 62px "Cormorant Garamond"'; y = wrap(g, it.title, x, y, w, 64, 2) + 8;
+  if (it.sub) { g.fillStyle = '#3c4350'; g.font = '36px Lora'; y = wrap(g, it.sub, x, y, w, 44, 2) + 6; }
+  if (it.kind === 'hymn' && it.tune) { g.fillStyle = '#5d6470'; g.font = '600 28px Lora'; y = wrap(g, it.tune.toUpperCase(), x, y + 4, w, 36, 2); }
+  else if (it.text) { g.fillStyle = '#3c4350'; g.font = '35px Lora'; wrap(g, it.text, x, y, w, 46, Math.max(1, Math.floor((TH - 30 - y) / 46))); }
   if (it.kind === 'hymn' && it.n) { // hymnal number roundel
     g.beginPath(); g.arc(TW - (img ? 340 : 60), 60, 34, 0, Math.PI * 2); g.fillStyle = '#b68235'; g.fill();
     g.fillStyle = '#fff'; g.font = '600 26px Lora'; g.textAlign = 'center'; g.fillText(String(it.n), TW - (img ? 340 : 60), 46); g.textAlign = 'left';
@@ -169,7 +169,7 @@ function drawCard(it, img) {
 }
 function yearTexture(text) {
   const c = document.createElement('canvas'); c.width = 512; c.height = 128; const g = c.getContext('2d');
-  g.fillStyle = 'rgba(122,90,37,.85)'; g.font = '500 84px "Cormorant Garamond"'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = 'rgba(122,90,37,.95)'; g.font = '600 96px "Cormorant Garamond"'; g.textAlign = 'center'; g.textBaseline = 'middle';
   g.fillText(text, 256, 64);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
@@ -177,7 +177,7 @@ const cardGeo = new THREE.PlaneGeometry(CW, CH), yearGeo = new THREE.PlaneGeomet
 const shadowTex = (() => { const c = document.createElement('canvas'); c.width = 128; c.height = 64; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 32, 4, 64, 32, 60); gr.addColorStop(0, 'rgba(60,45,25,.35)'); gr.addColorStop(1, 'rgba(60,45,25,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 64); return new THREE.CanvasTexture(c); })();
 const live = new Map(); // key -> {group, card, refl, year, shadow}
 function side(i) { return i % 2 === 0 ? -1 : 1; }
-function cardPos(i) { return new THREE.Vector3(side(i) * (ROAD_W / 2 + CW / 2 + 0.25), CH / 2 + 0.35, -i * SP); }
+function cardPos(i) { return new THREE.Vector3(side(i) * (ROAD_W / 2 + CW / 2 - 0.35), CH / 2 + 0.3, -i * SP); }
 function makeCard(it, i) {
   const grp = new THREE.Group();
   const mat = new THREE.MeshBasicMaterial({ map: drawCard(it, null), transparent: true });
@@ -188,7 +188,7 @@ function makeCard(it, i) {
   const shadow = new THREE.Mesh(shadowGeo, new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2; shadow.position.set(p.x, 0.01, p.z + 0.15);
   const ym = new THREE.Mesh(yearGeo, new THREE.MeshBasicMaterial({ map: yearTexture(it.prologue ? '' : fy(it.year)), transparent: true, depthWrite: false }));
-  ym.rotation.x = -Math.PI / 2; ym.position.set(side(i) * (ROAD_W / 2 - 0.85), 0.02, p.z + 1.4);
+  ym.rotation.x = -Math.PI / 2; ym.position.set(side(i) * (ROAD_W / 2 - 0.9), 0.02, p.z + 1.2);
   grp.add(card, refl, shadow, ym); scene.add(grp);
   const rec = { grp, card, refl, mats: [mat, reflMat, ym.material, shadow.material], it };
   live.set(it.key, rec);
@@ -279,12 +279,12 @@ let lastSync = -1;
 function frame() {
   cur += (idx - cur) * 0.09;
   if (Math.abs(idx - cur) < 0.001) cur = idx;
-  const z = -cur * SP + 5.2;
+  const z = -cur * SP + 6.4;
   camera.position.set(Math.sin(cur * 0.6) * 0.15, 1.75, z);
-  camera.lookAt(0, 1.05, z - 9);
+  camera.lookAt(0, 1.0, z - 10);
   const f = Math.floor(cur); if (f !== lastSync) { syncWindow(); lastSync = f; }
   // fade cards behind the camera and the far ones
-  live.forEach(r => { const d = (r.card.position.z - z) ; const o = d > -1.2 ? Math.max(0, 1 - (d + 1.2) / 2.2) : 1; r.mats[0].opacity = o; r.mats[1].opacity = 0.16 * o; r.mats[2].opacity = o; });
+  live.forEach(r => { const d = (r.card.position.z - z); const o = d > -2.5 ? Math.max(0, 1 - (d + 2.5) / 2.2) : 1; r.mats[0].opacity = o; r.mats[1].opacity = 0.16 * o; r.mats[2].opacity = o; });
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
