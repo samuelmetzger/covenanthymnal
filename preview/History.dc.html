@@ -185,7 +185,7 @@
 
   <sc-if value="{{ isRoad }}" hint-placeholder-val="{{ false }}">
     <section style="max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px">
-      <div style="position:relative;height:min(640px,78vh);min-height:460px;perspective:760px;perspective-origin:50% 16%;overflow:hidden;background:linear-gradient(180deg,var(--color-bg) 0%,var(--color-bg) 22%,#ebe5da 100%);border:1px solid var(--color-divider)">
+      <div class="hx-road" style="touch-action:pan-x;position:relative;height:min(640px,78vh);min-height:460px;perspective:760px;perspective-origin:50% 16%;overflow:hidden;background:linear-gradient(180deg,var(--color-bg) 0%,var(--color-bg) 22%,#ebe5da 100%);border:1px solid var(--color-divider)">
         <div style="position:absolute;left:50%;top:66%;width:0;height:0;transform-style:preserve-3d;transform:translateZ({{ roadZ }}px);transition:transform .7s cubic-bezier(.3,.1,.2,1)">
           <div style="position:absolute;left:-110px;top:0;width:220px;height:{{ roadLen }}px;transform-origin:50% 0;transform:rotateX(-90deg);background:#d9d0c1;border-left:2px solid #c4b8a5;border-right:2px solid #c4b8a5">
             <div style="position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:repeating-linear-gradient(180deg,#f3f2f2 0 60px,transparent 60px 120px)"></div>
@@ -299,8 +299,25 @@ class Component extends DCLogic {
       else if (this.state.view === 'timeline' && !(tg && tg.closest && tg.closest('.hx-row'))) { this.goEra(this.state.eraI + dir); e.preventDefault(); }
     };
     document.addEventListener('keydown', this.onKey);
+    this.wheelAcc = 0; this.wheelT = 0;
+    this.onWheel = e => {
+      if (this.state.view !== 'road' || !(e.target && e.target.closest && e.target.closest('.hx-road'))) return;
+      e.preventDefault();
+      const now = Date.now(); if (now - this.wheelT > 400) this.wheelAcc = 0;
+      this.wheelAcc += e.deltaY;
+      if (Math.abs(this.wheelAcc) >= 80 && now - this.wheelT > 260) { this.roadStep(this.wheelAcc > 0 ? 1 : -1); this.wheelAcc = 0; this.wheelT = now; }
+    };
+    this.onTouchStart = e => { if (e.target && e.target.closest && e.target.closest('.hx-road')) this.touchY = e.touches[0].clientY; else this.touchY = null; };
+    this.onTouchMove = e => {
+      if (this.touchY == null || this.state.view !== 'road') return;
+      const dy = this.touchY - e.touches[0].clientY; e.preventDefault();
+      if (Math.abs(dy) > 50) { this.roadStep(dy > 0 ? 1 : -1); this.touchY = e.touches[0].clientY; }
+    };
+    document.addEventListener('wheel', this.onWheel, { passive: false });
+    document.addEventListener('touchstart', this.onTouchStart, { passive: true });
+    document.addEventListener('touchmove', this.onTouchMove, { passive: false });
   }
-  componentWillUnmount() { document.removeEventListener('keydown', this.onKey); }
+  componentWillUnmount() { document.removeEventListener('wheel', this.onWheel); document.removeEventListener('touchstart', this.onTouchStart); document.removeEventListener('touchmove', this.onTouchMove); document.removeEventListener('keydown', this.onKey); }
   fy(y) { return y < 0 ? `${-y} BC` : y === 0 ? 'AD 1' : String(y); }
   visOf(s) { return this.D.items.filter(it => it.kind === 'hymn' ? (!s.trad || it.trad === s.trad) : s.lanes[it.kind]); }
   eraDates(e, last) { return last ? `Since ${this.fy(e.start)}` : `${this.fy(e.start)} – ${this.fy(e.end)}`; }
@@ -364,7 +381,7 @@ class Component extends DCLogic {
     const band = eras.map((e, i) => { const sp = e.end - e.start; const on = i === eraI; return { label: this.eraDates(e, i === lastI) + ' · ' + e.label, short: e.short || e.label, current: on ? 'true' : 'false', bg: on ? '#efeae1' : 'transparent', line: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', ticks: vis.filter(it => it.era === e.id).map(it => ({ pct: Math.max(0, Math.min(99, (it.year - e.start) / sp * 100)), bg: it.kind === 'hymn' ? 'var(--color-accent)' : 'var(--color-neutral-500)', h: it.kind === 'hymn' ? 9 : 5 })), go: () => this.goEra(i) }; });
     const groups = eras.map((e, i) => { const its = vis.filter(it => it.era === e.id); return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.image), ...its.filter(x => !x.image)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
     const ri = Math.max(0, Math.min(s.roadI, vis.length - 1)); const SP = 360; const stageW = Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const off = Math.max(130, Math.min(200, stageW / 2 - 150));
-    const roadCards = vis.map((it, i) => { const dd = i - ri; const c = this.card(it); const side = i % 2 === 0 ? -1 : 1; const shown = dd >= 0 && dd <= 7; return { ...c, tf: `translate3d(${side * off - 120}px, -250px, ${-i * SP}px)`, mk: `translate3d(-50%, 0, ${-i * SP + 60}px) rotateX(-90deg) translateY(-18px)`, op: shown ? (1 - dd * 0.1).toFixed(2) : 0, vis: shown ? 'visible' : 'hidden', tab: dd === 0 ? '0' : '-1' }; });
+    const roadCards = vis.map((it, i) => { const dd = i - ri; const c = this.card(it); const side = i % 2 === 0 ? -1 : 1; const shown = dd >= 0 && dd <= 7; return { ...c, tf: `translate3d(${side * off - 120}px, -250px, ${-i * SP}px)`, mk: `translate3d(-50%, 0, ${-i * SP - 70}px) rotateX(-90deg) translateY(-18px)`, op: shown && dd > 0 ? (1 - dd * 0.1).toFixed(2) : 0, vis: shown ? 'visible' : 'hidden', tab: dd === 0 ? '0' : '-1' }; });
     const ql = s.q.trim().toLowerCase();
     const results = ql.length < 2 ? [] : items.filter(it => [it.title, it.first, it.author, it.composer, it.tune, it.text, String(it.year)].some(v => String(v || '').toLowerCase().includes(ql))).slice(0, 8).map(it => ({ label: it.title, meta: `${this.fy(it.year)} · ${it.kind === 'hymn' ? (it.author || 'Hymn') : this.LANE[it.kind].label}`, go: () => this.jump(it) }));
     const legend = trads.map(t => { const on = s.trad === t.id; return { label: t.label, color: t.color, count: items.filter(i => i.kind === 'hymn' && i.trad === t.id).length, pressed: on ? 'true' : 'false', border: on ? 'var(--color-text)' : 'var(--color-divider)', bg: on ? '#efeae1' : 'transparent', op: s.trad && !on ? .6 : 1, go: () => this.setState(st => ({ trad: st.trad === t.id ? null : t.id })) }; });
