@@ -47,7 +47,7 @@
 </style>
 </head>
 <body>
-<header><a href="index.html#/history">← History</a><h1>Hymns through the Road of History</h1></header>
+<header><a href="index.html#/history" target="_top">← History</a><h1>Hymns through the Road of History</h1></header>
 <div id="hint">Scroll, swipe or use the arrow keys to walk the road. Tap a card to read it.</div>
 <div id="lanes" role="group" aria-label="Lanes"></div>
 <div id="stage" aria-hidden="true"></div>
@@ -293,7 +293,7 @@ function openPanel(it) {
     + (it.image ? `<img src="${esc(it.image)}" alt="${esc(it.title)}"><div class="cr">${esc(it.credit)}</div>` : '')
     + (it.sub ? `<p><strong>${esc(it.sub)}</strong></p>` : '') + (it.verse ? `<blockquote>${esc(it.verse)}</blockquote>` : '')
     + (it.text ? `<p>${esc(it.text)}</p>` : '') + (it.kind === 'hymn' && it.tune ? `<p class="cr">${esc(it.tune)}</p>` : '')
-    + (it.n ? `<a class="go" href="index.html#/hymn/${it.n}">Open hymn No. ${it.n} →</a>` : '');
+    + (it.n ? `<a class="go" href="index.html#/hymn/${it.n}" target="_top">Open hymn No. ${it.n} →</a>` : '');
   panel.classList.add('open');
 }
 function closePanel() { panel.classList.remove('open'); }
