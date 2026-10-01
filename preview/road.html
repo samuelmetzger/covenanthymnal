@@ -252,7 +252,7 @@ function placeStones() {
   vis.forEach((v, i) => {
     if (v.era === last) return; last = v.era; const e = eras.find(x => x.id === v.era); if (!e) return;
     const side = new THREE.MeshBasicMaterial({ color: '#a89a7a' }), top = new THREE.MeshBasicMaterial({ color: '#cfc3a6' });
-    const z = -i * SP + (i === 0 ? 2.6 : SP / 2);
+    const z = -i * SP + (i === 0 ? -SP / 2 : SP / 2);
     [-1, 1].forEach(sgn => {
       const face = new THREE.MeshBasicMaterial({ map: stoneTexture(e.short || e.label) });
       const m = new THREE.Mesh(stoneGeo, [side, side, top, side, face, side]);
