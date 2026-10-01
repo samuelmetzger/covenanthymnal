@@ -24,7 +24,10 @@
   .hx-band-seg > span:first-child{white-space:nowrap!important;min-height:0!important}
   .hx-grid > button{grid-column:span 1!important}
   .hx-listrow{grid-template-columns:1fr!important}
+  .hx-row > button{width:100%!important}
 }
+.hx-road:active{cursor:grabbing}
+.hx-rcard:focus-visible > span:first-child{outline:2px solid #d9b36a!important;outline-offset:-2px}
 @media (prefers-reduced-motion:reduce){.hx-root *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 </helmet>
@@ -53,9 +56,19 @@
       </div>
       <div role="group" aria-label="Lanes" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <span style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;font-size:15px;color:var(--color-neutral-700)"><span style="width:10px;height:10px;border-radius:50%;background:var(--color-accent)"></span>Hymns and tunes</span>
-        <sc-for list="{{ laneToggles }}" as="lt" hint-placeholder-count="3"><button onClick="{{ lt.go }}" aria-pressed="{{ lt.pressed }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid {{ lt.border }};border-radius:999px;background:{{ lt.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:14px;height:14px;border-radius:3px;border:1px solid {{ lt.color }};background:{{ lt.fill }};color:#fff;font-size:11px;line-height:14px;text-align:center">{{ lt.mark }}</span>{{ lt.label }}</button></sc-for>
+        <sc-for list="{{ laneToggles }}" as="lt" hint-placeholder-count="4"><button onClick="{{ lt.go }}" aria-pressed="{{ lt.pressed }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid {{ lt.border }};border-radius:999px;background:{{ lt.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:14px;height:14px;border-radius:3px;border:1px solid {{ lt.color }};background:{{ lt.fill }};color:#fff;font-size:11px;line-height:14px;text-align:center">{{ lt.mark }}</span>{{ lt.label }}</button></sc-for>
       </div>
     </div>
+    <sc-if value="{{ hasSub }}" hint-placeholder-val="{{ false }}">
+      <div role="group" aria-label="Lane filters" style="display:flex;gap:10px 28px;flex-wrap:wrap;align-items:center;margin-top:12px">
+        <sc-for list="{{ subGroups }}" as="sg" hint-placeholder-count="2">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)"><span style="width:8px;height:8px;border-radius:50%;background:{{ sg.color }}"></span>{{ sg.label }}</span>
+            <sc-for list="{{ sg.items }}" as="st" hint-placeholder-count="3"><button onClick="{{ st.go }}" role="switch" aria-checked="{{ st.pressed }}" style="display:inline-flex;align-items:center;gap:9px;min-height:40px;padding:0 12px 0 10px;border:1px solid {{ st.border }};border-radius:999px;background:{{ st.bg }};color:var(--color-text);font-family:var(--font-body);font-size:14px;cursor:pointer;white-space:nowrap" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span aria-hidden="true" style="width:26px;height:14px;border-radius:7px;background:{{ st.track }};position:relative;display:inline-block;flex:none;transition:background .15s"><span style="position:absolute;top:2px;left:{{ st.knob }}px;width:10px;height:10px;border-radius:50%;background:#fbf8f2;transition:left .15s"></span></span>{{ st.label }}</button></sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
     <sc-if value="{{ sample }}" hint-placeholder-val="{{ false }}"><p style="margin:16px 0 0;font-size:14px;font-style:italic;color:var(--color-neutral-700)">Sample entries ({{ sampleCount }}) are shown until the full history is added to the hymn data.</p></sc-if>
   </section>
 
@@ -90,18 +103,12 @@
         <sc-if value="{{ hymnsEmpty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:22px 20px;border:1px dashed var(--color-neutral-400);font-size:16px;color:var(--color-neutral-700)">{{ hymnsEmptyText }}</p></sc-if>
         <div class="hx-row" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 14px;align-items:stretch">
           <sc-for list="{{ hymnCards }}" as="c" hint-placeholder-count="4">
-            <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:272px;background:#e9e3d8;outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;scroll-snap-align:start" style-hover="background:#e3dccf" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
-              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span>
-              <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:150px;object-fit:cover;display:block"></sc-if>
-              <span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px">
-                <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
-                <span style="font-family:var(--font-heading);font-size:46px;line-height:1;color:var(--color-accent-700);font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
-                <span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span>
-                <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span>
-                <sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if>
-              </span>
+            <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:320px;background:{{ c.tint }};border:1px solid rgba(32,31,29,.1);outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;scroll-snap-align:start" style-hover="filter:brightness(.96)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span><sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:150px;object-fit:cover;display:block"></sc-if>
+              <span style="display:flex;align-items:flex-start;min-width:0"><sc-if value="{{ c.isH }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0 0 14px"><img src="assets/hymnal-cover-sm.png" alt="" style="width:70px;height:auto;display:block;filter:drop-shadow(0 6px 10px rgba(21,40,63,.35))"><span style="font-family:var(--font-body);font-weight:600;font-size:9px;letter-spacing:.2em;color:#1f3c5d;text-transform:uppercase;margin-top:4px">Hymn</span><span style="font-family:var(--font-heading);font-weight:600;font-size:30px;line-height:1;color:#8a6024;font-variant-numeric:lining-nums tabular-nums">{{ c.n }}</span></span></sc-if><span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px;min-width:0"><span style="display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)"><sc-if value="{{ c.reformed }}" hint-placeholder-val="{{ false }}"><span aria-label="Reformed and Presbyterian" title="Reformed and Presbyterian" style="width:8px;height:8px;background:#1f3c5d;transform:rotate(45deg);flex:none;display:inline-block"></span></sc-if><span>{{ c.kicker }}</span></span><span style="font-family:var(--font-heading);font-size:{{ c.ySz }}px;line-height:1.05;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums;text-wrap:balance">{{ c.year }}</span><span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span><span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span><sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if></span></span>
             </button>
           </sc-for>
+          <sc-if value="{{ showAllBtn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ toggleAll }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:272px;min-height:200px;border:1px dashed var(--color-accent-700);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:18px;scroll-snap-align:start;color:var(--color-accent-700)" style-hover="background:#f3ebdc" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="font-family:var(--font-heading);font-size:22px;font-weight:600;line-height:1.2;color:var(--color-text)">{{ showAllLabel }}</span><span style="font-size:14px;line-height:1.45">{{ showAllSub }}</span></button></sc-if>
         </div>
 
         <div onTouchStart="{{ tStart }}" onTouchEnd="{{ tEnd }}" style="position:relative;height:92px;margin:4px 0 8px" aria-hidden="true">
@@ -116,17 +123,17 @@
             <sc-if value="{{ ln.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 8px;padding:18px 20px;border:1px dashed var(--color-divider);font-size:16px;color:var(--color-neutral-700)">{{ ln.emptyText }}</p></sc-if>
             <div class="hx-row" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 14px;align-items:stretch">
               <sc-for list="{{ ln.cards }}" as="c" hint-placeholder-count="3">
-                <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:272px;background:#efeae1;outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;scroll-snap-align:start" style-hover="background:#e9e3d8" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
-                  <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:150px;object-fit:cover;display:block"></sc-if>
-                  <span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px">
-                    <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
-                    <span style="font-family:var(--font-heading);font-size:34px;line-height:1;color:var(--color-neutral-800);font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
-                    <span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.2">{{ c.title }}</span>
-                    <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span>
-                  </span>
-                </button>
+                <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:272px;background:{{ c.tint }};border:1px solid rgba(32,31,29,.1);outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;scroll-snap-align:start" style-hover="filter:brightness(.96)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span><sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:150px;object-fit:cover;display:block"></sc-if>
+              <span style="display:flex;align-items:flex-start;min-width:0"><sc-if value="{{ c.isH }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0 0 14px"><img src="assets/hymnal-cover-sm.png" alt="" style="width:70px;height:auto;display:block;filter:drop-shadow(0 6px 10px rgba(21,40,63,.35))"><span style="font-family:var(--font-body);font-weight:600;font-size:9px;letter-spacing:.2em;color:#1f3c5d;text-transform:uppercase;margin-top:4px">Hymn</span><span style="font-family:var(--font-heading);font-weight:600;font-size:30px;line-height:1;color:#8a6024;font-variant-numeric:lining-nums tabular-nums">{{ c.n }}</span></span></sc-if><span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px;min-width:0"><span style="display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)"><sc-if value="{{ c.reformed }}" hint-placeholder-val="{{ false }}"><span aria-label="Reformed and Presbyterian" title="Reformed and Presbyterian" style="width:8px;height:8px;background:#1f3c5d;transform:rotate(45deg);flex:none;display:inline-block"></span></sc-if><span>{{ c.kicker }}</span></span><span style="font-family:var(--font-heading);font-size:{{ c.ySz }}px;line-height:1.05;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums;text-wrap:balance">{{ c.year }}</span><span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span><span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span><sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if></span></span>
+            </button>
               </sc-for>
             </div>
+            <sc-if value="{{ ln.hasPeriods }}" hint-placeholder-val="{{ false }}">
+              <div aria-label="Periods of music history" style="position:relative;height:28px;margin:-4px 0 4px;border-top:1px solid #7d6c57;border-bottom:1px solid #7d6c57;background:#f1ece4;overflow:hidden">
+                <sc-for list="{{ ln.periods }}" as="pr" hint-placeholder-count="2"><span title="{{ pr.title }}" style="position:absolute;left:{{ pr.left }}%;width:{{ pr.width }}%;top:0;bottom:0;border-left:1px solid #7d6c57;padding:0 8px;display:flex;align-items:center;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#5e4f3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box">{{ pr.label }}</span></sc-for>
+              </div>
+            </sc-if>
           </div>
         </sc-for>
       </div>
@@ -141,16 +148,9 @@
           <sc-if value="{{ g.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:16px;color:var(--color-neutral-700)">Nothing shown for these years with the current lanes and colour filter.</p></sc-if>
           <div class="hx-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));grid-auto-flow:dense;gap:16px">
             <sc-for list="{{ g.pin }}" as="c" hint-placeholder-count="4">
-              <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;grid-column:span {{ c.span }};background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column" style-hover="background:#e3dccf" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
-                <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span>
-                <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:260px;object-fit:cover;display:block"></sc-if>
-                <span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px">
-                  <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
-                  <span style="font-family:var(--font-heading);font-size:40px;line-height:1;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
-                  <span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.2">{{ c.title }}</span>
-                  <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span>
-                  <sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if>
-                </span>
+              <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;grid-column:span {{ c.span }};background:{{ c.tint }};border:1px solid rgba(32,31,29,.1);outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column" style-hover="filter:brightness(.96)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+                <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span><sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ c.img }}" alt="{{ c.imgAlt }}" style="width:100%;height:260px;object-fit:cover;display:block"></sc-if>
+                <span style="display:flex;align-items:flex-start;min-width:0"><sc-if value="{{ c.isH }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0 0 14px"><img src="assets/hymnal-cover-sm.png" alt="" style="width:70px;height:auto;display:block;filter:drop-shadow(0 6px 10px rgba(21,40,63,.35))"><span style="font-family:var(--font-body);font-weight:600;font-size:9px;letter-spacing:.2em;color:#1f3c5d;text-transform:uppercase;margin-top:4px">Hymn</span><span style="font-family:var(--font-heading);font-weight:600;font-size:30px;line-height:1;color:#8a6024;font-variant-numeric:lining-nums tabular-nums">{{ c.n }}</span></span></sc-if><span style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px;min-width:0"><span style="display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)"><sc-if value="{{ c.reformed }}" hint-placeholder-val="{{ false }}"><span aria-label="Reformed and Presbyterian" title="Reformed and Presbyterian" style="width:8px;height:8px;background:#1f3c5d;transform:rotate(45deg);flex:none;display:inline-block"></span></sc-if><span>{{ c.kicker }}</span></span><span style="font-family:var(--font-heading);font-size:{{ c.ySzP }}px;line-height:1.05;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums;text-wrap:balance">{{ c.year }}</span><span style="font-family:var(--font-heading);font-size:20px;font-weight:600;line-height:1.2">{{ c.title }}</span><span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}</span><sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;letter-spacing:.1em;color:var(--color-neutral-700)">{{ c.tune }}</span></sc-if></span></span>
               </button>
             </sc-for>
           </div>
@@ -166,16 +166,16 @@
           <h2 style="margin:0 0 6px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1"><span style="font-variant-numeric:lining-nums">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
           <sc-if value="{{ g.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:8px 0 0;font-size:16px;color:var(--color-neutral-700)">Nothing shown for these years with the current lanes and colour filter.</p></sc-if>
           <sc-for list="{{ g.rows }}" as="c" hint-placeholder-count="4">
-            <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;margin-top:10px;background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px" style-hover="background:#e3dccf" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
-              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block"></span>
-              <span class="hx-listrow" style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:6px 24px;padding:14px 18px 16px;align-items:baseline">
-                <span style="font-family:var(--font-heading);font-size:34px;line-height:1;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums">{{ c.year }}</span>
+            <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;margin-top:10px;background:{{ c.tint }};border:1px solid rgba(32,31,29,.1);outline:2px solid {{ c.border }};outline-offset:-2px" style-hover="filter:brightness(.96)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
+              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block;flex:none"></span>
+              <span style="display:flex;align-items:flex-start;min-width:0"><sc-if value="{{ c.isH }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0 0 14px"><img src="assets/hymnal-cover-sm.png" alt="" style="width:70px;height:auto;display:block;filter:drop-shadow(0 6px 10px rgba(21,40,63,.35))"><span style="font-family:var(--font-body);font-weight:600;font-size:9px;letter-spacing:.2em;color:#1f3c5d;text-transform:uppercase;margin-top:4px">Hymn</span><span style="font-family:var(--font-heading);font-weight:600;font-size:30px;line-height:1;color:#8a6024;font-variant-numeric:lining-nums tabular-nums">{{ c.n }}</span></span></sc-if><span class="hx-listrow" style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:6px 24px;padding:14px 18px 16px;align-items:baseline;flex:1;min-width:0">
+                <span style="font-family:var(--font-heading);font-size:{{ c.ySzM }}px;line-height:1.05;color:{{ c.yearColor }};font-variant-numeric:lining-nums tabular-nums;text-wrap:balance">{{ c.year }}</span>
                 <span style="display:flex;flex-direction:column;gap:4px;min-width:0">
-                  <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
+                  <span style="display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)"><sc-if value="{{ c.reformed }}" hint-placeholder-val="{{ false }}"><span aria-label="Reformed and Presbyterian" title="Reformed and Presbyterian" style="width:8px;height:8px;background:#1f3c5d;transform:rotate(45deg);flex:none;display:inline-block"></span></sc-if><span>{{ c.kicker }}</span></span>
                   <span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span>
                   <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ c.sub }}<sc-if value="{{ c.hasTune }}" hint-placeholder-val="{{ false }}"><span style="letter-spacing:.08em;color:var(--color-neutral-700)"> · {{ c.tune }}</span></sc-if></span>
                 </span>
-              </span>
+              </span></span>
             </button>
           </sc-for>
         </div>
@@ -193,7 +193,7 @@
   <section style="max-width:1280px;margin:0 auto;padding:28px clamp(16px,3vw,40px) clamp(40px,5vw,64px);border-top:1px solid var(--color-divider);display:flex;flex-direction:column;gap:14px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Colour key · tap to show one tradition</span><sc-if value="{{ tradOn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearTrad }}" class="btn btn-ghost" style="background:none;min-height:44px;font-size:15px">Show all traditions</button></sc-if></div>
     <div role="group" aria-label="Traditions" style="display:flex;flex-wrap:wrap;gap:8px">
-      <sc-for list="{{ legend }}" as="t" hint-placeholder-count="7"><button onClick="{{ t.go }}" aria-pressed="{{ t.pressed }}" style="display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border:1px solid {{ t.border }};border-radius:var(--radius-md);background:{{ t.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer;opacity:{{ t.op }}" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:22px;height:5px;background:{{ t.color }}"></span>{{ t.label }}<span style="color:var(--color-neutral-700);font-size:14px">{{ t.count }}</span></button></sc-for>
+      <sc-for list="{{ legend }}" as="t" hint-placeholder-count="8"><button onClick="{{ t.go }}" aria-pressed="{{ t.pressed }}" style="display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border:1px solid {{ t.border }};border-radius:var(--radius-md);background:{{ t.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer;opacity:{{ t.op }}" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:22px;height:5px;background:{{ t.color }}"></span>{{ t.label }}<span style="color:var(--color-neutral-700);font-size:14px">{{ t.count }}</span></button></sc-for>
     </div>
     <p style="margin:6px 0 0;font-size:15px;color:var(--color-neutral-700)">Classroom games and a printable timeline strip are on the <button onClick="{{ goTimeline }}" style="all:unset;cursor:pointer;color:var(--color-accent-700);text-decoration:underline;text-underline-offset:3px" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">Timeline page</button>.</p>
   </section>
@@ -208,7 +208,7 @@
       </div>
       <div style="flex:1;overflow-y:auto;padding:22px 24px 28px;display:flex;flex-direction:column;gap:18px">
         <div style="display:flex;flex-direction:column;gap:6px">
-          <span style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700);font-variant-numeric:lining-nums">{{ d.year }}</span>
+          <span style="font-family:var(--font-heading);font-size:{{ d.ySz }}px;line-height:1.05;color:var(--color-accent-700);font-variant-numeric:lining-nums;text-wrap:balance">{{ d.year }}</span>
           <sc-if value="{{ d.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:var(--color-neutral-700)">{{ d.note }}</span></sc-if>
           <h3 style="margin:6px 0 0;font-family:var(--font-heading);font-size:30px;font-weight:600;line-height:1.1">{{ d.title }}</h3>
         </div>
@@ -240,31 +240,42 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;openHymn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(n: number) =&gt; void&quot;},&quot;goTimeline&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
 class Component extends DCLogic {
-  state = { ready: false, sample: true, eraI: 0, view: 'timeline', lanes: { church: true, music: true, world: true }, trad: null, q: '', sel: null, roadI: 0 };
-  closeRef = React.createRef();
-  LANE = { hymn: { label: 'Hymns and tunes', color: '#b68235' }, church: { label: 'Church history', color: '#39465a' }, music: { label: 'Music history', color: '#7d6c57' }, world: { label: 'World events', color: '#a39d93' } };
+  state = { ready: false, sample: true, eraI: 0, view: 'timeline', lanes: { covenant: false, church: true, music: true, world: true }, trad: null, q: '', sel: null, roadI: 0, playing: false, speed: 'normal', reformedOnly: false, groups: { institutions: true, congregations: true }, americanOnly: false, expanded: {} };
+  closeRef = React.createRef(); roadStage = React.createRef(); roadCanvas = React.createRef(); pos = 0;
+  LANE = {
+    hymn: { label: 'Hymns and tunes', color: '#b68235', tint: '#fbf8f2', rule: '#b68235' },
+    covenant: { label: 'Covenant Presbyterian', color: '#b68235', tint: '#f3ebdc', rule: '#b68235' },
+    church: { label: 'Church history', color: '#39465a', tint: '#e6e9ee', rule: '#39465a' },
+    music: { label: 'Music history', color: '#7d6c57', tint: '#ece5da', rule: '#7d6c57' },
+    world: { label: 'World events', color: '#a39d93', tint: '#eae9e5', rule: '#a39d93' },
+  };
+  REF = '#1f3c5d';
+  ORDER = { hymn: 0, covenant: 1, church: 2, music: 3, world: 4 };
   componentDidMount() {
     Promise.all([import('./hymns-data.js'), import('./hymn-notes.js').catch(() => ({})), import('./history-sample.js')]).then(([d, n, s]) => {
       const real = !!(d.ERAS && (d.HYMNS || []).some(h => h.featured && h.year != null));
       const pick = k => real ? (d[k] || []) : (s[k] || []);
       const eras = pick('ERAS').slice().sort((a, b) => a.start - b.start);
       const trads = pick('TRADITIONS');
-      const base = real ? d.HYMNS.filter(h => h.featured && h.year != null) : s.SAMPLE_HYMNS.map(x => ({ ...(d.HYMNS.find(h => h.n === x.n) || {}), ...x })).filter(h => h.title);
+      const withYear = real ? d.HYMNS.filter(h => h.year != null) : [];
+      const base = real ? withYear.filter(h => h.featured) : s.SAMPLE_HYMNS.map(x => ({ ...(d.HYMNS.find(h => h.n === x.n) || {}), ...x })).filter(h => h.title);
       const notes = n.NOTES || {}, texts = d.TEXTS || {};
       const strip = t => String(t || '').replace(/\[\^\d+\]/g, '').replace(/\s+/g, ' ').trim();
       const eraOf = (y, id) => (id && eras.find(e => e.id === id)) || eras.find(e => y >= e.start && y < e.end) || eras[y < eras[0].start ? 0 : eras.length - 1];
       const items = [];
-      base.forEach(h => {
+      const mkHymn = (h, extra) => {
         const N = notes[h.n] || {};
         const st = (N.lyrics_lines && N.lyrics_lines[0]) || (texts[h.n] && texts[h.n][0] && texts[h.n][0].join('\n')) || '';
         const first = st ? st.split('\n')[0].replace(/[,;:.—–-]+$/, '') : h.title;
-        items.push({ key: 'h' + h.n, kind: 'hymn', n: h.n, year: h.year, note: h.yearNote || '', era: eraOf(h.year, h.eraId).id, trad: h.traditionId, title: h.title, first, author: h.authorName || '', composer: h.composerName || '', tune: h.tune || '', page: h.page || '', story: strip(h.story), blurb: strip(N.blurb), tuneOrigin: strip(N.composer && N.composer[0]), stanza: st, image: h.image || '', imageAlt: h.imageAlt || '', credit: h.imageCredit || '' });
-      });
+        return { key: 'h' + h.n, kind: 'hymn', extra, n: h.n, year: h.year, note: h.yearNote || '', era: eraOf(h.year, h.eraId).id, trad: h.traditionId, title: h.title, first, author: h.authorName || '', composer: h.composerName || '', tune: h.tune || '', page: h.page || '', story: strip(h.story), blurb: strip(N.blurb), tuneOrigin: strip(N.composer && N.composer[0]), stanza: st, image: h.image || '', imageAlt: h.imageAlt || '', credit: h.imageCredit || '' };
+      };
+      base.forEach(h => items.push(mkHymn(h, false)));
       (real ? (d.PSALM_CARDS || []) : []).forEach(p => items.push({ key: p.key || ('ps' + p.psalm), kind: 'hymn', psalmCard: true, n: p.n, year: p.year, note: p.yearNote || '', era: eraOf(p.year).id, trad: 'psalter', title: p.title, first: p.title, author: p.author, composer: '', tune: `Sung as No. ${p.n} · ${p.hymnTitle}`, page: p.page || '', story: strip(p.story), blurb: '', tuneOrigin: '', stanza: p.verse, image: '', imageAlt: '', credit: '' }));
-      [['church', 'CHURCH_EVENTS'], ['music', 'MUSIC_EVENTS'], ['world', 'WORLD_EVENTS']].forEach(([kind, k]) => pick(k).forEach((e, i) => items.push({ key: kind[0] + i, kind, year: e.year, prologue: e.tag === 'prologue', note: e.tag === 'prologue' ? '' : (e.yearNote || ''), era: eraOf(e.year, e.eraId).id, title: e.title, text: strip(e.text), image: e.image || '', imageAlt: e.imageAlt || e.title, credit: e.credit || '' })));
-      const order = { hymn: 0, church: 1, music: 2, world: 3 };
-      items.sort((a, b) => a.year - b.year || order[a.kind] - order[b.kind]);
-      this.D = { eras, trads, items, tmap: Object.fromEntries(trads.map(t => [t.id, t])) };
+      const covenant = real ? (d.COVENANT_EVENTS || []) : [];
+      [['covenant', covenant], ['church', pick('CHURCH_EVENTS')], ['music', pick('MUSIC_EVENTS')], ['world', pick('WORLD_EVENTS')]].forEach(([kind, list]) => list.forEach((e, i) => items.push({ key: (kind === 'covenant' ? 'cv' : kind[0]) + i, kind, year: e.year, prologue: e.tag === 'prologue', reformed: e.tag === 'reformed', american: e.tag === 'american', group: e.group || '', note: e.tag === 'prologue' ? '' : (e.yearNote || ''), era: eraOf(e.year, e.eraId).id, title: e.title, text: strip(e.text), image: e.image || '', imageAlt: e.imageAlt || e.title, credit: e.credit || '' })));
+      withYear.filter(h => !h.featured).forEach(h => items.push(mkHymn(h, true)));
+      items.sort((a, b) => a.year - b.year || this.ORDER[a.kind] - this.ORDER[b.kind] || (a.extra ? 1 : 0) - (b.extra ? 1 : 0));
+      this.D = { eras, trads, items, periods: pick('MUSIC_PERIODS'), hasCovenant: covenant.length > 0, tmap: Object.fromEntries(trads.map(t => [t.id, t])) };
       const start = 0;
       this.setState({ ready: true, sample: !real, eraI: start });
     });
@@ -272,6 +283,7 @@ class Component extends DCLogic {
       if (!this.D) return; const tg = e.target;
       if (e.key === 'Escape' && this.state.sel) { this.close(); return; }
       if (tg && /INPUT|TEXTAREA|SELECT/.test(tg.tagName)) return;
+      if (e.key === 'Enter' && this.state.view === 'road' && !this.state.sel) { const v = this.visOf(this.state)[Math.round(this.target)]; if (v) { this.open(v.key); e.preventDefault(); } return; }
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       const dir = e.key === 'ArrowRight' ? 1 : -1;
       if (this.state.sel) { this.step(dir); e.preventDefault(); }
@@ -279,32 +291,118 @@ class Component extends DCLogic {
       else if (this.state.view === 'timeline' && !(tg && tg.closest && tg.closest('.hx-row'))) { this.goEra(this.state.eraI + dir); e.preventDefault(); }
     };
     document.addEventListener('keydown', this.onKey);
-    this.wheelAcc = 0; this.wheelT = 0;
+    this.target = 0; this.snapT = null;
     this.onWheel = e => {
       if (this.state.view !== 'road' || !(e.target && e.target.closest && e.target.closest('.hx-road'))) return;
-      e.preventDefault();
-      const now = Date.now(); if (now - this.wheelT > 400) this.wheelAcc = 0;
-      this.wheelAcc += e.deltaY;
-      if (Math.abs(this.wheelAcc) >= 80 && now - this.wheelT > 260) { this.roadStep(this.wheelAcc > 0 ? 1 : -1); this.wheelAcc = 0; this.wheelT = now; }
+      e.preventDefault(); this.stopPlay();
+      const d = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      this.target = this.clampPos(this.target + d / 260); this.kick();
+      clearTimeout(this.snapT); this.snapT = setTimeout(() => { this.target = Math.round(this.target); this.kick(); }, 240);
     };
-    this.onTouchStart = e => { if (e.target && e.target.closest && e.target.closest('.hx-road')) this.touchY = e.touches[0].clientY; else this.touchY = null; };
+    this.onTouchStart = e => { if (e.target && e.target.closest && e.target.closest('.hx-road')) { this.ty = e.touches[0].clientY; this.tx0 = e.touches[0].clientX; this.stopPlay(); } else this.ty = null; };
     this.onTouchMove = e => {
-      if (this.touchY == null || this.state.view !== 'road') return;
-      const dy = this.touchY - e.touches[0].clientY; e.preventDefault();
-      if (Math.abs(dy) > 50) { this.roadStep(dy > 0 ? 1 : -1); this.touchY = e.touches[0].clientY; }
+      if (this.ty == null || this.state.view !== 'road') return;
+      const t = e.touches[0]; const dy = this.ty - t.clientY, dx = this.tx0 - t.clientX; e.preventDefault();
+      this.target = this.clampPos(this.target + (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.ty = t.clientY; this.tx0 = t.clientX; this.kick();
     };
+    this.onTouchEnd = () => { if (this.ty == null) return; this.ty = null; this.target = Math.round(this.target); this.kick(); };
+    this.onMove = e => { if (this.dragX == null) return; const dx = this.dragX - e.clientX, dy = this.dragY - e.clientY; this.target = this.clampPos(this.target + (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.dragX = e.clientX; this.dragY = e.clientY; this.kick(); };
+    this.onUp = () => { if (this.dragX == null) return; this.dragX = null; this.target = Math.round(this.target); this.kick(); };
     document.addEventListener('wheel', this.onWheel, { passive: false });
     document.addEventListener('touchstart', this.onTouchStart, { passive: true });
     document.addEventListener('touchmove', this.onTouchMove, { passive: false });
+    document.addEventListener('touchend', this.onTouchEnd);
+    document.addEventListener('mousemove', this.onMove); document.addEventListener('mouseup', this.onUp);
+    this.onResize = () => this.paint(); window.addEventListener('resize', this.onResize);
   }
-  componentWillUnmount() { document.removeEventListener('wheel', this.onWheel); document.removeEventListener('touchstart', this.onTouchStart); document.removeEventListener('touchmove', this.onTouchMove); document.removeEventListener('keydown', this.onKey); }
-  fy(y) { return y < 0 ? `${-y} BC` : y === 0 ? 'AD 1' : String(y); }
-  visOf(s) { return this.D.items.filter(it => it.kind === 'hymn' ? (!s.trad || it.trad === s.trad) : s.lanes[it.kind]); }
+  componentDidUpdate() { if (this.state.view === 'road') this.paint(); }
+  componentWillUnmount() { this.stopPlay(); cancelAnimationFrame(this.raf); window.removeEventListener('resize', this.onResize); document.removeEventListener('wheel', this.onWheel); document.removeEventListener('touchstart', this.onTouchStart); document.removeEventListener('touchmove', this.onTouchMove); document.removeEventListener('touchend', this.onTouchEnd); document.removeEventListener('mousemove', this.onMove); document.removeEventListener('mouseup', this.onUp); document.removeEventListener('keydown', this.onKey); }
+  clampPos(p) { const n = this.visOf(this.state).length; return Math.max(0, Math.min(Math.max(0, n - 1), p)); }
+  reduced() { return typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  kick() {
+    if (this.raf) return;
+    const tick = () => {
+      this.raf = 0; const t = this.target;
+      let nx = this.reduced() ? t : this.pos + (t - this.pos) * 0.11; if (Math.abs(t - nx) < 0.0015) nx = t;
+      this.pos = nx; const ri = Math.round(nx);
+      if (ri !== this.state.roadI) this.setState({ roadI: ri }); else this.paint();
+      if (nx !== t) this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+  geom(W, Hh) {
+    const T = 5, yCur = Hh * 0.42; const uOf = dd => (dd + 0.5) / (T + 0.5); const u0 = uOf(0);
+    return { T, uOf, yOf: u => yCur * Math.pow(Math.max(0, 1 - u) / (1 - u0), 2), scOf: u => 1 / (1 + 2.8 * Math.max(0, u)), halfOf: u => W * (0.11 + 0.30 * Math.pow(Math.max(0, 1 - u), 3)), cardW: Math.min(360, Math.floor(W * 0.46)) };
+  }
+  paint() {
+    const stage = this.roadStage.current, cv = this.roadCanvas.current; if (!stage || !cv || !this.D || this.state.view !== 'road') return;
+    const vis = this.visOf(this.state); const n = vis.length; if (!n) return;
+    const pos = Math.max(0, Math.min(this.pos, n - 1)); const W = stage.clientWidth, Hf = stage.clientHeight, Hh = Hf - 78;
+    const dpr = Math.min(2, window.devicePixelRatio || 1); if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(Hf * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(Hf * dpr); }
+    const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, Hf);
+    const { T, uOf, yOf, scOf, halfOf } = this.geom(W, Hh); const cx = W / 2; const eras = this.D.eras;
+    g.strokeStyle = 'rgba(243,242,242,.55)'; g.lineWidth = 1.5;
+    [1, -1].forEach(sd => { g.beginPath(); for (let q = 0; q <= 28; q++) { const u = -0.45 + 1.45 * q / 28; const y = Math.min(Hh + 40, yOf(u)); const x = cx + sd * halfOf(u); q ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); });
+    const eraFirst = {}; vis.forEach((it, i) => { if (eraFirst[it.era] == null) eraFirst[it.era] = i; });
+    let lastYear = null;
+    for (let k = Math.ceil((pos - 0.5) * 10) / 10; k <= pos + T; k = Math.round((k + 0.1) * 10) / 10) {
+      const dd = k - pos; const u = Math.min(1, uOf(dd)); const y = yOf(u); const hw = halfOf(u); const sc = scOf(u); const major = Math.abs(k - Math.round(k)) < 0.001;
+      const len = (major ? 30 : 14) * (0.35 + 0.65 * sc); const a = 0.25 + 0.5 * sc;
+      g.fillStyle = `rgba(243,242,242,${a.toFixed(2)})`; g.fillRect(cx - hw - len, y, len, major ? 2 : 1); g.fillRect(cx + hw, y, len, major ? 2 : 1);
+      if (!major && Math.abs((k * 10) % 5) < 0.01) { g.fillStyle = `rgba(243,242,242,${(0.12 + 0.18 * sc).toFixed(2)})`; g.fillRect(cx - 1, y - 6 * sc, 2, Math.max(2, 12 * sc)); }
+      if (!major) continue;
+      const i = Math.round(k); const it = vis[i]; if (!it) continue;
+      g.fillStyle = `rgba(243,242,242,${(0.05 + 0.08 * sc).toFixed(3)})`; g.fillRect(cx - hw, y, hw * 2, 1);
+      const lab = this.signText(it);
+      if (lab && lab !== lastYear) {
+        lastYear = lab; const avail = cx - hw - len - 18; let fs = Math.round(12 + 40 * sc); const inside = avail < 48; if (inside) fs = Math.round(12 + 26 * sc);
+        g.font = `${fs}px "Cormorant Garamond", serif`; let tw = g.measureText(lab).width; if (!inside && tw > avail) { fs = Math.max(11, Math.floor(fs * avail / tw)); g.font = `${fs}px "Cormorant Garamond", serif`; }
+        g.fillStyle = `rgba(217,179,106,${(0.45 + 0.55 * sc).toFixed(2)})`; g.textBaseline = 'middle'; g.textAlign = inside ? 'right' : 'left'; g.fillText(lab, inside ? cx + hw - 10 : cx + hw + len + 10, y - fs * 0.05);
+      } else if (lab) lastYear = lab;
+      const e = eras.find(x => x.id === it.era);
+      if (e && eraFirst[it.era] === i && dd > -0.5) {
+        const ssc = 0.45 + 0.75 * sc; const sw = 176, sh = 62; const room = cx - 8; const x = sw * ssc + 8 > room - hw - len ? Math.min(cx - hw + 10, -room + sw * ssc + cx) : cx - hw - len - 8;
+        g.save(); g.globalAlpha = 0.6 + 0.4 * sc; g.translate(x, y); g.scale(ssc, ssc);
+        g.fillStyle = '#c3b595'; g.strokeStyle = '#8f7f5c'; g.lineWidth = 2; g.fillRect(-sw, -sh, sw, sh); g.strokeRect(-sw, -sh, sw, sh);
+        g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = '#6b5a3e'; g.font = '11px Lora, serif'; g.fillText(this.eraDates(e, e === eras[eras.length - 1]), -sw / 2, -sh + 20);
+        g.fillStyle = '#4a3a24'; let fs2 = 17; g.font = `600 ${fs2}px "Cormorant Garamond", serif`; const lb = (e.short || e.label).toUpperCase(); while (g.measureText(lb).width > sw - 20 && fs2 > 11) { fs2--; g.font = `600 ${fs2}px "Cormorant Garamond", serif`; } g.fillText(lb, -sw / 2, -sh + 44);
+        g.restore();
+      }
+    }
+    const laneOf = i => [0, 1, -1][i % 3]; const ri = Math.round(pos);
+    stage.querySelectorAll('[data-ri]').forEach(el => {
+      const i = +el.dataset.ri; const dd = i - pos; const u = Math.min(1, uOf(dd)); const sc = scOf(u); const back = Math.max(0, -dd); const ease = back / 0.6;
+      const y = yOf(u) + ease * ease * Hh * 1.1; const x = laneOf(i) * halfOf(u) * 0.78 + laneOf(i) * ease * 160;
+      const shown = dd > -0.6 && dd <= T; const fog = dd > 3 ? Math.max(0, 1 - (dd - 3) / 2) : 1;
+      el.style.transform = `translate(calc(-50% + ${x.toFixed(1)}px), ${y.toFixed(1)}px) scale(${sc.toFixed(3)})`;
+      el.style.opacity = fog.toFixed(2); el.style.zIndex = shown ? String(Math.round(200 - u * 100)) : '0'; el.style.visibility = shown ? 'visible' : 'hidden'; el.tabIndex = i === ri ? 0 : -1;
+    });
+    const mk = document.getElementById('hx-road-marker'); if (mk) mk.style.left = ((pos + 0.5) / n * 100).toFixed(3) + '%';
+  }
+  goRoad(i) { this.target = this.clampPos(i); this.kick(); }
+  roadStep(dir) { this.stopPlay(); this.goRoad(Math.round(this.target) + dir); }
+  startPlay() { if (this.playT) return; const rate = { slow: 0.22, normal: 0.45, fast: 0.9 }; let last = performance.now(); const step = (now) => { const dt = (now - last) / 1000; last = now; const n = this.visOf(this.state).length - 1; this.target = this.clampPos(this.target + dt * rate[this.state.speed]); this.kick(); if (this.target >= n) { this.stopPlay(); this.target = n; this.kick(); return; } this.playT = requestAnimationFrame(step); }; this.playT = requestAnimationFrame(step); this.setState({ playing: true }); }
+  stopPlay() { if (this.playT) { cancelAnimationFrame(this.playT); this.playT = 0; } if (this.state.playing) this.setState({ playing: false }); }
+  signText(it) { if (it.prologue || it.year < -2000) return ''; const y = it.year; const ord = n => n + (n % 10 === 1 && n % 100 !== 11 ? 'st' : n % 10 === 2 && n % 100 !== 12 ? 'nd' : n % 10 === 3 && n % 100 !== 13 ? 'rd' : 'th'); if (y < 1) return ord(Math.ceil((1 - y) / 100)) + ' century BC'; return ord(Math.floor((y - 1) / 100) + 1) + ' century'; }
+  fy(y) { return y < 0 ? `${-y} BC` : y < 1000 ? `AD ${Math.max(1, y)}` : String(y); }
+  yearText(it) { return it.prologue ? 'In the beginning' : it.note ? it.note : this.fy(it.year); }
+  px(y) { return y >= 600 ? y : 600 - 2600 * Math.pow(Math.max(0, 600 - y) / 2600, 0.45); }
+  pct(y, a, b) { return (this.px(y) - this.px(a)) / (this.px(b) - this.px(a)) * 100; }
+  visOf(s) {
+    return this.D.items.filter(it => {
+      if (it.kind === 'hymn') return (!it.extra || s.expanded[it.era]) && (!s.trad || it.trad === s.trad);
+      if (!s.lanes[it.kind]) return false;
+      if (it.kind === 'church' && !it.prologue) { if (s.reformedOnly && !it.reformed) return false; if (it.group && s.groups[it.group] === false) return false; }
+      if ((it.kind === 'world' || it.kind === 'music') && s.americanOnly && !it.american) return false;
+      return true;
+    });
+  }
   eraDates(e, last) { return last ? `Since ${this.fy(e.start)}` : `${this.fy(e.start)} – ${this.fy(e.end)}`; }
   close() { const k = this.state.sel; this.setState({ sel: null }, () => { const el = k && document.getElementById((this.state.view === 'road' ? 'hr-' : 'hx-') + k); if (el) el.focus({ preventScroll: true }); }); }
   open(key) {
     const it = this.D.items.find(i => i.key === key); if (!it) return;
     const eraI = this.D.eras.findIndex(e => e.id === it.era); const ri = this.visOf(this.state).findIndex(x => x.key === key);
+    if (ri >= 0 && this.state.view === 'road') { this.stopPlay(); this.goRoad(ri); }
     this.setState(s => ({ sel: key, eraI: eraI < 0 ? s.eraI : eraI, roadI: ri < 0 ? s.roadI : ri }), () => { this.scrollToCard(key); setTimeout(() => this.closeRef.current && this.closeRef.current.focus({ preventScroll: true }), 30); });
   }
   step(dir) { const v = this.visOf(this.state); const i = v.findIndex(x => x.key === this.state.sel); if (i < 0) return; const j = Math.max(0, Math.min(v.length - 1, i + dir)); if (j !== i) this.open(v[j].key); }
@@ -321,56 +419,81 @@ class Component extends DCLogic {
     this.setState({ eraI: i }, () => {
       if (this.state.view === 'pin' || this.state.view === 'list') { const el = document.getElementById('hx-era-' + this.D.eras[i].id); if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 60, behavior: 'smooth' }); }
       else if (this.state.view === 'timeline') { const el = document.getElementById('hx-stage'); if (el) { const r = el.getBoundingClientRect(); if (r.top < 0) window.scrollTo({ top: window.scrollY + r.top - 50, behavior: 'smooth' }); } }
-      else if (this.state.view === 'road') { const v = this.visOf(this.state); const ri = v.findIndex(x => x.era === this.D.eras[i].id); if (ri >= 0) this.setState({ roadI: ri }); }
+      else if (this.state.view === 'road') { const v = this.visOf(this.state); const ri = v.findIndex(x => x.era === this.D.eras[i].id); if (ri >= 0) { this.stopPlay(); this.goRoad(ri); } }
     });
   }
-  roadStep(dir) { const n = this.visOf(this.state).length; this.setState(s => ({ roadI: Math.max(0, Math.min(n - 1, s.roadI + dir)) })); }
   jump(it) {
-    this.setState(s => ({ q: '', view: s.view, lanes: it.kind === 'hymn' ? s.lanes : { ...s.lanes, [it.kind]: true }, trad: it.kind === 'hymn' && s.trad && s.trad !== it.trad ? null : s.trad }), () => this.open(it.key));
+    this.setState(s => ({ q: '', view: s.view, lanes: it.kind === 'hymn' ? s.lanes : { ...s.lanes, [it.kind]: true }, trad: it.kind === 'hymn' && s.trad && s.trad !== it.trad ? null : s.trad, expanded: it.extra ? { ...s.expanded, [it.era]: true } : s.expanded, reformedOnly: it.kind === 'church' && !it.reformed && !it.prologue ? false : s.reformedOnly, americanOnly: (it.kind === 'world' || it.kind === 'music') && !it.american ? false : s.americanOnly, groups: it.group ? { ...s.groups, [it.group]: true } : s.groups }), () => this.open(it.key));
   }
   card(it) {
-    const s = this.state; const isH = it.kind === 'hymn'; const T = this.D.tmap[it.trad] || {};
+    const s = this.state; const isH = it.kind === 'hymn'; const T = this.D.tmap[it.trad] || {}; const L = this.LANE[it.kind];
     const who = [it.author, it.composer].filter((v, i, a) => v && a.indexOf(v) === i).join(' · ');
+    const big = !it.prologue && !it.note;
     return {
-      id: 'hx-' + it.key, rid: 'hr-' + it.key, bar: isH ? (T.color || '#b68235') : 'transparent', barH: isH ? 5 : 0,
-      kicker: (isH ? (T.label || 'Hymn') : this.LANE[it.kind].label) + (it.note ? ' · ' + it.note : ''),
-      year: it.prologue ? 'In the beginning' : this.fy(it.year), title: isH ? it.first : it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
-      img: it.image, hasImg: !!it.image, imgAlt: it.imageAlt || it.title, span: it.image ? 2 : 1,
-      tint: isH ? '#e9e3d8' : '#efeae1', yearColor: isH ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
-      border: s.sel === it.key ? 'var(--color-accent)' : 'transparent', go: () => this.open(it.key),
+      id: 'hx-' + it.key, rid: 'hr-' + it.key, isH, n: it.n, bar: isH ? (T.color || '#b68235') : (it.reformed ? this.REF : L.rule), barH: isH || it.reformed ? 5 : 3,
+      kicker: isH ? (T.label || 'Hymn') : L.label, reformed: !!it.reformed,
+      year: this.yearText(it), ySz: big ? 44 : 24, ySzP: big ? 40 : 24, ySzM: big ? 34 : 21,
+      title: isH ? it.first : it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
+      img: it.image, imgSrc: JSON.stringify(it.image || ''), hasImg: !!it.image, imgAlt: it.imageAlt || it.title, span: it.image ? 2 : 1,
+      tint: L.tint, yearColor: isH ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+      border: s.sel === it.key ? '#d9b36a' : 'transparent', glow: s.sel === it.key ? 'rgba(217,179,106,.35)' : 'transparent', go: () => this.state.sel === it.key ? this.close() : this.open(it.key),
     };
   }
   renderVals() {
     const s = this.state;
-    const views = [['timeline', 'Timeline'], ['pin', 'Pinboard'], ['list', 'List'], ['road', 'Road']].map(([k, label]) => ({ label, pressed: s.view === k ? 'true' : 'false', bg: s.view === k ? '#1f3c5d' : 'transparent', fg: s.view === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setState({ view: k }, () => k !== 'timeline' && k !== 'road' && this.goEra(this.state.eraI)) }));
-    const laneToggles = ['church', 'music', 'world'].map(k => ({ label: this.LANE[k].label, color: this.LANE[k].color, pressed: s.lanes[k] ? 'true' : 'false', mark: s.lanes[k] ? '✓' : '', fill: s.lanes[k] ? this.LANE[k].color : 'transparent', bg: s.lanes[k] ? '#efeae1' : 'transparent', border: s.lanes[k] ? this.LANE[k].color : 'var(--color-divider)', go: () => this.setState(st => ({ lanes: { ...st.lanes, [k]: !st.lanes[k] } })) }));
-    const common = { views, laneToggles, q: s.q, setQ: e => this.setState({ q: e.target.value }), goTimeline: () => this.props.goTimeline && this.props.goTimeline(), closeRef: this.closeRef, closeSel: () => this.close() };
+    const views = [['timeline', 'Timeline'], ['pin', 'Pinboard'], ['list', 'List'], ['road', 'Road']].map(([k, label]) => ({ label, pressed: s.view === k ? 'true' : 'false', bg: s.view === k ? '#1f3c5d' : 'transparent', fg: s.view === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setState({ view: k }, () => { if (k === 'road') { this.target = this.clampPos(this.state.roadI || 0); this.kick(); } else if (k !== 'timeline') this.goEra(this.state.eraI); }) }));
+    const ctxKinds = ['covenant', 'church', 'music', 'world'].filter(k => k !== 'covenant' || (this.D && this.D.hasCovenant));
+    const laneToggles = ctxKinds.map(k => ({ label: this.LANE[k].label, color: this.LANE[k].color, pressed: s.lanes[k] ? 'true' : 'false', mark: s.lanes[k] ? '✓' : '', fill: s.lanes[k] ? this.LANE[k].color : 'transparent', bg: s.lanes[k] ? this.LANE[k].tint : 'transparent', border: s.lanes[k] ? this.LANE[k].color : 'var(--color-divider)', go: () => this.setState(st => ({ lanes: { ...st.lanes, [k]: !st.lanes[k] } })) }));
+    const sw = (label, on, go) => ({ label, pressed: on ? 'true' : 'false', go, border: on ? 'var(--color-neutral-500)' : 'var(--color-divider)', bg: on ? '#f3f0ea' : 'transparent', track: on ? 'var(--color-accent-700)' : 'var(--color-neutral-400)', knob: on ? 14 : 2 });
+    const subGroups = [];
+    if (s.lanes.church) subGroups.push({ label: 'Church history', color: this.LANE.church.color, items: [
+      sw('Reformed and Presbyterian only', s.reformedOnly, () => this.setState(st => ({ reformedOnly: !st.reformedOnly }))),
+      sw('Institutions', s.groups.institutions, () => this.setState(st => ({ groups: { ...st.groups, institutions: !st.groups.institutions } }))),
+      sw('Congregations', s.groups.congregations, () => this.setState(st => ({ groups: { ...st.groups, congregations: !st.groups.congregations } }))) ] });
+    if (s.lanes.world || s.lanes.music) subGroups.push({ label: 'World events', color: this.LANE.world.color, items: [sw('American history only', s.americanOnly, () => this.setState(st => ({ americanOnly: !st.americanOnly })))] });
+    const common = { views, laneToggles, subGroups, hasSub: subGroups.length > 0, q: s.q, setQ: e => this.setState({ q: e.target.value }), goTimeline: () => this.props.goTimeline && this.props.goTimeline(), closeRef: this.closeRef, closeSel: () => this.close() };
     if (!s.ready || !this.D) return { ...common, loading: true, band: [], legend: [], results: [], hasResults: false };
-    const { eras, trads, items, tmap } = this.D;
+    const { eras, trads, items, tmap, periods } = this.D;
     const vis = this.visOf(s);
-    const eraI = Math.min(s.eraI, eras.length - 1); const E = eras[eraI]; const lastI = eras.length - 1;
+    const posIt = s.view === 'road' ? vis[Math.max(0, Math.min(s.roadI, vis.length - 1))] : null;
+    const eraI = posIt ? Math.max(0, eras.findIndex(e => e.id === posIt.era)) : Math.min(s.eraI, eras.length - 1); const E = eras[eraI]; const lastI = eras.length - 1;
     const inE = vis.filter(it => it.era === E.id);
-    const hymnCards = inE.filter(it => it.kind === 'hymn').map(it => this.card(it));
+    const onTL = s.view === 'timeline', onPL = s.view === 'pin' || s.view === 'list', onRoad = s.view === 'road';
+    const hymnCards = onTL ? inE.filter(it => it.kind === 'hymn').map(it => this.card(it)) : [];
     const trLabel = s.trad ? (tmap[s.trad] || {}).label : '';
-    const ctxLanes = ['church', 'music', 'world'].filter(k => s.lanes[k]).map(k => { const cards = inE.filter(it => it.kind === k).map(it => this.card(it)); return { label: this.LANE[k].label, color: this.LANE[k].color, cards, empty: cards.length === 0, emptyText: `No ${this.LANE[k].label.toLowerCase()} entries for these years yet.` }; });
+    const eraHymns = items.filter(it => it.kind === 'hymn' && !it.psalmCard && it.era === E.id && (!s.trad || it.trad === s.trad));
+    const extraN = eraHymns.filter(it => it.extra).length; const expanded = !!s.expanded[E.id];
+    const P = y => this.pct(y, E.start, E.end);
+    const ctxLanes = ctxKinds.filter(k => onTL && s.lanes[k]).map(k => {
+      const cards = inE.filter(it => it.kind === k).map(it => this.card(it));
+      const prs = k === 'music' ? periods.map(p => { const a = Math.max(p.start, E.start), b = Math.min(p.end, E.end); return b <= a ? null : { label: p.label, title: `${p.label} · ${this.fy(p.start)} – ${this.fy(p.end)}`, left: P(a), width: P(b) - P(a) }; }).filter(Boolean) : [];
+      return { label: this.LANE[k].label, color: this.LANE[k].color, cards, empty: cards.length === 0, emptyText: `No ${this.LANE[k].label.toLowerCase()} entries for these years yet.`, periods: prs, hasPeriods: prs.length > 0 };
+    });
     const span = E.end - E.start; const step = span <= 40 ? 5 : span <= 100 ? 10 : span <= 300 ? 50 : span <= 1000 ? 100 : 200;
-    const tk = []; for (let y = Math.ceil(E.start / step) * step; y <= E.end; y += step) tk.push(y);
-    const ticks = tk.map((y, i) => ({ pct: (y - E.start) / span * 100, label: tk.length > 7 && i % 2 ? '' : this.fy(y) }));
-    const laneY = { hymn: 12, church: 64, music: 74, world: 84 };
-    const dots = inE.map(it => ({ pct: Math.max(0.5, Math.min(99.5, (it.year - E.start) / span * 100)), top: laneY[it.kind], size: s.sel === it.key ? 16 : it.kind === 'hymn' ? 11 : 8, bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || '#b68235') : this.LANE[it.kind].color, title: `${it.prologue ? 'In the beginning' : this.fy(it.year)} · ${it.title}`, go: () => this.open(it.key) }));
-    const band = eras.map((e, i) => { const sp = e.end - e.start; const on = i === eraI; return { label: this.eraDates(e, i === lastI) + ' · ' + e.label, short: e.short || e.label, current: on ? 'true' : 'false', bg: on ? '#efeae1' : 'transparent', line: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', ticks: vis.filter(it => it.era === e.id).map(it => ({ pct: Math.max(0, Math.min(99, (it.year - e.start) / sp * 100)), bg: it.kind === 'hymn' ? 'var(--color-accent)' : 'var(--color-neutral-500)', h: it.kind === 'hymn' ? 9 : 5 })), go: () => this.goEra(i) }; });
-    const groups = eras.map((e, i) => { const its = vis.filter(it => it.era === e.id); return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.prologue), ...its.filter(x => x.image && !x.prologue), ...its.filter(x => !x.image && !x.prologue)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
-    const ri = Math.max(0, Math.min(s.roadI, vis.length - 1)); const SP = 360; const stageW = Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const off = Math.max(150, Math.min(250, stageW / 2 - 220));
-    const roadCards = vis.map((it, i) => { const dd = i - ri; const c = this.card(it); const side = i % 2 === 0 ? -1 : 1; const shown = dd >= 0 && dd <= 7; return { ...c, tf: `translate3d(${side * off - 140}px, -270px, ${-i * SP + 230}px)`, mk: `translate3d(-50%, 0, ${-i * SP - 70}px) rotateX(-90deg) translateY(-18px)`, op: shown ? (1 - dd * 0.1).toFixed(2) : 0, mop: shown && dd > 0 ? (1 - dd * 0.1).toFixed(2) : 0, vis: shown ? 'visible' : 'hidden', tab: dd === 0 ? '0' : '-1' }; });
+    let tk = []; if (E.start < 600) tk = [-2000, -1500, -1000, -500, 1, 200, 400, 600].filter(y => y >= E.start && y <= E.end); else for (let y = Math.ceil(E.start / step) * step; y <= E.end; y += step) tk.push(y);
+    const ticks = tk.map((y, i) => ({ pct: P(y), label: tk.length > 9 && i % 2 ? '' : this.fy(y) }));
+    const laneY = { hymn: 12, covenant: 54, church: 64, music: 74, world: 84 };
+    const dots = (onTL ? inE : []).map(it => ({ pct: Math.max(0.5, Math.min(99.5, P(it.year))), top: laneY[it.kind], size: s.sel === it.key ? 16 : it.kind === 'hymn' ? 11 : 8, bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || '#b68235') : (it.reformed ? this.REF : this.LANE[it.kind].color), title: `${this.yearText(it)} · ${it.title}`, go: () => this.open(it.key) }));
+    const band = eras.map((e, i) => { const on = i === eraI; return { label: this.eraDates(e, i === lastI) + ' · ' + e.label, short: e.short || e.label, current: on ? 'true' : 'false', bg: on ? '#efeae1' : 'transparent', line: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', ticks: vis.filter(it => it.era === e.id).map(it => ({ pct: Math.max(0, Math.min(99, this.pct(it.year, e.start, e.end))), bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || 'var(--color-accent)') : (it.reformed ? this.REF : this.LANE[it.kind].color), h: it.kind === 'hymn' ? 9 : 5 })), go: () => this.goEra(i) }; });
+    const groups = eras.map((e, i) => { const its = onPL ? vis.filter(it => it.era === e.id) : []; return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.prologue), ...its.filter(x => x.image && !x.prologue), ...its.filter(x => !x.image && !x.prologue)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
+    const ri = Math.max(0, Math.min(s.roadI, Math.max(0, vis.length - 1)));
+    const W = (this.roadStage.current && this.roadStage.current.clientWidth) || Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const cardW = Math.min(360, Math.floor(W * 0.46));
+    const lo = Math.max(0, ri - 2), hi = Math.min(vis.length - 1, ri + 6);
+    const roadCards = (onRoad ? vis.slice(lo, hi + 1) : []).map((it, k) => { const i = lo + k; const c = this.card(it); return { ...c, i, w: cardW, year: this.yearText(it), tune: it.kind === 'hymn' ? (it.tune || '').toUpperCase() : '', sub: it.kind === 'hymn' ? [it.author, it.composer].filter((v, j, a) => v && a.indexOf(v) === j).join(' · ') : it.text }; });
+    const eraCounts = eras.map(e => vis.filter(it => it.era === e.id).length); const total = Math.max(1, vis.length);
+    let acc = 0; const roadBand = eras.map((e, i) => { const n = eraCounts[i]; const first = acc; acc += n; const on = i === eraI; return { flex: Math.max(n, 2), start: this.fy(e.start), label: e.short || e.label, title: this.eraDates(e, i === eras.length - 1) + ' · ' + e.label, bg: on ? 'rgba(243,242,242,.07)' : 'transparent', marks: vis.slice(first, first + n).map((it, j) => ({ pct: n > 1 ? (j + 0.5) / n * 100 : 50, top: it.kind === 'hymn' ? 30 : 44, bg: it.kind === 'hymn' ? '#d9b36a' : 'rgba(243,242,242,.5)' })), go: () => { this.stopPlay(); if (n) this.goRoad(first); } }; });
+    const roadList = (onRoad ? vis : []).map(it => `${this.yearText(it)}: ${it.title}${it.kind === 'hymn' && it.author ? ', ' + it.author : ''}. ${it.text || it.story || ''}`);
+    const speeds = [['slow', 'Slow'], ['normal', 'Normal'], ['fast', 'Fast']].map(([k, label]) => ({ label, pressed: s.speed === k ? 'true' : 'false', bg: s.speed === k ? '#1f3c5d' : 'transparent', fg: s.speed === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setState({ speed: k }) }));
     const ql = s.q.trim().toLowerCase();
-    const results = ql.length < 2 ? [] : items.filter(it => [it.title, it.first, it.author, it.composer, it.tune, it.text, String(it.year)].some(v => String(v || '').toLowerCase().includes(ql))).slice(0, 8).map(it => ({ label: it.title, meta: `${it.prologue ? 'In the beginning' : this.fy(it.year)} · ${it.kind === 'hymn' ? (it.author || 'Hymn') : this.LANE[it.kind].label}`, go: () => this.jump(it) }));
+    const results = ql.length < 2 ? [] : items.filter(it => [it.title, it.first, it.author, it.composer, it.tune, it.text, String(it.year), it.n && 'no. ' + it.n].some(v => String(v || '').toLowerCase().includes(ql))).slice(0, 8).map(it => ({ label: it.title, meta: `${this.yearText(it)} · ${it.kind === 'hymn' ? (it.author || 'Hymn') : this.LANE[it.kind].label}`, go: () => this.jump(it) }));
     const legend = trads.map(t => { const on = s.trad === t.id; return { label: t.label, color: t.color, count: items.filter(i => i.kind === 'hymn' && i.trad === t.id).length, pressed: on ? 'true' : 'false', border: on ? 'var(--color-text)' : 'var(--color-divider)', bg: on ? '#efeae1' : 'transparent', op: s.trad && !on ? .6 : 1, go: () => this.setState(st => ({ trad: st.trad === t.id ? null : t.id })) }; });
+    legend.push({ label: 'Reformed and Presbyterian thread', color: this.REF, count: items.filter(i => i.reformed).length, pressed: s.reformedOnly ? 'true' : 'false', border: s.reformedOnly ? 'var(--color-text)' : 'var(--color-divider)', bg: s.reformedOnly ? '#efeae1' : 'transparent', op: 1, go: () => this.setState(st => ({ reformedOnly: !st.reformedOnly, lanes: { ...st.lanes, church: true } })) });
     const cur = s.sel ? items.find(i => i.key === s.sel) : null; let d = {};
     if (cur) {
-      const isH = cur.kind === 'hymn'; const T = tmap[cur.trad] || {};
+      const isH = cur.kind === 'hymn'; const T = tmap[cur.trad] || {}; const L = this.LANE[cur.kind]; const big = !cur.prologue && !cur.note;
       const secs = (isH ? [['The story', cur.story], ['About this hymn', cur.blurb], ['Where the tune comes from', cur.tuneOrigin]] : [['', cur.text]]).filter(x => x[1]).map(([h, t]) => ({ h, t, hasH: !!h }));
       const vi = vis.findIndex(x => x.key === cur.key);
-      d = { tag: isH ? (T.label || 'Hymn') : this.LANE[cur.kind].label, tagColor: isH ? (T.color || '#b68235') : this.LANE[cur.kind].color, bar: isH ? (T.color || '#b68235') : 'var(--color-divider)', year: cur.prologue ? 'In the beginning' : this.fy(cur.year), note: cur.note, hasNote: !!cur.note, title: cur.title, isH, meta: isH ? (cur.psalmCard ? [['Written by', cur.author], ['In the hymnal', cur.tune.replace('Sung as ', '')]] : [['Words', cur.author], ['Music', cur.composer], ['Tune', cur.tune]]).filter(x => x[1]).map(([k, v]) => ({ k, v })) : [], img: cur.image, hasImg: !!cur.image, imgAlt: cur.imageAlt || cur.title, credit: cur.credit, hasCredit: !!cur.credit, secs, stanza: cur.stanza, hasStanza: isH && !!cur.stanza, linkLabel: `Open the hymn page · No. ${cur.n}${cur.page ? ', page ' + cur.page : ''}`, openHymn: () => { this.setState({ sel: null }); this.props.openHymn && this.props.openHymn(cur.n); }, count: vi < 0 ? '' : `${vi + 1} of ${vis.length}` };
+      d = { tag: isH ? (T.label || 'Hymn') : L.label, tagColor: isH ? (T.color || '#b68235') : (cur.reformed ? this.REF : L.color), bar: isH ? (T.color || '#b68235') : (cur.reformed ? this.REF : L.rule), year: this.yearText(cur), ySz: big ? 56 : 30, note: '', hasNote: false, title: cur.title, isH, meta: isH ? (cur.psalmCard ? [['Written by', cur.author], ['In the hymnal', cur.tune.replace('Sung as ', '')]] : [['Words', cur.author], ['Music', cur.composer], ['Tune', cur.tune]]).filter(x => x[1]).map(([k, v]) => ({ k, v })) : [], img: cur.image, hasImg: !!cur.image, imgAlt: cur.imageAlt || cur.title, credit: cur.credit, hasCredit: !!cur.credit, secs, stanza: cur.stanza, hasStanza: isH && !!cur.stanza, linkLabel: `Open the hymn page · No. ${cur.n}${cur.page ? ', page ' + cur.page : ''}`, openHymn: () => { this.setState({ sel: null }); this.props.openHymn && this.props.openHymn(cur.n); }, count: vi < 0 ? '' : `${vi + 1} of ${vis.length}` };
     }
     return {
       ...common, loading: false, sample: s.sample, sampleCount: `${items.filter(i => i.kind === 'hymn').length} hymns, ${items.filter(i => i.kind !== 'hymn').length} events`,
@@ -380,8 +503,11 @@ class Component extends DCLogic {
       prevEra: () => this.goEra(eraI - 1), nextEra: () => this.goEra(eraI + 1),
       tStart: e => { this.tx = e.touches[0].clientX; }, tEnd: e => { const dx = e.changedTouches[0].clientX - (this.tx || 0); if (Math.abs(dx) > 60) this.goEra(eraI + (dx < 0 ? 1 : -1)); },
       hymnCards, hymnsEmpty: hymnCards.length === 0, hymnsEmptyText: s.trad ? `No ${trLabel} hymns in these years. Tap “Show all traditions” below to see the rest.` : 'No hymns from these years are in the timeline yet.',
+      showAllBtn: extraN > 0, showAllLabel: expanded ? 'Show fewer' : `Show all ${eraHymns.length} hymns from this era`, showAllSub: expanded ? 'Back to the featured hymns' : 'Every hymn in the book from these years, in date order', toggleAll: () => this.setState(st => ({ expanded: { ...st.expanded, [E.id]: !st.expanded[E.id] } })),
       ctxLanes, ticks, dots, band, groups,
-      roadCards, roadZ: ri * SP, roadLen: (vis.length + 3) * SP, roadCount: vis.length ? `${ri + 1} of ${vis.length}` : '', roadBack: () => this.roadStep(-1), roadFwd: () => this.roadStep(1),
+      roadCards, roadBand, roadList, speeds, roadStage: this.roadStage, roadCanvas: this.roadCanvas, roadCount: vis.length ? `${ri + 1} of ${vis.length}` : '', roadBack: () => this.roadStep(-1), roadFwd: () => this.roadStep(1),
+      roadDown: e => { if (e.button !== 0 || (e.target && e.target.closest && e.target.closest('button'))) return; this.stopPlay(); this.dragX = e.clientX; this.dragY = e.clientY; e.preventDefault(); },
+      togglePlay: () => this.state.playing ? this.stopPlay() : this.startPlay(), playing: s.playing ? 'true' : 'false', playLabel: s.playing ? 'Pause' : 'Play', playGlyph: s.playing ? '❚❚' : '▶', playBg: s.playing ? '#1f3c5d' : 'transparent', playFg: s.playing ? 'var(--color-bg)' : 'var(--color-accent-700)',
       results, hasResults: results.length > 0, noResults: ql.length >= 2 && results.length === 0,
       legend, tradOn: !!s.trad, clearTrad: () => this.setState({ trad: null }),
       hasSel: !!cur, d, stepPrev: () => this.step(-1), stepNext: () => this.step(1),
