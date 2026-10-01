@@ -108,7 +108,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
         <span>This month: <em style="color:var(--color-bg)">{{ hom.now.title }}</em></span>
         <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;white-space:nowrap">Reserve the first printing →</button>
-        <button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button>
+        <sc-if value="{{ showTopShare }}" hint-placeholder-val="{{ true }}"><button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button></sc-if>
       </div>
     </div>
   </sc-if>
@@ -704,6 +704,17 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         </sc-for>
       </sc-for>
     </sc-if>
+    <sc-if value="{{ isTitlesView }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:18px">
+        <sc-for list="{{ letterCards }}" as="lc" hint-placeholder-count="6">
+          <div style="border:1px solid var(--color-divider);padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;background:#faf9f7">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--color-divider);padding-bottom:6px;margin-bottom:4px"><span style="font-family:var(--font-heading);font-size:40px;font-weight:400;line-height:1;color:var(--color-accent-700)">{{ lc.letter }}</span><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ lc.count }}</span></div>
+            <sc-for list="{{ lc.rows }}" as="r" hint-placeholder-count="5"><button onClick="{{ r.go }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:13.5px;line-height:1.45;padding:3px 0;width:100%;box-sizing:border-box" style-hover="color:var(--color-accent-700)"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.title }}</span><span style="font-variant-numeric:tabular-nums;color:var(--color-neutral-700);flex:none">{{ r.n }}</span></button></sc-for>
+            <sc-if value="{{ lc.hasMore }}" hint-placeholder-val="{{ false }}"><button onClick="{{ lc.toggle }}" style="all:unset;cursor:pointer;font-size:12.5px;color:var(--color-accent-700);margin-top:6px;border-top:1px solid var(--color-divider);padding-top:8px" style-hover="color:var(--color-accent)">{{ lc.moreLabel }}</button></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
     <sc-if value="{{ isStdList }}" hint-placeholder-val="{{ true }}">
     <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
       <div style="margin-bottom:28px">
@@ -728,9 +739,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
     <div style="max-width:1200px;margin:0 auto;padding:clamp(32px,5vw,56px) clamp(20px,4vw,48px) clamp(36px,5vw,56px)" class="hymn-hero">
       <div style="grid-column:1;display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400);flex-wrap:wrap;margin-bottom:14px"><button onClick="{{ goHymns }}" style="all:unset;cursor:pointer;color:var(--color-neutral-300)" style-hover="color:var(--color-bg)">← The Hymns</button><span>{{ h.section }}</span><span style="color:var(--color-neutral-400)">{{ h.topic }}</span></div>
       <h1 style="grid-column:1;font-size:clamp(36px,5vw,64px);font-weight:400;margin:0;line-height:1.02;color:var(--color-bg)">{{ h.title }}</h1>
-      <span class="hymn-num" style="grid-column:2;grid-row:2;font-family:var(--font-heading);font-size:clamp(64px,9vw,120px);line-height:1;color:var(--color-accent-400);font-variant-numeric:lining-nums tabular-nums;margin-top:-0.13em;justify-self:end">{{ h.n }}</span>
+      <span class="hymn-num" style="grid-column:2;grid-row:2;font-family:var(--font-heading);font-size:clamp(48px,6vw,80px);line-height:1;color:var(--color-accent-400);font-variant-numeric:lining-nums tabular-nums;margin-top:-0.13em;justify-self:end">{{ h.n }}</span>
       <span style="grid-column: 1; font-family: var(--font-heading); font-style: italic; font-size: 30px; color: var(--color-neutral-300); margin-top: 14px">{{ h.subtitle }}</span>
-      <div class="hymn-share" style="grid-column:2;grid-row:3;justify-self:end;align-self:end"><button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button></div>
+      <div class="hymn-share" style="grid-column:2;grid-row:3;justify-self:end;align-self:end;margin-top:18px;padding-top:14px"><button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button></div>
     </div>
   </section>
   <section style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(36px,5vw,72px);align-items:start">
@@ -756,7 +767,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       </div>
       <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid var(--color-divider)">
         <button onClick="{{ toggleDownloads }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;box-sizing:border-box;width:100%" style-hover="color:var(--color-accent-700)"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Resources and Downloads</span><span style="font-family:var(--font-heading);font-size:22px;color:var(--color-accent-700);line-height:1">{{ downloadsMark }}</span></button>
-        <sc-if value="{{ downloadsOpen }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;padding-bottom:8px"><sc-for list="{{ downloads }}" as="d" hint-placeholder-count="4"><a href="{{ d.href }}" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--color-divider);text-decoration:none;color:inherit;font-size:14px" style-hover="color:var(--color-accent-700)"><span>{{ d.label }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ d.kind }}</span></a></sc-for></div></sc-if>
+        <sc-if value="{{ downloadsOpen }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;padding-bottom:8px"><sc-for list="{{ downloads }}" as="d" hint-placeholder-count="4"><a href="{{ d.href }}" onClick="{{ d.go }}" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--color-divider);text-decoration:none;color:inherit;font-size:14px" style-hover="color:var(--color-accent-700)"><span>{{ d.label }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ d.kind }}</span></a></sc-for></div></sc-if>
       </div>
     </div>
     <div style="grid-column:span 1;display:flex;flex-direction:column;gap:32px;order:1">
@@ -764,7 +775,12 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <sc-for list="{{ stanzas }}" as="s" hint-placeholder-count="3">
           <div style="display:grid;grid-template-columns:28px 1fr;gap:12px"><span style="font-family:var(--font-heading);font-size:20px;color:var(--color-accent-700);font-variant-numeric:tabular-nums;line-height:1.4">{{ s.n }}</span><p style="margin:0;font-size:17px;line-height:1.6;white-space:pre-line">{{ s.text }}</p></div>
         </sc-for>
-        <sc-if value="{{ noText }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;line-height:1.65;color:var(--color-neutral-700);border:1px dashed var(--color-divider);padding:20px;border-radius:var(--radius-md)">{{ noTextMsg }}</p></sc-if>
+        <sc-if value="{{ noTextPlain }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;line-height:1.65;color:var(--color-neutral-700);border:1px dashed var(--color-divider);padding:20px;border-radius:var(--radius-md)">{{ noTextMsg }}</p></sc-if>
+        <sc-if value="{{ hasPubLyrics }}" hint-placeholder-val="{{ false }}"><div style="border:1px solid var(--color-divider);background:#faf9f7;padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Lyrics from the publisher</span>
+          <p style="margin:0;font-size:15px;line-height:1.65;text-align:left">This text is under copyright, so it is not reproduced here. The publisher, {{ pub.name }}, shows the full words on its own page. It opens in a small window beside this one.</p>
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><button onClick="{{ pub.open }}" class="btn btn-primary" style="background:none;min-height:44px">Read the lyrics at {{ pub.name }} ↗</button><span style="font-size:12px;color:var(--color-neutral-700)">{{ pub.credit }}</span></div>
+        </div></sc-if>
       </div>
 
     </div>
@@ -862,7 +878,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 </sc-if>
 
 <!-- ═════════ HISTORY ═════════ -->
-<sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}"><dc-import name="History" open-hymn="{{ openHymnFn }}" go-timeline="{{ goTimelineFn }}" hint-size="100%,1400px"></dc-import></sc-if>
+<sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}"><dc-import name="History" view="{{ historyView }}" set-view="{{ setHistoryView }}" open-hymn="{{ openHymnFn }}" go-timeline="{{ goTimelineFn }}" hint-size="100%,1400px"></dc-import></sc-if>
 
 <footer style="background:#15283f;color:var(--color-neutral-300);margin-top:0">
   <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,4vw,48px) 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:36px">
@@ -946,10 +962,12 @@ const FAQS = [
   ['May I reproduce a hymn from the hymnal?','No part of the hymnal may be reproduced without written permission, and many texts and tunes are held by other copyright owners. Write to us with the hymn number and intended use.'],
 ];
 
+const PUBLISHER_LYRICS = { 569: { name: 'Getty Music', url: 'https://gettymusic.store/products/in-christ-alone-getty-gospel-coalition', credit: '© Thankyou Music' } };
 class Component extends DCLogic {
+  openPublisher(url) { const w = window.open(url, 'publisherLyrics', 'popup=yes,width=480,height=720,left=' + Math.max(0, (window.screenX || 0) + (window.outerWidth || 1200) - 520) + ',top=60,scrollbars=yes,resizable=yes,noopener'); if (!w) window.open(url, '_blank', 'noopener'); }
   componentDidMount() { const fnd = e => { const s = e.target && e.target.closest && e.target.closest('.fnref'); if (s) this.fnPlace({ currentTarget: s }); }; document.addEventListener('mouseover', fnd, true); document.addEventListener('focusin', fnd, true); this.readHash(); window.addEventListener('hashchange', () => this.readHash()); import('./hymn-notes.js').then(m => this.setState({ notes: m.NOTES, downloadsMap: m.DOWNLOADS, listenMap: m.LISTEN })).catch(() => {}); import('./hymns-data.js').then(m => { this.setState({ hymns: m.HYMNS, texts: m.TEXTS, refrains: m.REFRAINS || {}, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS }); this.tlLoad(m); }); }
   hymnVals() {
-    const { hymns = [], texts = {}, sectionOrder = [], q = '', view = 'sections', hymn } = this.state;
+    const { hymns = [], texts = {}, sectionOrder = [], q = '', view = 'titles', hymn } = this.state;
     const norm = s => String(s ?? '').toLowerCase();
     const ql = norm(q).trim();
     const hit = h => !ql || [h.n, h.title, h.subtitle, h.tune, h.meter, h.author, h.composer, h.scripture, h.psalm && 'psalm ' + h.psalm, (h.topics || []).join(' '), (h.scriptures || []).join(' ')].some(v => norm(v).includes(ql));
@@ -967,7 +985,11 @@ class Component extends DCLogic {
     else { const PI = this.state.psalmIndex || []; const byN = new Map(hymns.map(x => [x.n, x])); const m = new Map();
       PI.forEach(r => r.hymns.forEach(n => { const x = byN.get(n); if (!x || !hit(x)) return; (m.get(r.psalm) || m.set(r.psalm, []).get(r.psalm)).push({ ...row(x), title: r.title, subtitle: r.kind + ' · ' + r.category, kind: r.kind, category: r.category }); }));
       groups = [...m.entries()].sort((a, b) => a[0] - b[0]).map(([k, rows]) => ({ name: 'Psalm ' + k, meta: rows.length + (rows.length === 1 ? ' setting' : ' settings'), rows: rows.map(r => ({ ...r, author: hymns.find(x => x.n === r.n).author, kindShort: r.kind === 'Metrical setting' ? 'Metrical' : r.kind })) })); }
-    const views = [['sections', 'By section'], ['titles', 'Titles'], ['tunes', 'Tunes'], ['authors', 'Authors'], ['composers', 'Composers'], ['psalms', 'Psalms'], ['topics', 'Topics']].map(([k, label]) => ({ label, go: () => this.setState({ view: k }), line: view === k ? 'var(--color-accent-400)' : 'transparent', color: view === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
+    const tkey = t => String(t || '').replace(/^(A|An|The|O|Oh)\s+/i, '').replace(/^[^A-Za-z]+/, '');
+    const openL = this.state.openLetters || {};
+    const byL = {}; [...list].sort((a, b) => tkey(a.sortTitle || a.title).localeCompare(tkey(b.sortTitle || b.title))).forEach(x => { const L = (tkey(x.sortTitle || x.title)[0] || '#').toUpperCase(); (byL[L] = byL[L] || []).push(x); });
+    const letterCards = Object.keys(byL).sort().map(L => { const all = byL[L]; const open = !!openL[L] || !!ql; const rows = (open ? all : all.slice(0, 8)).map(x => ({ n: x.n, title: x.title, go: () => this.openHymn(x.n) })); return { letter: L, count: all.length + (all.length === 1 ? ' hymn' : ' hymns'), rows, hasMore: all.length > 8 && !ql, moreLabel: open ? 'Show fewer' : 'and ' + (all.length - 8) + ' more →', toggle: () => this.setState(s => ({ openLetters: { ...(s.openLetters || {}), [L]: !(s.openLetters || {})[L] } })) }; });
+    const views = [['titles', 'Titles'], ['sections', 'By section'], ['tunes', 'Tunes'], ['authors', 'Authors'], ['composers', 'Composers'], ['psalms', 'Psalms'], ['topics', 'Topics']].map(([k, label]) => ({ label, go: () => this.setState({ view: k }), line: view === k ? 'var(--color-accent-400)' : 'transparent', color: view === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const h = hymns.find(x => x.n === hymn) || hymns[0] || {};
     const idx = hymns.indexOf(h); const prev = hymns[idx - 1], next = hymns[idx + 1];
     const others = hymns.filter(x => x.n !== h.n);
@@ -977,11 +999,11 @@ class Component extends DCLogic {
     const pi = (this.state.psalmIndex || []).find(r => r.hymns.includes(h.n));
     const an = (this.state.ancient || []).find(a => a.n === h.n);
     return {
-      q, setQ: e => this.setState({ q: e.target.value }), views, groups, isPsalmView: view === 'psalms', isAncientView: view === 'ancient', isListView: view !== 'ancient', isStdList: view !== 'ancient' && view !== 'psalms', psalmLayout: this.props.psalmLayout ?? 'table',
+      q, setQ: e => this.setState({ q: e.target.value }), views, groups, letterCards, isTitlesView: view === 'titles', isPsalmView: view === 'psalms', isAncientView: view === 'ancient', isListView: view !== 'ancient', isStdList: (view !== 'ancient' && view !== 'psalms') && view !== 'titles', psalmLayout: this.props.psalmLayout ?? 'table',
       resultLabel: ql ? `${list.length} of ${hymns.length} hymns match “${q}”` : `${hymns.length} hymns`,
       h: { ...h, hasKind: !!(h.kind || pi), kindLabel: pi ? pi.kind + (pi.category ? ' · ' + pi.category + ' psalm' : '') : (h.kind ? h.kind[0].toUpperCase() + h.kind.slice(1) : ''), pageLabel: h.page ? 'Page ' + h.page : '', stanzaLabel: h.stanzas ? h.stanzas + (h.stanzas === 1 ? ' stanza' : ' stanzas') + (h.refrain ? ' with refrain' : '') : '', rights: h.pd ? 'Public domain' : (h.copyright || 'Under copyright'), scheduledLabel: h.scheduled ? 'Sung at Covenant ' + h.scheduled + (h.scheduled === 1 ? ' time' : ' times') + ' since 2016' : '', rankLabel: h.hymnals ? 'In ' + h.hymnals + ' hymnals' : '' }, topicTags: (h.topics || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'topics', q: t }) })), ancientNote: an ? { orig: an.orig, source: an.source, german: an.viaGerman, era: an.era } : null, isAncient: !!an,
       ancientGroups: (this.state.ancientEras || []).map(er => ({ ...er, rows: (this.state.ancient || []).filter(a => a.era === er.name).map(a => { const x = hymns.find(y => y.n === a.n); const sub = x && x.subtitle && x.subtitle.toLowerCase() !== a.orig.toLowerCase() ? x.subtitle : ''; return { ...a, subtitle: sub, titleTail: [a.orig, sub].filter(Boolean).join(' · '), hasGerman: !!a.viaGerman, go: () => this.openHymn(a.n) }; }) })),
-      scriptureTags: (h.scriptures || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'sections', q: t }) })), stanzas: stz.map((lines, i) => ({ n: i + 1, text: lines.join('\n') })), noText: stz.length === 0,
+      scriptureTags: (h.scriptures || []).map(t => ({ t, go: () => this.setState({ page: 'hymns', view: 'titles', q: t }) })), stanzas: stz.map((lines, i) => ({ n: i + 1, text: lines.join('\n') })), noText: stz.length === 0,
       ...this.noteVals(h),
       related: [rel('Same tune · ' + (h.tune || ''), others.filter(x => x.tune === h.tune)), rel('Same meter · ' + (h.meter || ''), others.filter(x => x.meter === h.meter)), rel(h.psalm ? 'Also Psalm ' + h.psalm : 'Same topic · ' + (h.topic || ''), others.filter(x => h.psalm ? x.psalm === h.psalm : x.topic === h.topic))],
       prevLabel: prev ? prev.n + ' · ' + prev.title : 'Hymns', prevGo: prev ? () => this.openHymn(prev.n) : this.go('hymns'),
@@ -1037,20 +1059,21 @@ class Component extends DCLogic {
       downloadsOpen: !!this.state.downloadsOpen, downloadsMark: this.state.downloadsOpen ? '−' : '+', toggleDownloads: () => this.setState(s => ({ downloadsOpen: !s.downloadsOpen })),
       notes,
       stanzas: (() => { const items = lyr.map((t, i) => ({ n: i + 1, text: t })); const rf = ((this.state.refrains || {})[h.n]); if (rf && rf.lines && items.length) { const r = { n: 'R', text: rf.lines.join('\n') }; if (rf.pos === 'before_first') items.unshift(r); else if (rf.pos === 'after_last') items.push(r); else items.splice(1, 0, r); } return items; })(), noText: lyr.length === 0,
+      noTextPlain: lyr.length === 0 && !PUBLISHER_LYRICS[h.n], hasPubLyrics: lyr.length === 0 && !!PUBLISHER_LYRICS[h.n], pub: PUBLISHER_LYRICS[h.n] ? { ...PUBLISHER_LYRICS[h.n], open: () => this.openPublisher(PUBLISHER_LYRICS[h.n].url) } : {},
       noTextMsg: (N && N.show_lyrics === false) || !h.pd ? 'This text is under copyright and is not reproduced here; the hymnal page carries it in full.' : 'Text to be added. Each hymn page will carry the full text as printed.',
       scriptureTags: tags.map(t => ({ t, href: this.esvHref(t) || '#' })),
-      downloads: (() => { let list = (D || ['Hymnal page', 'Leadsheet (G)', 'Chord chart (G)'].map(label => ({ label, kind: 'to come', file: null }))).slice(); const txt = list.find(d => /^text only$/i.test(d.label)); list = list.filter(d => d !== txt); if (!list.some(d => /lyric sheet/i.test(d.label))) list.unshift(txt ? { ...txt, label: 'Lyric sheet' } : { label: 'Lyric sheet', kind: 'to come', file: null }); return list.map(d => ({ label: d.label, kind: d.kind, href: d.file || '#' })); })(),
+      downloads: (() => { if (!h.pd) { const pb = PUBLISHER_LYRICS[h.n]; return pb ? [{ label: 'Lyrics at ' + pb.name + ' ↗', kind: pb.credit, href: pb.url, go: e => { e.preventDefault(); this.openPublisher(pb.url); } }] : [{ label: 'Publisher link to come', kind: '', href: '#', go: e => e.preventDefault() }]; } let list = (D || ['Hymnal page', 'Leadsheet (G)', 'Chord chart (G)'].map(label => ({ label, kind: 'to come', file: null }))).slice(); const txt = list.find(d => /^text only$/i.test(d.label)); list = list.filter(d => d !== txt); if (!list.some(d => /lyric sheet/i.test(d.label))) list.unshift(txt ? { ...txt, label: 'Lyric sheet' } : { label: 'Lyric sheet', kind: 'to come', file: null }); const rows = list.map(d => ({ label: d.label, kind: d.kind, href: d.file || '#' })); const pub = PUBLISHER_LYRICS[h.n]; if (pub) rows.splice(1, 0, { label: 'Lyrics at ' + pub.name + ' ↗', kind: pub.credit, href: pub.url, go: e => { e.preventDefault(); this.openPublisher(pub.url); } }); return rows; })(),
       listen: { hasVideo: !!id, noVideo: !id, embed: id ? 'https://www.youtube-nocookie.com/embed/' + id : '', label: (L && L.label) || 'Lyric video to come' },
     };
   }
-  readHash() { const m = (location.hash || '').replace(/^#\/?/, ''); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','history','timeline','order','journal','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
+  readHash() { const m = (location.hash || '').replace(/^#\/?/, ''); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'history') { const v = ['timeline', 'pin', 'list', 'road'].includes(arg) ? arg : 'road'; if (this.state.page !== 'history' || this.state.historyView !== v) this.setState({ page: 'history', historyView: v, menuOpen: false }); return; } if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','history','timeline','order','journal','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
   setHash(s) { try { if (('#' + s) !== location.hash) history.replaceState(null, '', '#' + s); } catch (_) {} }
   shareVals(p, h, N) {
     const base = location.href.split('#')[0]; const url = base + '#' + (p === 'hymn' ? 'hymn/' + h.n : p === 'home' ? '' : p);
     const names = { home: 'Covenant Hymnal', about: 'About the Covenant Hymnal', hymnal: 'Inside the Covenant Hymnal', hymns: 'The Hymns — Covenant Hymnal', order: 'Order the Covenant Hymnal', journal: 'Journal — Covenant Hymnal', article: 'Journal — Covenant Hymnal', faq: 'FAQ — Covenant Hymnal', contact: 'Contact — Covenant Hymnal', sources: 'Sources & Permissions — Covenant Hymnal' };
     const title = p === 'hymn' ? `${h.n} · ${h.title} — Covenant Hymnal` : names[p] || 'Covenant Hymnal';
     const text = p === 'hymn' && N && N.blurb ? N.blurb.replace(/\[\^\d+\]/g, '') : '';
-    return { shareLabel: this.state.shared ? 'Link copied' : 'Share', share: async () => { const data = { title, text, url }; try { if (navigator.share && (!navigator.canShare || navigator.canShare(data))) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; } try { await navigator.clipboard.writeText(url); } catch (_) { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } this.setState({ shared: true }); setTimeout(() => this.setState({ shared: false }), 1800); } };
+    return { showTopShare: p !== 'hymn', shareLabel: this.state.shared ? 'Link copied' : 'Share', share: async () => { const data = { title, text, url }; try { if (navigator.share && (!navigator.canShare || navigator.canShare(data))) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; } try { await navigator.clipboard.writeText(url); } catch (_) { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } this.setState({ shared: true }); setTimeout(() => this.setState({ shared: false }), 1800); } };
   }
   // ── Timeline page ──
   tlRef = React.createRef(); tlPrintRef = React.createRef();
@@ -1132,8 +1155,9 @@ class Component extends DCLogic {
     };
   }
   openHymn(n) { this.setHash('hymn/' + n); this.setState({ hymn: n, page: 'hymn', noteOpen: {}, downloadsOpen: false }); try { localStorage.setItem('cvh2-page', 'hymn'); localStorage.setItem('cvh2-hymn', String(n)); } catch (_) {} window.scrollTo({ top: 0 }); }
-  state = { menuOpen: false, hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
-  go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setHash(page === 'home' ? '' : page); this.setState({ page, menuOpen: false }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
+  setHistoryView = (v) => { this.setHash('history/' + v); this.setState({ historyView: v }); window.scrollTo({ top: 0 }); };
+  state = { menuOpen: false, historyView: 'road', hymn: Number((typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-hymn')) || 523), page: (typeof localStorage !== 'undefined' && localStorage.getItem('cvh2-page')) || 'home', year: null, faq: 0, qty: '1', subject: 'Ordering', orderSent: false, contactSent: false, newsSent: false };
+  go = (page) => (e) => { e && e.preventDefault && e.preventDefault(); this.setHash(page === 'home' ? '' : page === 'history' ? 'history/' + (this.state.historyView || 'road') : page); this.setState({ page, menuOpen: false }); try { localStorage.setItem('cvh2-page', page); } catch (_) {} window.scrollTo({ top: 0 }); };
   cycle() {
     const now = new Date(); const m = now.getMonth();
     const start = m >= 7 ? now.getFullYear() : now.getFullYear() - 1;
@@ -1154,7 +1178,7 @@ class Component extends DCLogic {
     return {
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), menuLabel: this.state.menuOpen ? 'Close ✕' : 'Menu ☰', menuOpenClass: this.state.menuOpen ? 'open' : '',
       nav, showUtility: this.props.showUtilityBar ?? true, ...this.shareVals(p, (this.state.hymns || []).find(x => x.n === this.state.hymn) || {}, (this.state.notes || {})[this.state.hymn]),
-      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', isTimeline: p === 'timeline', isHistory: p === 'history', openHymnFn: n => this.openHymn(n), goTimelineFn: () => this.go('timeline')(), ...this.tlVals(), goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'), goContact: this.go('contact'),
+      ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', isTimeline: p === 'timeline', isHistory: p === 'history', historyView: this.state.historyView || 'road', setHistoryView: this.setHistoryView, openHymnFn: n => this.openHymn(n), goTimelineFn: () => this.go('timeline')(), ...this.tlVals(), goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'), goContact: this.go('contact'),
       isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isSources: p === 'sources', isContact: p === 'contact',
       heroLetter: hero === 'book-and-letter', heroCentered: hero === 'book-centered',
       goHome: this.go('home'), goAbout: this.go('about'), goHymnal: this.go('hymnal'), goOrder: this.go('order'), goJournal: this.go('journal'), goArticle: this.go('article'),

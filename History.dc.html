@@ -39,19 +39,26 @@
 </helmet>
 <div class="hx-root" data-screen-label="History" style="font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
 
-  <section style="max-width:1280px;margin:0 auto;padding:clamp(28px,4vw,48px) clamp(16px,3vw,40px) 0">
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px 32px;flex-wrap:wrap">
-      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px">
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(20px,3vw,32px) clamp(16px,3vw,40px) 0">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px 32px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px;max-width:720px">
         <span style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-700)">History of Hymns</span>
         <h1 style="font-family:var(--font-heading);font-weight:500;font-size:clamp(34px,5vw,60px);letter-spacing:.06em;text-transform:uppercase;margin:0;line-height:1.02">Singing God’s Praise Through the Ages</h1>
-        <p style="margin:0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);text-align:left">“From the rising of the sun to its setting, the name of the <span style="font-variant:small-caps;letter-spacing:.04em">Lord</span> is to be praised” — the church’s song from the Psalms to today.</p>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);text-align:left">“From the rising of the sun to its setting, the name of the <span style="font-variant:small-caps;letter-spacing:.04em">Lord</span> is to be praised” (Ps. 113:3) — the church’s song from the Psalms to today.</p>
+        <span style="margin-top:8px;font-family:var(--font-heading);font-size:22px;color:var(--color-accent-700)"><span style="font-weight:600">{{ viewTitle }}</span><span style="color:var(--color-neutral-700)"> · {{ viewSub }}</span></span>
       </div>
-      <div role="group" aria-label="View" style="display:flex;border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden;flex-wrap:wrap">
-        <sc-for list="{{ views }}" as="v" hint-placeholder-count="4"><button onClick="{{ v.go }}" aria-pressed="{{ v.pressed }}" style="min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--color-divider);background:{{ v.bg }};color:{{ v.fg }};font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">{{ v.label }}</button></sc-for>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <nav role="group" aria-label="Pages" style="display:flex;border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden;flex-wrap:wrap">
+          <sc-for list="{{ views }}" as="v" hint-placeholder-count="4"><button onClick="{{ v.go }}" aria-pressed="{{ v.pressed }}" style="min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--color-divider);background:{{ v.bg }};color:{{ v.fg }};font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">{{ v.label }}</button></sc-for>
+        </nav>
       </div>
-          </div>
-    <div style="display:flex;gap:12px 24px;flex-wrap:wrap;align-items:center;margin-top:24px">
-      <div style="position:relative;flex:1 1 300px;max-width:520px">
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px 16px;flex-wrap:wrap;margin-top:18px">
+      <div role="group" aria-label="Lanes" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex:0 1 auto">
+                <sc-for list="{{ laneToggles }}" as="lt" hint-placeholder-count="4"><button onClick="{{ lt.go }}" aria-pressed="{{ lt.pressed }}" style="display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 12px;border:1px solid {{ lt.border }};border-radius:999px;background:{{ lt.bg }};color:var(--color-text);font-family:var(--font-body);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:13px;height:13px;border-radius:3px;border:1px solid {{ lt.color }};background:{{ lt.fill }};color:#fff;font-size:10px;line-height:13px;text-align:center;flex:none">{{ lt.mark }}</span>{{ lt.label }}</button></sc-for>
+      </div>
+      <div style="position:relative;flex:1 1 300px;max-width:400px;margin-left:auto">
         <input type="search" value="{{ q }}" onChange="{{ setQ }}" aria-label="Search the history" placeholder="Find a hymn, author, composer or event" style="width:100%;box-sizing:border-box;min-height:48px;padding:10px 16px;font-size:16px;font-family:var(--font-body);border:1px solid var(--color-neutral-400);border-radius:var(--radius-md);background:var(--color-surface, #fff);color:var(--color-text)">
         <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
           <div role="listbox" style="position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-md);box-shadow:0 10px 28px rgba(0,0,0,.12);z-index:40;display:flex;flex-direction:column;max-height:360px;overflow-y:auto">
@@ -60,13 +67,13 @@
         </sc-if>
         <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:12px 16px;font-size:15px;color:var(--color-neutral-700);z-index:40">Nothing found for “{{ q }}”.</div></sc-if>
       </div>
-      <div role="group" aria-label="Lanes" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <span style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;font-size:15px;color:var(--color-neutral-700)"><span style="width:10px;height:10px;border-radius:50%;background:var(--color-accent)"></span>Hymns and tunes</span>
-        <sc-for list="{{ laneToggles }}" as="lt" hint-placeholder-count="4"><button onClick="{{ lt.go }}" aria-pressed="{{ lt.pressed }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid {{ lt.border }};border-radius:999px;background:{{ lt.bg }};color:var(--color-text);font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:2px"><span style="width:14px;height:14px;border-radius:3px;border:1px solid {{ lt.color }};background:{{ lt.fill }};color:#fff;font-size:11px;line-height:14px;text-align:center">{{ lt.mark }}</span>{{ lt.label }}</button></sc-for>
-      </div>
     </div>
-    <sc-if value="{{ hasSub }}" hint-placeholder-val="{{ false }}">
-      <div role="group" aria-label="Lane filters" style="display:flex;gap:10px 28px;flex-wrap:wrap;align-items:center;margin-top:12px">
+    <sc-if value="{{ filtersOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;gap:12px 24px;flex-wrap:wrap;align-items:center;justify-content:flex-start;margin-top:12px">
+
+    </div>
+    <sc-if value="{{ showSub }}" hint-placeholder-val="{{ false }}">
+      <div role="group" aria-label="Lane filters" style="display:flex;gap:10px 28px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:12px">
         <sc-for list="{{ subGroups }}" as="sg" hint-placeholder-count="2">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)"><span style="width:8px;height:8px;border-radius:50%;background:{{ sg.color }}"></span>{{ sg.label }}</span>
@@ -75,10 +82,12 @@
         </sc-for>
       </div>
     </sc-if>
+    </sc-if>
     <sc-if value="{{ sample }}" hint-placeholder-val="{{ false }}"><p style="margin:16px 0 0;font-size:14px;font-style:italic;color:var(--color-neutral-700)">Sample entries ({{ sampleCount }}) are shown until the full history is added to the hymn data.</p></sc-if>
   </section>
 
-  <div style="position:sticky;top:0;z-index:20;background:var(--color-bg);border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);margin-top:22px">
+  <sc-if value="{{ showBand }}" hint-placeholder-val="{{ true }}">
+  <div style="position:sticky;top:0;z-index:20;background:var(--color-bg);border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);margin-top:18px">
     <nav class="hx-band-track" aria-label="Eras" style="max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px);display:flex">
       <sc-for list="{{ band }}" as="b" hint-placeholder-count="8">
         <button onClick="{{ b.go }}" class="hx-band-seg" aria-current="{{ b.current }}" title="{{ b.label }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:1 1 0;min-width:0;padding:10px 6px 6px;border-bottom:3px solid {{ b.line }};background:{{ b.bg }};display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--color-divider)" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">
@@ -90,13 +99,14 @@
       </sc-for>
     </nav>
   </div>
+  </sc-if>
 
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}"><div style="max-width:1280px;margin:0 auto;padding:60px clamp(16px,3vw,40px);font-size:16px;color:var(--color-neutral-700)">Loading the history…</div></sc-if>
 
   <sc-if value="{{ isTimeline }}" hint-placeholder-val="{{ false }}">
     <section id="hx-stage" style="max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 24px">
       <div class="hx-erahead" onTouchStart="{{ tStart }}" onTouchEnd="{{ tEnd }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0 16px;background:var(--color-bg);flex-wrap:wrap">
-        <h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.1"><span style="font-variant-numeric:lining-nums">{{ era.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ era.label }}</h2>
+        <h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.1"><span style="font-variant-numeric:lining-nums;font-style:{{ era.style }}">{{ era.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ era.label }}</h2>
         <div style="display:flex;align-items:center;gap:10px">
           <button onClick="{{ prevEra }}" aria-label="Previous era" disabled="{{ atFirst }}" style="width:48px;height:48px;border:1px solid var(--color-neutral-400);border-radius:50%;background:none;color:var(--color-text);font-size:20px;cursor:pointer;opacity:{{ prevOp }}" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">←</button>
           <span style="font-size:15px;color:var(--color-neutral-700);min-width:56px;text-align:center;font-variant-numeric:tabular-nums">{{ eraCount }}</span>
@@ -150,7 +160,7 @@
     <section style="max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 24px">
       <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
         <div id="{{ g.anchor }}" style="padding-top:28px">
-          <h2 style="margin:0 0 16px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1;border-bottom:1px solid var(--color-divider);padding-bottom:10px"><span style="font-variant-numeric:lining-nums">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
+          <h2 style="margin:0 0 16px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1;border-bottom:1px solid var(--color-divider);padding-bottom:10px"><span style="font-variant-numeric:lining-nums;font-style:{{ g.style }}">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
           <sc-if value="{{ g.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:16px;color:var(--color-neutral-700)">Nothing shown for these years with the current lanes and colour filter.</p></sc-if>
           <div class="hx-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));grid-auto-flow:dense;gap:16px">
             <sc-for list="{{ g.pin }}" as="c" hint-placeholder-count="4">
@@ -169,7 +179,7 @@
     <section style="max-width:1000px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 24px">
       <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
         <div id="{{ g.anchor }}" style="padding-top:28px">
-          <h2 style="margin:0 0 6px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1"><span style="font-variant-numeric:lining-nums">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
+          <h2 style="margin:0 0 6px;font-family:var(--font-heading);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.1"><span style="font-variant-numeric:lining-nums;font-style:{{ g.style }}">{{ g.dates }}</span><span style="color:var(--color-accent-700)"> · </span>{{ g.label }}</h2>
           <sc-if value="{{ g.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:8px 0 0;font-size:16px;color:var(--color-neutral-700)">Nothing shown for these years with the current lanes and colour filter.</p></sc-if>
           <sc-for list="{{ g.rows }}" as="c" hint-placeholder-count="4">
             <button id="{{ c.id }}" onClick="{{ c.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;margin-top:10px;background:{{ c.tint }};border:1px solid rgba(32,31,29,.1);outline:2px solid {{ c.border }};outline-offset:-2px" style-hover="filter:brightness(.96)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
@@ -226,13 +236,13 @@
             </button>
         </sc-for>
         <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#10203a 0%,rgba(16,32,58,0) 8%),linear-gradient(0deg,#10203a 78px,rgba(16,32,58,0) 160px)"></div>
-        <div role="group" aria-label="Eras" style="position:absolute;left:0;right:0;bottom:0;height:78px;background:#0c1829;border-top:1px solid #d9b36a;display:flex">
+        <div role="group" aria-label="Eras" style="position:absolute;left:0;right:0;bottom:0;height:78px;background:#0c1829;border-top:1px solid #d9b36a;display:flex;z-index:300">
           <sc-for list="{{ roadBand }}" as="b" hint-placeholder-count="0">
-            <button onClick="{{ b.go }}" title="{{ b.title }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:relative;flex:{{ b.flex }} 1 0;min-width:0;border-left:2px solid #b68235;display:block;height:100%;background:{{ b.bg }}" style-hover="background:rgba(243,242,242,.06)" style-focus="outline:2px solid var(--color-accent-400);outline-offset:-2px">
-              <span style="position:absolute;left:8px;top:8px;font-size:12px;color:#c9cfd8;font-variant-numeric:lining-nums">{{ b.start }}</span>
-              <sc-for list="{{ b.marks }}" as="mk" hint-placeholder-count="0"><span style="position:absolute;left:{{ mk.pct }}%;top:{{ mk.top }}px;width:5px;height:5px;transform:translateX(-50%) rotate(45deg);background:{{ mk.bg }}"></span></sc-for>
-              <span style="position:absolute;left:8px;right:8px;bottom:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#f3f2f2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.label }}</span>
-            </button>
+            <div onClick="{{ b.go }}" title="{{ b.title }}" style="box-sizing:border-box;cursor:pointer;position:relative;flex:{{ b.flex }} 1 0;min-width:{{ b.minW }}px;border-left:2px solid #b68235;display:block;height:100%;background:{{ b.bg }};overflow:hidden" style-hover="background:rgba(243,242,242,.06)">
+              <span style="position:absolute;left:8px;right:4px;top:8px;font-size:12px;color:#c9cfd8;font-variant-numeric:lining-nums;pointer-events:none;font-style:{{ b.style }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.start }}</span>
+              <sc-for list="{{ b.marks }}" as="mk" hint-placeholder-count="0"><button onClick="{{ mk.go }}" title="{{ mk.title }}" aria-label="{{ mk.title }}" style="position:absolute;left:{{ mk.pct }}%;top:{{ mk.top }}px;width:16px;height:16px;transform:translate(-50%,-50%);border:0;padding:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="transform:translate(-50%,-50%) scale(1.6)" style-focus="outline:2px solid #d9b36a;outline-offset:1px"><span style="width:5px;height:5px;transform:rotate(45deg);background:{{ mk.bg }};display:block;pointer-events:none"></span></button></sc-for>
+              <span style="position:absolute;left:8px;right:8px;bottom:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#f3f2f2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none">{{ b.label }}</span>
+            </div>
           </sc-for>
           <span id="hx-road-marker" aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:2px;background:#d9b36a;box-shadow:0 0 8px #d9b36a;transform:translateX(-50%)"></span>
         </div>
@@ -303,9 +313,9 @@
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;openHymn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(n: number) =&gt; void&quot;},&quot;goTimeline&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;road&quot;,&quot;options&quot;:[&quot;road&quot;,&quot;timeline&quot;,&quot;list&quot;,&quot;pin&quot;],&quot;tsType&quot;:&quot;'road' | 'timeline' | 'list' | 'pin'&quot;},&quot;setView&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(view: string) =&gt; void&quot;},&quot;openHymn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(n: number) =&gt; void&quot;},&quot;goTimeline&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
 class Component extends DCLogic {
-  state = { ready: false, sample: true, eraI: 0, view: 'timeline', lanes: { covenant: false, church: true, music: true, world: true }, trad: null, q: '', sel: null, roadI: 0, playing: false, speed: 'normal', reformedOnly: false, groups: { institutions: true, congregations: true }, americanOnly: false, expanded: {} };
+  state = { ready: false, sample: true, eraI: 0, view: 'road', lanes: { hymn: true, covenant: false, church: true, music: true, world: true }, trad: null, q: '', sel: null, roadI: 0, playing: false, speed: 'normal', reformedOnly: false, groups: { institutions: true, congregations: true }, americanOnly: false, expanded: {} };
   closeRef = React.createRef(); roadStage = React.createRef(); roadCanvas = React.createRef(); pos = 0;
   LANE = {
     hymn: { label: 'Hymns and tunes', color: '#b68235', tint: '#fbf8f2', rule: '#b68235' },
@@ -348,17 +358,17 @@ class Component extends DCLogic {
       if (!this.D) return; const tg = e.target;
       if (e.key === 'Escape' && this.state.sel) { this.close(); return; }
       if (tg && /INPUT|TEXTAREA|SELECT/.test(tg.tagName)) return;
-      if (e.key === 'Enter' && this.state.view === 'road' && !this.state.sel) { const v = this.visOf(this.state)[Math.round(this.target)]; if (v) { this.open(v.key); e.preventDefault(); } return; }
+      if (e.key === 'Enter' && this.curView() === 'road' && !this.state.sel) { const v = this.visOf(this.state)[Math.round(this.target)]; if (v) { this.open(v.key); e.preventDefault(); } return; }
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       const dir = e.key === 'ArrowRight' ? 1 : -1;
       if (this.state.sel) { this.step(dir); e.preventDefault(); }
-      else if (this.state.view === 'road') { this.roadStep(dir); e.preventDefault(); }
-      else if (this.state.view === 'timeline' && !(tg && tg.closest && tg.closest('.hx-row'))) { this.goEra(this.state.eraI + dir); e.preventDefault(); }
+      else if (this.curView() === 'road') { this.roadStep(dir); e.preventDefault(); }
+      else if (this.curView() === 'timeline' && !(tg && tg.closest && tg.closest('.hx-row'))) { this.goEra(this.state.eraI + dir); e.preventDefault(); }
     };
     document.addEventListener('keydown', this.onKey);
     this.target = 0; this.snapT = null;
     this.onWheel = e => {
-      if (this.state.view !== 'road' || !(e.target && e.target.closest && e.target.closest('.hx-road'))) return;
+      if (this.curView() !== 'road' || !(e.target && e.target.closest && e.target.closest('.hx-road'))) return;
       e.preventDefault(); this.stopPlay();
       const d = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
       this.target = this.clampPos(this.target + d / 260); this.kick();
@@ -366,7 +376,7 @@ class Component extends DCLogic {
     };
     this.onTouchStart = e => { if (e.target && e.target.closest && e.target.closest('.hx-road')) { this.ty = e.touches[0].clientY; this.tx0 = e.touches[0].clientX; this.stopPlay(); } else this.ty = null; };
     this.onTouchMove = e => {
-      if (this.ty == null || this.state.view !== 'road') return;
+      if (this.ty == null || this.curView() !== 'road') return;
       const t = e.touches[0]; const dy = this.ty - t.clientY, dx = this.tx0 - t.clientX; e.preventDefault();
       this.target = this.clampPos(this.target + (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.ty = t.clientY; this.tx0 = t.clientX; this.kick();
     };
@@ -380,7 +390,9 @@ class Component extends DCLogic {
     document.addEventListener('mousemove', this.onMove); document.addEventListener('mouseup', this.onUp);
     this.onResize = () => this.paint(); window.addEventListener('resize', this.onResize);
   }
-  componentDidUpdate() { if (this.state.view === 'road') this.paint(); }
+  curView() { return this.props.view || this.state.view; }
+  setView(k) { if (this.props.setView) this.props.setView(k); else this.setState({ view: k }); window.scrollTo({ top: 0 }); if (k === 'road') { this.target = this.clampPos(this.state.roadI || 0); this.kick(); } else if (k !== 'timeline') setTimeout(() => this.goEra(this.state.eraI), 50); }
+  componentDidUpdate() { if (this.curView() === 'road') this.paint(); }
   componentWillUnmount() { this.stopPlay(); cancelAnimationFrame(this.raf); window.removeEventListener('resize', this.onResize); document.removeEventListener('wheel', this.onWheel); document.removeEventListener('touchstart', this.onTouchStart); document.removeEventListener('touchmove', this.onTouchMove); document.removeEventListener('touchend', this.onTouchEnd); document.removeEventListener('mousemove', this.onMove); document.removeEventListener('mouseup', this.onUp); document.removeEventListener('keydown', this.onKey); }
   clampPos(p) { const n = this.visOf(this.state).length; return Math.max(0, Math.min(Math.max(0, n - 1), p)); }
   reduced() { return typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches; }
@@ -396,11 +408,11 @@ class Component extends DCLogic {
     this.raf = requestAnimationFrame(tick);
   }
   geom(W, Hh) {
-    const T = 5, yCur = Hh * 0.42; const uOf = dd => (dd + 0.5) / (T + 0.5); const u0 = uOf(0);
+    const T = 5, yCur = Hh * 0.36; const uOf = dd => (dd + 0.5) / (T + 0.5); const u0 = uOf(0);
     return { T, uOf, yOf: u => yCur * Math.pow(Math.max(0, 1 - u) / (1 - u0), 2), scOf: u => 1 / (1 + 2.8 * Math.max(0, u)), halfOf: u => W * (0.11 + 0.30 * Math.pow(Math.max(0, 1 - u), 3)), cardW: Math.min(360, Math.floor(W * 0.46)) };
   }
   paint() {
-    const stage = this.roadStage.current, cv = this.roadCanvas.current; if (!stage || !cv || !this.D || this.state.view !== 'road') return;
+    const stage = this.roadStage.current, cv = this.roadCanvas.current; if (!stage || !cv || !this.D || this.curView() !== 'road') return;
     const vis = this.visOf(this.state); const n = vis.length; if (!n) return;
     const pos = Math.max(0, Math.min(this.pos, n - 1)); const W = stage.clientWidth, Hf = stage.clientHeight, Hh = Hf - 78;
     const dpr = Math.min(2, window.devicePixelRatio || 1); if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(Hf * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(Hf * dpr); }
@@ -427,7 +439,8 @@ class Component extends DCLogic {
       const e = eras.find(x => x.id === it.era);
       if (e && eraFirst[it.era] === i && dd > -0.5) {
         const ssc = 0.45 + 0.75 * sc; const sw = 176, sh = 62; const room = cx - 8; const x = sw * ssc + 8 > room - hw - len ? Math.min(cx - hw + 10, -room + sw * ssc + cx) : cx - hw - len - 8;
-        g.save(); g.globalAlpha = 0.6 + 0.4 * sc; g.translate(x, y); g.scale(ssc, ssc);
+        const cardEl = stage.querySelector(`[data-ri="${i}"] > span`); const faceH = cardEl ? cardEl.offsetHeight * sc : 0;
+        g.save(); g.globalAlpha = 0.6 + 0.4 * sc; g.translate(x, y + faceH); g.scale(ssc, ssc);
         g.fillStyle = '#c3b595'; g.strokeStyle = '#8f7f5c'; g.lineWidth = 2; g.fillRect(-sw, -sh, sw, sh); g.strokeRect(-sw, -sh, sw, sh);
         g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = '#6b5a3e'; g.font = '11px Lora, serif'; g.fillText(this.eraDates(e, e === eras[eras.length - 1]), -sw / 2, -sh + 20);
         g.fillStyle = '#4a3a24'; let fs2 = 17; g.font = `600 ${fs2}px "Cormorant Garamond", serif`; const lb = (e.short || e.label).toUpperCase(); while (g.measureText(lb).width > sw - 20 && fs2 > 11) { fs2--; g.font = `600 ${fs2}px "Cormorant Garamond", serif`; } g.fillText(lb, -sw / 2, -sh + 44);
@@ -457,19 +470,20 @@ class Component extends DCLogic {
   pct(y, a, b) { return (this.px(y) - this.px(a)) / (this.px(b) - this.px(a)) * 100; }
   visOf(s) {
     return this.D.items.filter(it => {
-      if (it.kind === 'hymn') return (!it.extra || s.expanded[it.era]) && (!s.trad || it.trad === s.trad);
+      if (it.kind === 'hymn') return s.lanes.hymn !== false && (!it.extra || s.expanded[it.era]) && (!s.trad || it.trad === s.trad);
       if (!s.lanes[it.kind]) return false;
       if (it.kind === 'church' && !it.prologue) { if (s.reformedOnly && !it.reformed) return false; if (it.group && s.groups[it.group] === false) return false; }
       if ((it.kind === 'world' || it.kind === 'music') && s.americanOnly && !it.american) return false;
       return true;
     });
   }
-  eraDates(e, last) { return last ? `Since ${this.fy(e.start)}` : `${this.fy(e.start)} – ${this.fy(e.end)}`; }
-  close() { const k = this.state.sel; this.setState({ sel: null }, () => { const el = k && document.getElementById((this.state.view === 'road' ? 'hr-' : 'hx-') + k); if (el) el.focus({ preventScroll: true }); }); }
+  eraDates(e, last) { if (e.undated) return 'In the beginning'; return last ? `Since ${this.fy(e.start)}` : `${this.fy(e.start)} – ${this.fy(e.end)}`; }
+  eraStart(e) { return e.undated ? 'In the beginning' : this.fy(e.start); }
+  close() { const k = this.state.sel; this.setState({ sel: null }, () => { const el = k && document.getElementById((this.curView() === 'road' ? 'hr-' : 'hx-') + k); if (el) el.focus({ preventScroll: true }); }); }
   open(key) {
     const it = this.D.items.find(i => i.key === key); if (!it) return;
     const eraI = this.D.eras.findIndex(e => e.id === it.era); const ri = this.visOf(this.state).findIndex(x => x.key === key);
-    if (ri >= 0 && this.state.view === 'road') { this.stopPlay(); this.goRoad(ri); }
+    if (ri >= 0 && this.curView() === 'road') { this.stopPlay(); this.goRoad(ri); }
     this.setState(s => ({ sel: key, eraI: eraI < 0 ? s.eraI : eraI, roadI: ri < 0 ? s.roadI : ri }), () => { this.scrollToCard(key); setTimeout(() => this.closeRef.current && this.closeRef.current.focus({ preventScroll: true }), 30); });
   }
   step(dir) { const v = this.visOf(this.state); const i = v.findIndex(x => x.key === this.state.sel); if (i < 0) return; const j = Math.max(0, Math.min(v.length - 1, i + dir)); if (j !== i) this.open(v[j].key); }
@@ -478,19 +492,19 @@ class Component extends DCLogic {
       const el = document.getElementById('hx-' + key); if (!el) return;
       const row = el.parentElement;
       if (row && row.scrollWidth > row.clientWidth + 4) row.scrollTo({ left: Math.max(0, el.offsetLeft - 8), behavior: 'smooth' });
-      if (this.state.view !== 'timeline' || row.scrollWidth <= row.clientWidth + 4) { const r = el.getBoundingClientRect(); if (r.top < 70 || r.bottom > window.innerHeight) window.scrollTo({ top: window.scrollY + r.top - 120, behavior: 'smooth' }); }
+      if (this.curView() !== 'timeline' || row.scrollWidth <= row.clientWidth + 4) { const r = el.getBoundingClientRect(); if (r.top < 70 || r.bottom > window.innerHeight) window.scrollTo({ top: window.scrollY + r.top - 120, behavior: 'smooth' }); }
     }, 60);
   }
   goEra(i) {
     const n = this.D.eras.length; if (i < 0 || i >= n) return;
     this.setState({ eraI: i }, () => {
-      if (this.state.view === 'pin' || this.state.view === 'list') { const el = document.getElementById('hx-era-' + this.D.eras[i].id); if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 60, behavior: 'smooth' }); }
-      else if (this.state.view === 'timeline') { const el = document.getElementById('hx-stage'); if (el) { const r = el.getBoundingClientRect(); if (r.top < 0) window.scrollTo({ top: window.scrollY + r.top - 50, behavior: 'smooth' }); } }
-      else if (this.state.view === 'road') { const v = this.visOf(this.state); const ri = v.findIndex(x => x.era === this.D.eras[i].id); if (ri >= 0) { this.stopPlay(); this.goRoad(ri); } }
+      if (this.curView() === 'pin' || this.curView() === 'list') { const el = document.getElementById('hx-era-' + this.D.eras[i].id); if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 60, behavior: 'smooth' }); }
+      else if (this.curView() === 'timeline') { const el = document.getElementById('hx-stage'); if (el) { const r = el.getBoundingClientRect(); if (r.top < 0) window.scrollTo({ top: window.scrollY + r.top - 50, behavior: 'smooth' }); } }
+      else if (this.curView() === 'road') { const v = this.visOf(this.state); const ri = v.findIndex(x => x.era === this.D.eras[i].id); if (ri >= 0) { this.stopPlay(); this.goRoad(ri); } }
     });
   }
   jump(it) {
-    this.setState(s => ({ q: '', view: s.view, lanes: it.kind === 'hymn' ? s.lanes : { ...s.lanes, [it.kind]: true }, trad: it.kind === 'hymn' && s.trad && s.trad !== it.trad ? null : s.trad, expanded: it.extra ? { ...s.expanded, [it.era]: true } : s.expanded, reformedOnly: it.kind === 'church' && !it.reformed && !it.prologue ? false : s.reformedOnly, americanOnly: (it.kind === 'world' || it.kind === 'music') && !it.american ? false : s.americanOnly, groups: it.group ? { ...s.groups, [it.group]: true } : s.groups }), () => this.open(it.key));
+    this.setState(s => ({ q: '', lanes: it.kind === 'hymn' ? s.lanes : { ...s.lanes, [it.kind]: true }, trad: it.kind === 'hymn' && s.trad && s.trad !== it.trad ? null : s.trad, expanded: it.extra ? { ...s.expanded, [it.era]: true } : s.expanded, reformedOnly: it.kind === 'church' && !it.reformed && !it.prologue ? false : s.reformedOnly, americanOnly: (it.kind === 'world' || it.kind === 'music') && !it.american ? false : s.americanOnly, groups: it.group ? { ...s.groups, [it.group]: true } : s.groups }), () => this.open(it.key));
   }
   card(it) {
     const s = this.state; const isH = it.kind === 'hymn'; const T = this.D.tmap[it.trad] || {}; const L = this.LANE[it.kind];
@@ -500,17 +514,19 @@ class Component extends DCLogic {
       id: 'hx-' + it.key, rid: 'hr-' + it.key, isH, n: it.n, bar: isH ? (T.color || '#b68235') : (it.reformed ? this.REF : L.rule), barH: isH || it.reformed ? 5 : 3,
       kicker: isH ? (T.label || 'Hymn') : L.label, reformed: !!it.reformed,
       year: this.yearText(it), ySz: big ? 44 : 24, ySzP: big ? 40 : 24, ySzM: big ? 34 : 21,
-      title: isH ? it.first : it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
+      title: it.title, sub: isH ? who : it.text, tune: isH ? it.tune : '', hasTune: isH && !!it.tune,
       img: it.image, imgSrc: JSON.stringify(it.image || ''), hasImg: !!it.image, imgAlt: it.imageAlt || it.title, span: it.image ? 2 : 1,
       tint: L.tint, yearColor: isH ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
       border: s.sel === it.key ? '#d9b36a' : 'transparent', glow: s.sel === it.key ? 'rgba(217,179,106,.35)' : 'transparent', go: () => this.state.sel === it.key ? this.close() : this.open(it.key),
     };
   }
   renderVals() {
-    const s = this.state;
-    const views = [['timeline', 'Timeline'], ['pin', 'Pinboard'], ['list', 'List'], ['road', 'Road']].map(([k, label]) => ({ label, pressed: s.view === k ? 'true' : 'false', bg: s.view === k ? '#1f3c5d' : 'transparent', fg: s.view === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setState({ view: k }, () => { if (k === 'road') { this.target = this.clampPos(this.state.roadI || 0); this.kick(); } else if (k !== 'timeline') this.goEra(this.state.eraI); }) }));
+    const s = { ...this.state, view: this.curView() };
+    const VIEWS = { road: ['Road', 'Walk the road of history, card by card'], timeline: ['Timeline', 'Era by era, with hymns and the history around them'], list: ['List', 'One line per card, in date order'], pin: ['Pinboard', 'Every card at once, pictures first'] }; const HIDDEN = ['pin'];
+    const views = Object.entries(VIEWS).filter(([k]) => !HIDDEN.includes(k) || s.view === k).map(([k, [label]]) => ({ label, pressed: s.view === k ? 'true' : 'false', bg: s.view === k ? '#1f3c5d' : 'transparent', fg: s.view === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setView(k) }));
+    const viewTitle = (VIEWS[s.view] || VIEWS.timeline)[0], viewSub = (VIEWS[s.view] || VIEWS.timeline)[1]; const onRoadPage = s.view === 'road';
     const ctxKinds = ['covenant', 'church', 'music', 'world'].filter(k => k !== 'covenant' || (this.D && this.D.hasCovenant));
-    const laneToggles = ctxKinds.map(k => ({ label: this.LANE[k].label, color: this.LANE[k].color, pressed: s.lanes[k] ? 'true' : 'false', mark: s.lanes[k] ? '✓' : '', fill: s.lanes[k] ? this.LANE[k].color : 'transparent', bg: s.lanes[k] ? this.LANE[k].tint : 'transparent', border: s.lanes[k] ? this.LANE[k].color : 'var(--color-divider)', go: () => this.setState(st => ({ lanes: { ...st.lanes, [k]: !st.lanes[k] } })) }));
+    const laneToggles = ['hymn', ...ctxKinds].map(k => ({ label: this.LANE[k].label, color: this.LANE[k].color, pressed: s.lanes[k] ? 'true' : 'false', mark: s.lanes[k] ? '✓' : '', fill: s.lanes[k] ? this.LANE[k].color : 'transparent', bg: s.lanes[k] ? this.LANE[k].tint : 'transparent', border: s.lanes[k] ? this.LANE[k].color : 'var(--color-divider)', go: () => this.setState(st => ({ lanes: { ...st.lanes, [k]: !st.lanes[k] } })) }));
     const sw = (label, on, go) => ({ label, pressed: on ? 'true' : 'false', go, border: on ? 'var(--color-neutral-500)' : 'var(--color-divider)', bg: on ? '#f3f0ea' : 'transparent', track: on ? 'var(--color-accent-700)' : 'var(--color-neutral-400)', knob: on ? 14 : 2 });
     const subGroups = [];
     if (s.lanes.church) subGroups.push({ label: 'Church history', color: this.LANE.church.color, items: [
@@ -518,7 +534,8 @@ class Component extends DCLogic {
       sw('Institutions', s.groups.institutions, () => this.setState(st => ({ groups: { ...st.groups, institutions: !st.groups.institutions } }))),
       sw('Congregations', s.groups.congregations, () => this.setState(st => ({ groups: { ...st.groups, congregations: !st.groups.congregations } }))) ] });
     if (s.lanes.world || s.lanes.music) subGroups.push({ label: 'World events', color: this.LANE.world.color, items: [sw('American history only', s.americanOnly, () => this.setState(st => ({ americanOnly: !st.americanOnly })))] });
-    const common = { views, laneToggles, subGroups, hasSub: subGroups.length > 0, q: s.q, setQ: e => this.setState({ q: e.target.value }), goTimeline: () => this.props.goTimeline && this.props.goTimeline(), closeRef: this.closeRef, closeSel: () => this.close() };
+    const filtersOpen = true; const activeFilters = ['hymn', ...ctxKinds].filter(k => s.lanes[k] === false).length + (s.reformedOnly ? 1 : 0) + (s.americanOnly ? 1 : 0) + (s.groups.institutions ? 0 : 1) + (s.groups.congregations ? 0 : 1) + (s.trad ? 1 : 0);
+    const common = { views, viewTitle, viewSub, onRoadPage, filtersOpen, showBand: !onRoadPage, toggleFilters: () => this.setState(st => ({ filtersOpen: !st.filtersOpen })), filtersLabel: activeFilters ? `Filter by topic · ${activeFilters} on` : 'Filter by topic', filtersChevron: s.filtersOpen ? '▲' : '▼', laneToggles, subGroups, hasSub: subGroups.length > 0, showSub: false, q: s.q, setQ: e => this.setState({ q: e.target.value }), goTimeline: () => this.props.goTimeline && this.props.goTimeline(), closeRef: this.closeRef, closeSel: () => this.close() };
     if (!s.ready || !this.D) return { ...common, loading: true, band: [], legend: [], results: [], hasResults: false };
     const { eras, trads, items, tmap, periods } = this.D;
     const vis = this.visOf(s);
@@ -537,18 +554,18 @@ class Component extends DCLogic {
       return { label: this.LANE[k].label, color: this.LANE[k].color, cards, empty: cards.length === 0, emptyText: `No ${this.LANE[k].label.toLowerCase()} entries for these years yet.`, periods: prs, hasPeriods: prs.length > 0 };
     });
     const span = E.end - E.start; const step = span <= 40 ? 5 : span <= 100 ? 10 : span <= 300 ? 50 : span <= 1000 ? 100 : 200;
-    let tk = []; if (E.start < 600) tk = [-2000, -1500, -1000, -500, 1, 200, 400, 600].filter(y => y >= E.start && y <= E.end); else for (let y = Math.ceil(E.start / step) * step; y <= E.end; y += step) tk.push(y);
+    let tk = []; if (E.undated) tk = []; else if (E.start < 600) tk = [-2000, -1500, -1000, -500, 1, 200, 400, 600].filter(y => y >= E.start && y <= E.end); else for (let y = Math.ceil(E.start / step) * step; y <= E.end; y += step) tk.push(y);
     const ticks = tk.map((y, i) => ({ pct: P(y), label: tk.length > 9 && i % 2 ? '' : this.fy(y) }));
     const laneY = { hymn: 12, covenant: 54, church: 64, music: 74, world: 84 };
     const dots = (onTL ? inE : []).map(it => ({ pct: Math.max(0.5, Math.min(99.5, P(it.year))), top: laneY[it.kind], size: s.sel === it.key ? 16 : it.kind === 'hymn' ? 11 : 8, bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || '#b68235') : (it.reformed ? this.REF : this.LANE[it.kind].color), title: `${this.yearText(it)} · ${it.title}`, go: () => this.open(it.key) }));
     const band = eras.map((e, i) => { const on = i === eraI; return { label: this.eraDates(e, i === lastI) + ' · ' + e.label, short: e.short || e.label, current: on ? 'true' : 'false', bg: on ? '#efeae1' : 'transparent', line: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-text)' : 'var(--color-neutral-700)', ticks: vis.filter(it => it.era === e.id).map(it => ({ pct: Math.max(0, Math.min(99, this.pct(it.year, e.start, e.end))), bg: it.kind === 'hymn' ? ((tmap[it.trad] || {}).color || 'var(--color-accent)') : (it.reformed ? this.REF : this.LANE[it.kind].color), h: it.kind === 'hymn' ? 9 : 5 })), go: () => this.goEra(i) }; });
-    const groups = eras.map((e, i) => { const its = onPL ? vis.filter(it => it.era === e.id) : []; return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), label: e.label, pin: [...its.filter(x => x.prologue), ...its.filter(x => x.image && !x.prologue), ...its.filter(x => !x.image && !x.prologue)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
+    const groups = eras.map((e, i) => { const its = onPL ? vis.filter(it => it.era === e.id) : []; return { anchor: 'hx-era-' + e.id, dates: this.eraDates(e, i === lastI), style: e.undated ? 'italic' : 'normal', label: e.label, pin: [...its.filter(x => x.prologue), ...its.filter(x => x.image && !x.prologue), ...its.filter(x => !x.image && !x.prologue)].map(it => this.card(it)), rows: its.map(it => this.card(it)), empty: its.length === 0 }; });
     const ri = Math.max(0, Math.min(s.roadI, Math.max(0, vis.length - 1)));
     const W = (this.roadStage.current && this.roadStage.current.clientWidth) || Math.min(1280, (typeof window !== 'undefined' ? window.innerWidth : 1000) - 32); const cardW = Math.min(360, Math.floor(W * 0.46));
     const lo = Math.max(0, ri - 2), hi = Math.min(vis.length - 1, ri + 6);
     const roadCards = (onRoad ? vis.slice(lo, hi + 1) : []).map((it, k) => { const i = lo + k; const c = this.card(it); return { ...c, i, w: cardW, year: this.yearText(it), tune: it.kind === 'hymn' ? (it.tune || '').toUpperCase() : '', sub: it.kind === 'hymn' ? [it.author, it.composer].filter((v, j, a) => v && a.indexOf(v) === j).join(' · ') : it.text }; });
     const eraCounts = eras.map(e => vis.filter(it => it.era === e.id).length); const total = Math.max(1, vis.length);
-    let acc = 0; const roadBand = eras.map((e, i) => { const n = eraCounts[i]; const first = acc; acc += n; const on = i === eraI; return { flex: Math.max(n, 2), start: this.fy(e.start), label: e.short || e.label, title: this.eraDates(e, i === eras.length - 1) + ' · ' + e.label, bg: on ? 'rgba(243,242,242,.07)' : 'transparent', marks: vis.slice(first, first + n).map((it, j) => ({ pct: n > 1 ? (j + 0.5) / n * 100 : 50, top: it.kind === 'hymn' ? 30 : 44, bg: it.kind === 'hymn' ? '#d9b36a' : 'rgba(243,242,242,.5)' })), go: () => { this.stopPlay(); if (n) this.goRoad(first); } }; });
+    let acc = 0; const roadBand = eras.map((e, i) => { const n = eraCounts[i]; const first = acc; acc += n; const on = i === eraI; return { flex: Math.max(n, 2), minW: e.undated ? 120 : 0, style: e.undated ? 'italic' : 'normal', start: this.eraStart(e), label: e.short || e.label, title: this.eraDates(e, i === eras.length - 1) + ' · ' + e.label, bg: on ? 'rgba(243,242,242,.07)' : 'transparent', marks: vis.slice(first, first + n).map((it, j) => ({ pct: n > 1 ? (j + 0.5) / n * 100 : 50, top: it.kind === 'hymn' ? 32 : 46, bg: it.kind === 'hymn' ? '#d9b36a' : 'rgba(243,242,242,.5)', title: `${this.yearText(it)} · ${it.title}`, go: (ev) => { ev && ev.stopPropagation && ev.stopPropagation(); this.stopPlay(); this.goRoad(first + j); } })), go: () => { this.stopPlay(); if (n) this.goRoad(first); } }; });
     const roadList = (onRoad ? vis : []).map(it => `${this.yearText(it)}: ${it.title}${it.kind === 'hymn' && it.author ? ', ' + it.author : ''}. ${it.text || it.story || ''}`);
     const speeds = [['slow', 'Slow'], ['normal', 'Normal'], ['fast', 'Fast']].map(([k, label]) => ({ label, pressed: s.speed === k ? 'true' : 'false', bg: s.speed === k ? '#1f3c5d' : 'transparent', fg: s.speed === k ? 'var(--color-bg)' : 'var(--color-text)', go: () => this.setState({ speed: k }) }));
     const ql = s.q.trim().toLowerCase();
@@ -565,7 +582,7 @@ class Component extends DCLogic {
     return {
       ...common, loading: false, sample: s.sample, sampleCount: `${items.filter(i => i.kind === 'hymn').length} hymns, ${items.filter(i => i.kind !== 'hymn').length} events`,
       isTimeline: s.view === 'timeline', isPin: s.view === 'pin', isList: s.view === 'list', isRoad: s.view === 'road',
-      era: { dates: this.eraDates(E, eraI === lastI), label: E.label }, eraCount: `${eraI + 1} of ${eras.length}`,
+      era: { dates: this.eraDates(E, eraI === lastI), label: E.label, style: E.undated ? 'italic' : 'normal' }, eraCount: `${eraI + 1} of ${eras.length}`,
       atFirst: eraI === 0, atLast: eraI === lastI, prevOp: eraI === 0 ? .35 : 1, nextOp: eraI === lastI ? .35 : 1,
       prevEra: () => this.goEra(eraI - 1), nextEra: () => this.goEra(eraI + 1),
       tStart: e => { this.tx = e.touches[0].clientX; }, tEnd: e => { const dx = e.changedTouches[0].clientX - (this.tx || 0); if (Math.abs(dx) > 60) this.goEra(eraI + (dx < 0 ? 1 : -1)); },
