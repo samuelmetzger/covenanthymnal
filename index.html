@@ -13,8 +13,8 @@
 <helmet>
 <link rel="stylesheet" href="_ds/classical-209a1473-d8f0-4fef-9222-5ea2b81c993d/styles.css">
 <script src="_ds/classical-209a1473-d8f0-4fef-9222-5ea2b81c993d/_ds_bundle.js"></script>
-<script src="esv-links.js" data-manual></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+<script src="esv-links.js" data-manual=""></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=Lora:ital,wght@0,400;0,600;1,400&amp;display=swap">
 <style>
 body{margin:0;background:var(--color-bg);text-wrap:pretty}
 a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-600)}
@@ -23,6 +23,17 @@ em,i{font-synthesis:none}
 .photo{box-sizing:border-box;border:6px solid var(--color-surface);outline:1px solid var(--color-divider)}
 .m-nav{display:flex;justify-content:center;flex-wrap:wrap}
 .m-menu-btn{display:none}
+.fnref{position:relative;display:inline-block;font-size:.68em;line-height:0;margin-left:1px;vertical-align:super}
+.fnref > a{color:var(--color-accent-700);text-decoration:none;padding:0 2px}
+.fnref > a:hover,.fnref > a:focus-visible{color:var(--color-accent-600)}
+.fnref > span{display:none;position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);width:min(340px,80vw);background:var(--color-bg);color:var(--color-text);border:1px solid var(--color-divider);border-radius:var(--radius-md);box-shadow:var(--shadow-md);padding:10px 12px;font-family:var(--font-body);font-size:13px;line-height:1.5;font-style:normal;font-weight:400;text-align:left;text-transform:none;letter-spacing:0;z-index:5;pointer-events:none}
+.fnref:hover > span,.fnref:focus-within > span{display:block}
+.fnref.fn-right > span{left:auto;right:-6px;transform:none}
+.fnref.fn-right > span::after{left:auto;right:10px;transform:none}
+.fnref.fn-left > span{left:-6px;right:auto;transform:none}
+.fnref.fn-left > span::after{left:10px;transform:none}
+.fnref > span::after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--color-divider)}
+@media (hover:none){.fnref > span{display:none!important}}
 .hymn-row{display:grid;grid-template-columns:56px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:8px 18px}
 .psalm-head{display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:0 16px}
 .psalm-row{display:grid;grid-template-columns:56px minmax(0,1.5fr) 110px 110px minmax(0,1fr) minmax(0,1.3fr);gap:4px 16px}
@@ -87,12 +98,13 @@ em,i{font-synthesis:none}
 button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
 </style>
 </helmet>
-<div style="background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);min-height:100vh">
+<div style="background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);min-height:100vh;position:relative;overflow-x:clip">
+<div aria-label="Beta — this site is in preparation" title="This site is in preparation — some pages are still being written" style="position:absolute;left:-66px;top:27px;transform:rotate(-45deg);background:var(--color-bg);color:#15283f;font-family:var(--font-body);font-size:16px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;padding:9px 0 8px 6px;width:255px;text-align:center;border-top:1px solid var(--color-accent);border-bottom:1px solid var(--color-accent);box-shadow:var(--shadow-sm);z-index:50;pointer-events:auto">Beta</div>
 
 <header data-screen-label="Header" style="background:#1f3c5d;color:var(--color-bg)">
   <sc-if value="{{ showUtility }}" hint-placeholder-val="{{ true }}">
-    <div style="background:#15283f;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:8px clamp(20px,4vw,48px);font-size:12px;color:var(--color-neutral-300)">
-      <span class="utility-note" style="font-family:var(--font-heading);font-style:italic;font-size:14px;color:var(--color-neutral-300)">Psalms, hymns, and spiritual songs — for public and daily worship</span>
+    <div style="background:#15283f;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:8px clamp(20px,4vw,48px);font-size:12px;color:var(--color-neutral-300);position:relative;z-index:2">
+      <span></span>
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
         <span>This month: <em style="color:var(--color-bg)">{{ hom.now.title }}</em></span>
         <button onClick="{{ goOrder }}" style="background:none;border:0;padding:0;cursor:pointer;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;white-space:nowrap">Reserve the first printing →</button>
@@ -126,11 +138,11 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <div style="display:flex;flex-direction:column;gap:20px;max-width:560px">
           <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">First printing · 2026</span>
           <h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;line-height:1.02;margin:0;letter-spacing:-.01em;color:var(--color-bg)">Psalms and hymns and spiritual songs, <em>with thankfulness.</em></h1>
-          <p style="margin:0;font-size:16px;line-height:1.7;text-align:left;color:var(--color-neutral-200)">Worship is a grand and glorious conversation between God and his chosen, redeemed people. It is with thankfulness and by God’s gracious providence that the Covenant Hymnal is in your hands — assembled for public worship at Covenant Presbyterian Church, and made more readily and intentionally useful for family and personal worship.</p>
-          <p style="margin:0;font-size:16px;line-height:1.7;text-align:left;color:var(--color-neutral-200)">It is our prayer that the Covenant Hymnal will be a blessing flowing to you and Christ’s Church for generations to come.</p>
+          <p style="margin:0;font-size:16px;line-height:1.7;text-align:left;color:var(--color-neutral-200)">Worship is a grand and glorious conversation between God and his chosen, redeemed people. It is with thankfulness and by God’s gracious providence that the Covenant Hymnal is in your hands — assembled for public worship In Christ's Church, and made more readily and intentionally useful for family and personal worship.</p>
+          <p style="margin:0;font-size:16px;line-height:1.7;text-align:left;color:var(--color-neutral-200)">It is our prayer that the Covenant Hymnal will be a blessing flowing to you and the Church for generations to come.</p>
           <div style="display:flex;flex-direction:column;gap:2px;border-top:1px solid rgba(243,242,242,.2);padding-top:16px">
             <span style="font-family:var(--font-heading);font-style:italic;font-size:30px;color:var(--color-accent-300);line-height:1.1">Soli Deo Gloria!</span>
-            <span style="font-size:13px;color:var(--color-neutral-300)">The Session of Covenant Presbyterian Church, 2026</span>
+            <span style="font-size:13px;color:var(--color-neutral-300)">The Session of Covenant Presbyterian Church (PCA), Nashville, TN - 2026</span>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
             <button onClick="{{ goOrder }}" class="btn" style="white-space:nowrap;color:var(--color-accent-300);border-color:var(--color-accent-400);background:transparent" style-hover="background:rgba(201,179,120,.14)">Reserve copies</button>
@@ -404,8 +416,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <sc-if value="{{ orderOpen }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submitOrder }}" style="display:flex;flex-direction:column;gap:16px">
           <h2 style="font-size:34px;font-weight:500;margin:0">Reservation</h2>
-          <div class="field"><label>Name</label><input class="input" required placeholder="Full name"></div>
-          <div class="field"><label>Email</label><input class="input" type="email" required placeholder="you@example.com"></div>
+          <div class="field"><label>Name</label><input class="input" required="" placeholder="Full name"></div>
+          <div class="field"><label>Email</label><input class="input" type="email" required="" placeholder="you@example.com"></div>
           <div class="field"><label>Church (for congregational orders)</label><input class="input" placeholder="Optional"></div>
           <div class="field"><label>Copies</label>
             <div class="seg">
@@ -505,10 +517,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
             <sc-for list="{{ subjects }}" as="s" hint-placeholder-count="4"><label class="seg-opt"><input type="radio" name="subject" checked="{{ s.checked }}" onChange="{{ s.pick }}" style="position:absolute;opacity:0;width:0;height:0">{{ s.label }}</label></sc-for>
           </div>
         </div>
-        <div class="field"><label>Name</label><input class="input" required></div>
-        <div class="field"><label>Email</label><input class="input" type="email" required></div>
+        <div class="field"><label>Name</label><input class="input" required=""></div>
+        <div class="field"><label>Email</label><input class="input" type="email" required=""></div>
         <div class="field"><label>Hymn number (if about a particular hymn)</label><input class="input" inputmode="numeric" placeholder="e.g. 20"></div>
-        <div class="field"><label>Message</label><textarea class="input" required style="min-height:150px"></textarea></div>
+        <div class="field"><label>Message</label><textarea class="input" required="" style="min-height:150px"></textarea></div>
         <button type="submit" class="btn btn-primary" style="align-self:flex-start;background:none;white-space:nowrap">Send</button>
       </form>
     </sc-if>
@@ -717,7 +729,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <div style="grid-column:1;display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400);flex-wrap:wrap;margin-bottom:14px"><button onClick="{{ goHymns }}" style="all:unset;cursor:pointer;color:var(--color-neutral-300)" style-hover="color:var(--color-bg)">← The Hymns</button><span>{{ h.section }}</span><span style="color:var(--color-neutral-400)">{{ h.topic }}</span></div>
       <h1 style="grid-column:1;font-size:clamp(36px,5vw,64px);font-weight:400;margin:0;line-height:1.02;color:var(--color-bg)">{{ h.title }}</h1>
       <span class="hymn-num" style="grid-column:2;grid-row:2;font-family:var(--font-heading);font-size:clamp(64px,9vw,120px);line-height:1;color:var(--color-accent-400);font-variant-numeric:lining-nums tabular-nums;margin-top:-0.13em;justify-self:end">{{ h.n }}</span>
-      <span style="grid-column:1;font-family:var(--font-heading);font-style:italic;font-size:22px;color:var(--color-neutral-300);margin-top:14px">{{ h.subtitle }}</span>
+      <span style="grid-column: 1; font-family: var(--font-heading); font-style: italic; font-size: 30px; color: var(--color-neutral-300); margin-top: 14px">{{ h.subtitle }}</span>
       <div class="hymn-share" style="grid-column:2;grid-row:3;justify-self:end;align-self:end"><button onClick="{{ share }}" aria-label="Share this page" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;color:var(--color-accent-400);letter-spacing:.08em;text-transform:uppercase;font-size:11px;" style-hover="color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>{{ shareLabel }}</button></div>
     </div>
   </section>
@@ -761,7 +773,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <div style="display:flex;flex-direction:column;gap:18px;border-top:1px solid var(--color-divider);padding-top:28px">
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">About this hymn</span><span style="font-size:12px;font-style:italic;color:var(--color-neutral-700)">For bulletins and church emails</span></div>
         <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:18px 20px;display:flex;flex-direction:column;gap:12px">
-          <p style="margin:0;font-family:var(--font-heading);font-size:19px;line-height:1.5;text-align:left"><sc-for list="{{ blurbParts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup style="font-size:.68em;line-height:0;margin-left:1px"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" style="color:var(--color-accent-700);text-decoration:none">{{ pt.n }}</a></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p>
+          <p style="margin:0;font-family:var(--font-heading);font-size:19px;line-height:1.5;text-align:left"><sc-for list="{{ blurbParts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup class="fnref"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" aria-describedby="fnpop-{{ pt.n }}">{{ pt.n }}</a><span role="tooltip" id="fnpop-{{ pt.n }}"><b style="font-weight:600;color:var(--color-accent-700);margin-right:6px">{{ pt.n }}</b>{{ pt.src }}</span></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p>
           <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-size:12px;color:var(--color-neutral-700)">Free to reprint</span><button onClick="{{ copyBlurb }}" class="btn btn-secondary" style="background:none;padding:6px 14px;font-size:12px">{{ copyLabel }}</button></div>
         </div>
         <div style="display:flex;flex-direction:column">
@@ -778,8 +790,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
                 <div style="display:flex;flex-direction:column;gap:16px;padding:2px 0 28px">
                   <sc-if value="{{ nt.hasLead }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14.5px;line-height:1.65;font-style:italic;color:var(--color-neutral-700);text-align:left">{{ nt.lead }}</p></sc-if>
                   <sc-for list="{{ nt.paras }}" as="pp" hint-placeholder-count="2">
-                    <sc-if value="{{ pp.isQuote }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 2px 28px;font-family:var(--font-heading);font-style:italic;font-size:19px;line-height:1.5;white-space:pre-line;text-align:left"><sc-for list="{{ pp.parts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup style="font-size:.68em;line-height:0;margin-left:1px"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" style="color:var(--color-accent-700);text-decoration:none">{{ pt.n }}</a></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p></sc-if>
-                    <sc-if value="{{ pp.isProse }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-size:17px;line-height:1.75;text-align:left"><sc-for list="{{ pp.parts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup style="font-size:.68em;line-height:0;margin-left:1px"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" style="color:var(--color-accent-700);text-decoration:none">{{ pt.n }}</a></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p></sc-if>
+                    <sc-if value="{{ pp.isQuote }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 2px 28px;font-family:var(--font-heading);font-style:italic;font-size:19px;line-height:1.5;white-space:pre-line;text-align:left"><sc-for list="{{ pp.parts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup class="fnref"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" aria-describedby="fnpop-{{ pt.n }}">{{ pt.n }}</a><span role="tooltip" id="fnpop-{{ pt.n }}"><b style="font-weight:600;color:var(--color-accent-700);margin-right:6px">{{ pt.n }}</b>{{ pt.src }}</span></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p></sc-if>
+                    <sc-if value="{{ pp.isProse }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-size:17px;line-height:1.75;text-align:left"><sc-for list="{{ pp.parts }}" as="pt" hint-placeholder-count="1"><sc-if value="{{ pt.isText }}" hint-placeholder-val="{{ true }}">{{ pt.text }}</sc-if><sc-if value="{{ pt.isFn }}" hint-placeholder-val="{{ false }}"><sup class="fnref"><a href="#src-{{ pt.n }}" onClick="{{ pt.go }}" aria-describedby="fnpop-{{ pt.n }}">{{ pt.n }}</a><span role="tooltip" id="fnpop-{{ pt.n }}"><b style="font-weight:600;color:var(--color-accent-700);margin-right:6px">{{ pt.n }}</b>{{ pt.src }}</span></sup></sc-if><sc-if value="{{ pt.isEsv }}" hint-placeholder-val="{{ false }}"><a class="esv" href="{{ pt.href }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--color-accent-400)">{{ pt.text }}</a></sc-if></sc-for></p></sc-if>
                   </sc-for>
                   <sc-if value="{{ nt.isTable }}" hint-placeholder-val="{{ false }}"><div style="overflow-x:auto"><table class="table" style="min-width:640px;width:100%;font-size:14px;line-height:1.55"><thead><tr><th style="text-align:left;width:32px"></th><sc-for list="{{ nt.columns }}" as="cl" hint-placeholder-count="3"><th style="text-align:left;font-weight:600">{{ cl }}</th></sc-for></tr></thead><tbody><sc-for list="{{ nt.rows }}" as="rw" hint-placeholder-count="4"><tr><td style="font-family:var(--font-heading);font-size:18px;color:var(--color-accent-700);vertical-align:top">{{ rw.n }}</td><sc-for list="{{ rw.cells }}" as="cel" hint-placeholder-count="3"><td style="white-space:pre-line;vertical-align:top;text-align:left">{{ cel }}</td></sc-for></tr></sc-for></tbody></table></div></sc-if>
                   <sc-if value="{{ nt.isSources }}" hint-placeholder-val="{{ false }}"><ol style="margin:0;padding-left:26px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.55"><sc-for list="{{ nt.sources }}" as="sr" hint-placeholder-count="3"><li id="src-{{ sr.n }}" style="text-align:left">{{ sr.text }}</li></sc-for></ol></sc-if>
@@ -858,7 +870,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
       <div style="display:flex;align-items:center;gap:14px"><img src="assets/hymnal-seal-2.png" alt="" style="width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--color-accent-500)"><span style="font-family:var(--font-heading);font-size:18px;letter-spacing:.24em;text-transform:uppercase;color:var(--color-bg)">Covenant Hymnal</span></div>
       <span style="font-size:13px;line-height:1.6">Hymn of the Month and new articles, by email once a month.</span>
       <form onSubmit="{{ submitNews }}" style="display:flex;gap:8px;max-width:420px">
-        <input class="input" type="email" required placeholder="Email address" style="background:transparent;color:var(--color-bg);border-color:rgba(243,242,242,.3)">
+        <input class="input" type="email" required="" placeholder="Email address" style="background:transparent;color:var(--color-bg);border-color:rgba(243,242,242,.3)">
         <button type="submit" class="btn" style="white-space:nowrap;color:var(--color-accent-300);border-color:var(--color-accent-400);background:transparent;flex:none">{{ newsLabel }}</button>
       </form>
     </div>
@@ -935,7 +947,7 @@ const FAQS = [
 ];
 
 class Component extends DCLogic {
-  componentDidMount() { this.readHash(); window.addEventListener('hashchange', () => this.readHash()); import('./hymn-notes.js').then(m => this.setState({ notes: m.NOTES, downloadsMap: m.DOWNLOADS, listenMap: m.LISTEN })).catch(() => {}); import('./hymns-data.js').then(m => { this.setState({ hymns: m.HYMNS, texts: m.TEXTS, refrains: m.REFRAINS || {}, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS }); this.tlLoad(m); }); }
+  componentDidMount() { const fnd = e => { const s = e.target && e.target.closest && e.target.closest('.fnref'); if (s) this.fnPlace({ currentTarget: s }); }; document.addEventListener('mouseover', fnd, true); document.addEventListener('focusin', fnd, true); this.readHash(); window.addEventListener('hashchange', () => this.readHash()); import('./hymn-notes.js').then(m => this.setState({ notes: m.NOTES, downloadsMap: m.DOWNLOADS, listenMap: m.LISTEN })).catch(() => {}); import('./hymns-data.js').then(m => { this.setState({ hymns: m.HYMNS, texts: m.TEXTS, refrains: m.REFRAINS || {}, sectionOrder: m.SECTIONS, subsections: m.SUBSECTIONS, psalmIndex: m.PSALM_INDEX, ancient: m.ANCIENT, ancientEras: m.ANCIENT_ERAS }); this.tlLoad(m); }); }
   hymnVals() {
     const { hymns = [], texts = {}, sectionOrder = [], q = '', view = 'sections', hymn } = this.state;
     const norm = s => String(s ?? '').toLowerCase();
@@ -977,10 +989,12 @@ class Component extends DCLogic {
     };
   }
   esvHref(t) { if (typeof window === 'undefined' || !window.linkScripture) return null; const d = document.createElement('div'); d.textContent = t; window.linkScripture(d); const a = d.querySelector('a'); return a ? a.href : null; }
+  fnPlace = e => { const el = e.currentTarget; const r = el.getBoundingClientRect(); const w = Math.min(340, window.innerWidth * 0.8); const vw = window.innerWidth; el.classList.remove('fn-left', 'fn-right'); if (r.left + r.width / 2 + w / 2 > vw - 12) el.classList.add('fn-right'); else if (r.left + r.width / 2 - w / 2 < 12) el.classList.add('fn-left'); };
+  fnText(n) { const N = this._N; const s = N && N.sources && N.sources[Number(n) - 1]; return s ? (s.text || '') : ''; }
   segs(str) {
     const out = []; const re = /\[\^(\d+)\]/g; let last = 0, m; str = String(str || '');
     const push = t => { if (!t) return; if (typeof window !== 'undefined' && window.linkScripture) { const d = document.createElement('div'); d.textContent = t; window.linkScripture(d); d.childNodes.forEach(nd => nd.nodeType === 3 ? out.push({ isText: true, text: nd.nodeValue }) : out.push({ isEsv: true, text: nd.textContent, href: nd.href })); } else out.push({ isText: true, text: t }); };
-    while ((m = re.exec(str))) { push(str.slice(last, m.index)); out.push({ isFn: true, n: m[1], go: this.fnGo(m[1]) }); last = m.index + m[0].length; }
+    while ((m = re.exec(str))) { push(str.slice(last, m.index)); out.push({ isFn: true, n: m[1], go: this.fnGo(m[1]), src: this.fnText(m[1]) }); last = m.index + m[0].length; }
     push(str.slice(last)); return out;
   }
   fnGo(n) { return e => { e.preventDefault(); this.setState(s => ({ noteOpen: { ...(s.noteOpen || {}), sources: true } })); setTimeout(() => { const el = document.getElementById('src-' + n); if (el) { const r = el.getBoundingClientRect(); window.scrollTo({ top: r.top + window.scrollY - 96, behavior: 'smooth' }); el.style.color = 'var(--color-accent-700)'; } }, 80); }; }
@@ -991,7 +1005,7 @@ class Component extends DCLogic {
     return String(s || '').replace(re, (m, book, d) => '(' + AB[book] + ' ' + d);
   }
   noteVals(h) {
-    const N = (this.state.notes || {})[h.n]; const D = (this.state.downloadsMap || {})[h.n]; const L = (this.state.listenMap || {})[h.n];
+    const N = (this.state.notes || {})[h.n]; this._N = N; const D = (this.state.downloadsMap || {})[h.n]; const L = (this.state.listenMap || {})[h.n];
     const a = (h.author || '').split(/[;,]/)[0].trim() || 'the author';
     const c = (h.composer || '').split(/[;,]/)[0].trim() || 'the composer';
     const blurb = N ? N.blurb : `${h.title || 'This hymn'} sets words by ${a} to the tune ${h.tune || ''}, ${c}. Written for congregations to sing as one voice, it draws on ${h.scripture || 'Scripture'} and has been sung in churches for generations. Look for it in worship this month, and sing it at home through the week.`;
@@ -1132,7 +1146,7 @@ class Component extends DCLogic {
   renderVals() {
     const p = this.state.page; const c = this.cycle();
     const year = this.state.year ?? c.yi;
-    const labels = [['home','Home'],['about','About'],['hymnal','Inside'],['hymns','The Hymns'],['history','History'],['order','Order'],['journal','Journal'],['faq','FAQ'],['contact','Contact']];
+    const labels = [['home','Home'],['hymns','The Hymns'],['hymnal','Inside'],['history','History of Hymns'],['about','About'],['journal','Journal'],['order','Order'],['faq','FAQ'],['contact','Contact']];
     const active = p === 'article' ? 'journal' : p === 'hymn' ? 'hymns' : p === 'timeline' ? 'history' : p;
     const nav = labels.map(([k, label]) => ({ label, go: this.go(k), line: active === k ? 'var(--color-accent-400)' : 'transparent', color: active === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const hero = this.props.heroLayout ?? 'book-and-letter';

@@ -27,6 +27,12 @@
   .hx-row > button{width:100%!important}
 }
 .hx-road:active{cursor:grabbing}
+.hx-roadwrap:fullscreen{background:#10203a;display:flex;flex-direction:column;justify-content:center;padding:16px 24px;box-sizing:border-box}
+.hx-roadwrap:fullscreen .hx-road{height:calc(100vh - 170px)!important;max-height:none!important}
+.hx-roadwrap:fullscreen .hx-roadctl span,.hx-roadwrap:fullscreen .hx-roadctl [aria-pressed]{color:#f3f2f2!important}
+.hx-roadwrap:fullscreen .hx-roadctl{color:#f3f2f2}
+.hx-roadwrap:fullscreen .hx-roadctl .btn{color:#d9b36a;border-color:#d9b36a}
+.hx-roadwrap:fullscreen .hx-roadhint{color:#c9cfd8}
 .hx-rcard:focus-visible > span:first-child{outline:2px solid #d9b36a!important;outline-offset:-2px}
 @media (prefers-reduced-motion:reduce){.hx-root *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
@@ -36,9 +42,9 @@
   <section style="max-width:1280px;margin:0 auto;padding:clamp(28px,4vw,48px) clamp(16px,3vw,40px) 0">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px 32px;flex-wrap:wrap">
       <div style="display:flex;flex-direction:column;gap:10px;max-width:720px">
-        <span style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-700)">History</span>
-        <h1 style="font-family:var(--font-heading);font-weight:500;font-size:clamp(34px,5vw,60px);letter-spacing:.06em;text-transform:uppercase;margin:0;line-height:1.02">The Hymnal in History</h1>
-        <p style="margin:0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);text-align:left">From the Psalms to today: the hymns of the Covenant Hymnal set in the story of the church, of music and of the world.</p>
+        <span style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-700)">History of Hymns</span>
+        <h1 style="font-family:var(--font-heading);font-weight:500;font-size:clamp(34px,5vw,60px);letter-spacing:.06em;text-transform:uppercase;margin:0;line-height:1.02">Singing God’s Praise Through the Ages</h1>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);text-align:left">“From the rising of the sun to its setting, the name of the <span style="font-variant:small-caps;letter-spacing:.04em">Lord</span> is to be praised” — the church’s song from the Psalms to today.</p>
       </div>
       <div role="group" aria-label="View" style="display:flex;border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden;flex-wrap:wrap">
         <sc-for list="{{ views }}" as="v" hint-placeholder-count="4"><button onClick="{{ v.go }}" aria-pressed="{{ v.pressed }}" style="min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--color-divider);background:{{ v.bg }};color:{{ v.fg }};font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">{{ v.label }}</button></sc-for>
@@ -184,7 +190,7 @@
   </sc-if>
 
   <sc-if value="{{ isRoad }}" hint-placeholder-val="{{ false }}">
-    <section style="max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px">
+    <section class="hx-roadwrap" ref="{{ roadWrapRef }}" style="max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px">
       <div class="hx-road" ref="{{ roadStage }}" onMouseDown="{{ roadDown }}" style="touch-action:none;position:relative;height:min(760px,82vh);min-height:520px;overflow:hidden;background:radial-gradient(90% 40% at 50% 0%,#36587f 0%,#24405f 35%,#172c45 65%,#10203a 100%);border:1px solid #2a4461;cursor:grab;user-select:none">
         <canvas ref="{{ roadCanvas }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
         <sc-for list="{{ roadCards }}" as="c" hint-placeholder-count="0">
@@ -232,11 +238,12 @@
         </div>
       </div>
       <ol aria-label="All cards on the road, in order" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><sc-for list="{{ roadList }}" as="li" hint-placeholder-count="0"><li>{{ li }}</li></sc-for></ol>
-      <div style="display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;flex-wrap:wrap">
-        <button onClick="{{ roadBack }}" class="btn btn-secondary" style="background:none;min-height:48px;font-size:16px">← Back in time</button>
+      <div class="hx-roadctl" style="display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;flex-wrap:wrap">
+        <button onClick="{{ roadBack }}" class="btn btn-secondary" style="background:none;min-height:48px;font-size:16px;white-space:nowrap">← Back in time</button>
         <button onClick="{{ togglePlay }}" aria-pressed="{{ playing }}" aria-label="{{ playLabel }}" title="{{ playLabel }}" style="width:52px;height:52px;border-radius:50%;border:1px solid var(--color-accent);background:{{ playBg }};color:{{ playFg }};font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">{{ playGlyph }}</button>
         <span aria-live="polite" style="font-size:16px;color:var(--color-neutral-700);min-width:90px;text-align:center;font-variant-numeric:tabular-nums">{{ roadCount }}</span>
-        <button onClick="{{ roadFwd }}" class="btn btn-primary" style="background:none;min-height:48px;font-size:16px">Walk forward →</button>
+        <button onClick="{{ roadFwd }}" class="btn btn-primary" style="white-space:nowrap;background:none;min-height:48px;font-size:16px">Walk forward →</button>
+        <button onClick="{{ toggleFull }}" class="btn btn-secondary" aria-label="Full screen" title="Full screen" style="background:none;min-height:48px;font-size:16px;padding:0 14px;white-space:nowrap">{{ fullLabel }}</button>
       </div>
       <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap">
         <span style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Speed</span>
@@ -244,7 +251,7 @@
           <sc-for list="{{ speeds }}" as="sp" hint-placeholder-count="3"><button onClick="{{ sp.go }}" aria-pressed="{{ sp.pressed }}" style="min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--color-divider);background:{{ sp.bg }};color:{{ sp.fg }};font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">{{ sp.label }}</button></sc-for>
         </div>
       </div>
-      <p style="margin:12px 0 0;text-align:center;font-size:14px;color:var(--color-neutral-700)">Scroll, drag or use the arrow keys to walk the road; press Enter or tap a card to read it; tap an era in the strip to jump there.</p>
+      <p class="hx-roadhint" style="margin:12px 0 0;text-align:center;font-size:14px;color:var(--color-neutral-700)">Scroll, drag or use the arrow keys to walk the road; press Enter or tap a card to read it; tap an era in the strip to jump there.</p>
     </section>
   </sc-if>
 
@@ -309,7 +316,7 @@ class Component extends DCLogic {
   };
   REF = '#1f3c5d';
   ORDER = { hymn: 0, covenant: 1, church: 2, music: 3, world: 4 };
-  componentDidMount() {
+  componentDidMount() { document.addEventListener('fullscreenchange', () => { this.setState({ isFull: !!document.fullscreenElement }); requestAnimationFrame(() => this.paint && this.paint()); });
     Promise.all([import('./hymns-data.js'), import('./hymn-notes.js').catch(() => ({})), import('./history-sample.js')]).then(([d, n, s]) => {
       const real = !!(d.ERAS && (d.HYMNS || []).some(h => h.featured && h.year != null));
       const pick = k => real ? (d[k] || []) : (s[k] || []);
@@ -443,6 +450,8 @@ class Component extends DCLogic {
   stopPlay() { if (this.playT) { cancelAnimationFrame(this.playT); this.playT = 0; } if (this.state.playing) this.setState({ playing: false }); }
   signText(it) { if (it.prologue || it.year < -2000) return ''; const y = it.year; const ord = n => n + (n % 10 === 1 && n % 100 !== 11 ? 'st' : n % 10 === 2 && n % 100 !== 12 ? 'nd' : n % 10 === 3 && n % 100 !== 13 ? 'rd' : 'th'); if (y < 1) return ord(Math.ceil((1 - y) / 100)) + ' century BC'; return ord(Math.floor((y - 1) / 100) + 1) + ' century'; }
   fy(y) { return y < 0 ? `${-y} BC` : y < 1000 ? `AD ${Math.max(1, y)}` : String(y); }
+  roadWrapRef = React.createRef();
+  toggleFull = () => { const el = this.roadWrapRef.current; if (!el) return; if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen().catch(() => {}); };
   yearText(it) { return it.prologue ? 'In the beginning' : it.note ? it.note : this.fy(it.year); }
   px(y) { return y >= 600 ? y : 600 - 2600 * Math.pow(Math.max(0, 600 - y) / 2600, 0.45); }
   pct(y, a, b) { return (this.px(y) - this.px(a)) / (this.px(b) - this.px(a)) * 100; }
@@ -563,6 +572,7 @@ class Component extends DCLogic {
       hymnCards, hymnsEmpty: hymnCards.length === 0, hymnsEmptyText: s.trad ? `No ${trLabel} hymns in these years. Tap “Show all traditions” below to see the rest.` : 'No hymns from these years are in the timeline yet.',
       showAllBtn: extraN > 0, showAllLabel: expanded ? 'Show fewer' : `Show all ${eraHymns.length} hymns from this era`, showAllSub: expanded ? 'Back to the featured hymns' : 'Every hymn in the book from these years, in date order', toggleAll: () => this.setState(st => ({ expanded: { ...st.expanded, [E.id]: !st.expanded[E.id] } })),
       ctxLanes, ticks, dots, band, groups,
+      fullLabel: this.state.isFull ? 'Exit full screen' : '⤢ Full screen', toggleFull: this.toggleFull, roadWrapRef: this.roadWrapRef,
       roadCards, roadBand, roadList, speeds, roadStage: this.roadStage, roadCanvas: this.roadCanvas, roadCount: vis.length ? `${ri + 1} of ${vis.length}` : '', roadBack: () => this.roadStep(-1), roadFwd: () => this.roadStep(1),
       roadDown: e => { if (e.button !== 0 || (e.target && e.target.closest && e.target.closest('button'))) return; this.stopPlay(); this.dragX = e.clientX; this.dragY = e.clientY; e.preventDefault(); },
       togglePlay: () => this.state.playing ? this.stopPlay() : this.startPlay(), playing: s.playing ? 'true' : 'false', playLabel: s.playing ? 'Pause' : 'Play', playGlyph: s.playing ? '❚❚' : '▶', playBg: s.playing ? '#1f3c5d' : 'transparent', playFg: s.playing ? 'var(--color-bg)' : 'var(--color-accent-700)',
