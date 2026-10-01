@@ -1030,15 +1030,15 @@ class Component extends DCLogic {
     const N = (this.state.notes || {})[h.n]; this._N = N; const D = (this.state.downloadsMap || {})[h.n]; const L = (this.state.listenMap || {})[h.n];
     const a = (h.author || '').split(/[;,]/)[0].trim() || 'the author';
     const c = (h.composer || '').split(/[;,]/)[0].trim() || 'the composer';
-    const blurb = N ? N.blurb : `${h.title || 'This hymn'} sets words by ${a} to the tune ${h.tune || ''}, ${c}. Written for congregations to sing as one voice, it draws on ${h.scripture || 'Scripture'} and has been sung in churches for generations. Look for it in worship this month, and sing it at home through the week.`;
+    const blurb = (N && N.blurb) ? N.blurb : `${h.title || 'This hymn'} sets words by ${a} to the tune ${h.tune || ''}, ${c}. Written for congregations to sing as one voice, it draws on ${h.scripture || 'Scripture'} and has been sung in churches for generations. Look for it in worship this month, and sing it at home through the week.`;
     const open = this.state.noteOpen || {};
     const para = p => ({ parts: this.segs(p), isQuote: p.includes('\n'), isProse: !p.includes('\n') });
     const mk = (id, title, sub, paras, x = {}) => ({ id, title, sub, paras: (paras || []).map(para), hasLink: !!x.href && !x.credit, subHref: x.href || '', subLinkText: x.linkText || '', hasCredit: !!x.credit, credit: x.credit || '', creditHref: x.href || '', creditLinkText: x.linkText || '', lead: x.lead || '', hasLead: !!x.lead, isTable: !!x.columns, columns: x.columns || [], rows: (x.rows || []).map((cells, i) => ({ n: i + 1, cells })), isSources: !!x.sources, sources: (x.sources || []).map((s, i) => ({ n: i + 1, text: s.text, url: s.url || '', hasUrl: !!s.url, noUrl: !s.url })), open: !!open[id], mark: open[id] ? '−' : '+', toggle: () => this.setState(s => ({ noteOpen: { ...(s.noteOpen || {}), [id]: !(s.noteOpen || {})[id] } })) });
     const notes = [];
     if (N) {
       if (N.children) notes.push(mk('children', 'For Children', 'A short note to read together', [N.children]));
-      notes.push(mk('author', 'The Words', a, N.author));
-      notes.push(mk('composer', 'The Music', c + (h.tune ? ' · ' + h.tune : ''), N.composer));
+      notes.push(mk('author', 'The Words', a, N.author || ['A short life of the author will appear here: where and when they lived, the church they served, and the circumstances in which the text was written.', 'Where the text has been altered for this hymnal, this section notes what changed and why.']));
+      notes.push(mk('composer', 'The Music', c + (h.tune ? ' · ' + h.tune : ''), N.composer || ['A short account of the composer and the tune: its first appearance, the text it was first paired with, and what makes it suited to these words.']));
       if (N.roff) { const src = (N.sources || []).find(s => /hymns4him/i.test(s.text) || /hymns4him/i.test(s.url || '')); notes.push(mk('roff', 'A Study by Dr. Larry Roff', '', N.roff, { credit: 'Reproduced with permission from ', href: (src && src.url) || 'https://www.hymns4him.org/', linkText: 'Hymns4Him', lead: N.roff_note })); }
       if (N.mcconathy) notes.push(mk('mcconathy', 'Hymn Notes by Mark McConathy', '', N.mcconathy, { credit: 'Reproduced in full by the author’s permission from ', href: 'https://markmcconathyprogramnotes.com/', linkText: 'Mark McConathy Program Notes' }));
       if (N.depth) notes.push(mk('depth', 'In Depth', 'Text, tune, and theology', N.depth));
