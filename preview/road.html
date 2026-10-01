@@ -146,7 +146,7 @@ function wrap(g, text, x, y, maxW, lh, maxLines) {
 const imgCache = {};
 let coverImg = null;
 function loadImg(src) {
-  if (!imgCache[src]) imgCache[src] = new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+  if (!imgCache[src]) imgCache[src] = new Promise(res => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
   return imgCache[src];
 }
 coverImg = await loadImg('../assets/hymnal-cover-sm.png');
