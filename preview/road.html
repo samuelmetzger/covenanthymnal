@@ -183,8 +183,8 @@ function makeCard(it, i) {
   const mat = new THREE.MeshBasicMaterial({ map: drawCard(it, null), transparent: true });
   const card = new THREE.Mesh(cardGeo, mat); card.userData.key = it.key;
   const p = cardPos(i); card.position.copy(p); card.rotation.y = -side(i) * 0.32;
-  const reflMat = new THREE.MeshBasicMaterial({ map: mat.map, transparent: true, opacity: 0.16, depthWrite: false });
-  const refl = new THREE.Mesh(cardGeo, reflMat); refl.position.set(p.x, -CH / 2 - 0.35 + 0.0, p.z); refl.rotation.y = card.rotation.y; refl.scale.y = -1;
+  const reflMat = new THREE.MeshBasicMaterial({ map: mat.map, transparent: true, opacity: 0.16, depthWrite: false, depthTest: false });
+  const refl = new THREE.Mesh(cardGeo, reflMat); refl.position.set(p.x, -CH / 2 - 0.35 + 0.0, p.z); refl.rotation.y = card.rotation.y; refl.scale.y = -1; refl.renderOrder = -1;
   const shadow = new THREE.Mesh(shadowGeo, new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2; shadow.position.set(p.x, 0.01, p.z + 0.15);
   const ym = new THREE.Mesh(yearGeo, new THREE.MeshBasicMaterial({ map: yearTexture(it.prologue ? '' : fy(it.year)), transparent: true, depthWrite: false }));
