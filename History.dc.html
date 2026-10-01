@@ -40,8 +40,7 @@
       <div role="group" aria-label="View" style="display:flex;border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden;flex-wrap:wrap">
         <sc-for list="{{ views }}" as="v" hint-placeholder-count="4"><button onClick="{{ v.go }}" aria-pressed="{{ v.pressed }}" style="min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--color-divider);background:{{ v.bg }};color:{{ v.fg }};font-family:var(--font-body);font-size:15px;cursor:pointer" style-focus="outline:2px solid var(--color-accent);outline-offset:-2px">{{ v.label }}</button></sc-for>
       </div>
-      <a href="road.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--color-divider);border-radius:var(--radius-md);color:var(--color-text);font-family:var(--font-body);font-size:15px;text-decoration:none;background:var(--color-surface, #fff)">Hymns through the Road of History →</a>
-    </div>
+          </div>
     <div style="display:flex;gap:12px 24px;flex-wrap:wrap;align-items:center;margin-top:24px">
       <div style="position:relative;flex:1 1 300px;max-width:520px">
         <input type="search" value="{{ q }}" onChange="{{ setQ }}" aria-label="Search the history" placeholder="Find a hymn, author, composer or event" style="width:100%;box-sizing:border-box;min-height:48px;padding:10px 16px;font-size:16px;font-family:var(--font-body);border:1px solid var(--color-neutral-400);border-radius:var(--radius-md);background:var(--color-surface, #fff);color:var(--color-text)">
@@ -186,29 +185,8 @@
 
   <sc-if value="{{ isRoad }}" hint-placeholder-val="{{ false }}">
     <section style="max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px">
-      <div class="hx-road" style="touch-action:pan-x;position:relative;height:min(640px,78vh);min-height:460px;perspective:760px;perspective-origin:50% 16%;overflow:hidden;background:linear-gradient(180deg,var(--color-bg) 0%,var(--color-bg) 22%,#ebe5da 100%);border:1px solid var(--color-divider)">
-        <div style="position:absolute;left:50%;top:66%;width:0;height:0;transform-style:preserve-3d;transform:translateZ({{ roadZ }}px);transition:transform .7s cubic-bezier(.3,.1,.2,1)">
-          <div style="position:absolute;left:-110px;top:0;width:220px;height:{{ roadLen }}px;transform-origin:50% 0;transform:rotateX(-90deg);background:#d9d0c1;border-left:2px solid #c4b8a5;border-right:2px solid #c4b8a5">
-            <div style="position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:repeating-linear-gradient(180deg,#f3f2f2 0 60px,transparent 60px 120px)"></div>
-          </div>
-          <sc-for list="{{ roadCards }}" as="c" hint-placeholder-count="4">
-            <span style="position:absolute;left:0;top:0;transform:{{ c.mk }};opacity:{{ c.mop }};font-family:var(--font-heading);font-size:34px;color:#7a5a25;white-space:nowrap;font-variant-numeric:lining-nums;transition:opacity .5s;transform-origin:50% 100%">{{ c.year }}</span>
-            <button id="{{ c.rid }}" onClick="{{ c.go }}" tabindex="{{ c.tab }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:0;top:0;width:280px;background:{{ c.tint }};outline:2px solid {{ c.border }};outline-offset:-2px;display:flex;flex-direction:column;transform:{{ c.tf }};opacity:{{ c.op }};visibility:{{ c.vis }};transition:opacity .5s;box-shadow:0 18px 28px -18px rgba(0,0,0,.35)" style-focus="outline:2px solid var(--color-accent);outline-offset:2px">
-              <span style="height:{{ c.barH }}px;background:{{ c.bar }};display:block"></span>
-              <span style="padding:12px 16px 16px;display:flex;flex-direction:column;gap:6px">
-                <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ c.kicker }}</span>
-                <span style="font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.2">{{ c.title }}</span>
-                <span style="font-size:15px;line-height:1.45;color:var(--color-neutral-800)">{{ c.sub }}</span>
-              </span>
-            </button>
-          </sc-for>
-        </div>
-      </div>
-      <div style="display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;flex-wrap:wrap">
-        <button onClick="{{ roadBack }}" class="btn btn-secondary" style="background:none;min-height:48px;font-size:16px">← Back in time</button>
-        <span style="font-size:16px;color:var(--color-neutral-700);min-width:90px;text-align:center;font-variant-numeric:tabular-nums">{{ roadCount }}</span>
-        <button onClick="{{ roadFwd }}" class="btn btn-primary" style="background:none;min-height:48px;font-size:16px">Walk forward →</button>
-      </div>
+      <iframe src="road.html" title="Hymns through the Road of History" style="display:block;width:100%;height:min(760px,82vh);min-height:520px;border:1px solid var(--color-divider);border-radius:var(--radius-md);background:#ece3d0" allow="fullscreen" loading="eager"></iframe>
+      <p style="margin:10px 0 0;font-size:14px;color:var(--color-neutral-700)">Scroll, swipe or use the arrow keys to walk the road; tap a card to read it. <a href="road.html" style="color:var(--color-text)">Open the Road full screen →</a></p>
     </section>
   </sc-if>
 
