@@ -7,6 +7,22 @@
 <meta name="description" content="The Covenant Hymnal: psalms, hymns and spiritual songs for public and daily worship, assembled by Covenant Presbyterian Church, Nashville, Tennessee.">
 <link rel="icon" href="assets/hymnal-seal-2.jpg">
 <script src="./support.js"></script>
+<!-- Beta: big feedback button (opens Marker.io form); remove at launch together with the Marker snippet -->
+<style>
+#beta-feedback{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:2147483000;background:#d6221b;color:#fff;border:3px solid #fff;border-left:0;border-radius:0 14px 14px 0;padding:22px 22px 22px 18px;font:700 20px/1.1 "Lora",Georgia,serif;letter-spacing:.04em;text-transform:uppercase;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);transform-origin:center;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.45);text-align:center}
+#beta-feedback:hover{background:#b3140e}
+#beta-feedback small{display:block;font:italic 400 13px/1.2 "Lora",Georgia,serif;text-transform:none;letter-spacing:0;margin-top:8px;opacity:.95}
+@media (max-width:700px){#beta-feedback{top:auto;bottom:0;right:16px;transform:none;writing-mode:horizontal-tb;border-radius:14px 14px 0 0;border:3px solid #fff;border-bottom:0;padding:12px 18px;font-size:16px}#beta-feedback small{display:none}}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var b=document.createElement('button');b.id='beta-feedback';b.type='button';
+  b.innerHTML='Click here to give feedback<small>Beta review \u2014 any page, any detail</small>';
+  b.onclick=function(){ if(window.Marker){ try{window.Marker.capture('fullscreen');}catch(e){window.Marker.capture();} } else alert('Feedback tool is still loading; please try again in a moment.'); };
+  document.body.appendChild(b);
+  var t=setInterval(function(){ if(window.Marker&&window.Marker.hide){ try{window.Marker.hide();}catch(e){} clearInterval(t);} },500); setTimeout(function(){clearInterval(t)},15000);
+});
+</script>
 <!-- Marker.io feedback widget (beta review period; remove at launch) -->
 <script>
   window.markerConfig = {
