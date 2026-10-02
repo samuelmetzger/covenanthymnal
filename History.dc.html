@@ -371,17 +371,17 @@ class Component extends DCLogic {
       if (this.curView() !== 'road' || !(e.target && e.target.closest && e.target.closest('.hx-road'))) return;
       e.preventDefault(); this.stopPlay();
       const d = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
-      this.target = this.clampPos(this.target + d / 260); this.kick();
+      this.target = this.clampPos(this.target - d / 260); this.kick(); // natural (Mac) direction: the road follows the fingers
       clearTimeout(this.snapT); this.snapT = setTimeout(() => { this.target = Math.round(this.target); this.kick(); }, 240);
     };
     this.onTouchStart = e => { if (e.target && e.target.closest && e.target.closest('.hx-road')) { this.ty = e.touches[0].clientY; this.tx0 = e.touches[0].clientX; this.stopPlay(); } else this.ty = null; };
     this.onTouchMove = e => {
       if (this.ty == null || this.curView() !== 'road') return;
       const t = e.touches[0]; const dy = this.ty - t.clientY, dx = this.tx0 - t.clientX; e.preventDefault();
-      this.target = this.clampPos(this.target + (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.ty = t.clientY; this.tx0 = t.clientX; this.kick();
+      this.target = this.clampPos(this.target - (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.ty = t.clientY; this.tx0 = t.clientX; this.kick();
     };
     this.onTouchEnd = () => { if (this.ty == null) return; this.ty = null; this.target = Math.round(this.target); this.kick(); };
-    this.onMove = e => { if (this.dragX == null) return; const dx = this.dragX - e.clientX, dy = this.dragY - e.clientY; this.target = this.clampPos(this.target + (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.dragX = e.clientX; this.dragY = e.clientY; this.kick(); };
+    this.onMove = e => { if (this.dragX == null) return; const dx = this.dragX - e.clientX, dy = this.dragY - e.clientY; this.target = this.clampPos(this.target - (Math.abs(dy) > Math.abs(dx) ? dy : dx) / 220); this.dragX = e.clientX; this.dragY = e.clientY; this.kick(); };
     this.onUp = () => { if (this.dragX == null) return; this.dragX = null; this.target = Math.round(this.target); this.kick(); };
     document.addEventListener('wheel', this.onWheel, { passive: false });
     document.addEventListener('touchstart', this.onTouchStart, { passive: true });
