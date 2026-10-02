@@ -1244,7 +1244,7 @@ class Component extends DCLogic {
   renderVals() {
     const p = this.state.page; const c = this.cycle();
     const year = this.state.year ?? c.yi;
-    const labels = [['home','Home'],['hymns','The Hymns'],['hymnal','Inside'],['history','History of Hymns'],['about','About'],['essays','Essays'],['order','Order'],['faq','FAQ'],['contact','Contact']];
+    const labels = [['home','Home'],['hymns','The Hymns'],['hymnal','Inside'],['history','Hymns in History'],['about','About'],['essays','Essays'],['order','Order'],['faq','FAQ'],['contact','Contact']];
     const active = p === 'article' ? 'essays' : p === 'hymn' ? 'hymns' : p === 'timeline' ? 'history' : p;
     const nav = labels.map(([k, label]) => ({ label, go: this.go(k), line: active === k ? 'var(--color-accent-400)' : 'transparent', color: active === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const hero = this.props.heroLayout ?? 'book-and-letter';
