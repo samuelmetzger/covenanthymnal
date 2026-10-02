@@ -233,7 +233,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
         <span style="position:absolute;inset:0;background:rgba(21,40,63,.58)"></span>
         <span style="position:relative;max-width:1200px;margin:0 auto;height:100%;padding:0 clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px">
           <span style="display:flex;flex-direction:column;gap:10px">
-            <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-300)">Journal</span>
+            <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-300)">Essays</span>
             <span style="font-family:var(--font-heading);font-size:clamp(34px,5vw,64px);font-weight:400;letter-spacing:.06em;text-transform:uppercase;line-height:1;color:var(--color-bg)">Sing the Psalms</span>
           </span>
           <span style="font-family:var(--font-heading);font-size:36px;color:var(--color-accent-300)">→</span>
@@ -483,11 +483,11 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
   </section>
 </sc-if>
 
-<!-- ═════════ JOURNAL ═════════ -->
-<sc-if value="{{ isJournal }}" hint-placeholder-val="{{ false }}">
-  <section data-screen-label="Journal" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
+<!-- ═════════ ESSAYS ═════════ -->
+<sc-if value="{{ isEssays }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Essays" style="background:#1f3c5d;color:var(--color-bg);border-top:1px solid rgba(243,242,242,.16)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:12px">
-      <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Journal</span>
+      <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Essays</span>
       <h1 style="font-size:clamp(40px,5vw,64px);font-weight:400;margin:0;line-height:1;color:var(--color-bg)">Notes on the hymns and their music</h1>
     </div>
   </section>
@@ -515,7 +515,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
 
 <sc-if value="{{ isArticle }}" hint-placeholder-val="{{ false }}">
   <article data-screen-label="Article" style="max-width:720px;margin:0 auto;padding:clamp(40px,6vw,80px) clamp(20px,4vw,48px)">
-    <button onClick="{{ goJournal }}" class="btn btn-ghost" style="background:none;margin-left:-8px">← Journal</button>
+    <button onClick="{{ goEssays }}" class="btn btn-ghost" style="background:none;margin-left:-8px">← Essays</button>
     <span style="display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700);margin-top:28px">Singing the Psalms</span>
     <h1 style="font-size:clamp(34px,4.4vw,52px);font-weight:400;line-height:1.05;margin:12px 0 32px">Metrical, Paraphrase, Christianized, or Based On? How the Hymnal Sings the Psalms</h1>
     <sc-for list="{{ article }}" as="b" hint-placeholder-count="12">
@@ -1140,11 +1140,11 @@ class Component extends DCLogic {
       listen: { hasVideo: !!id, noVideo: !id, embed: id ? 'https://www.youtube-nocookie.com/embed/' + id : '', label: (L && L.label) || 'Lyric video to come' },
     };
   }
-  readHash() { const m = (location.hash || '').replace(/^#\/?/, ''); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'history') { const v = ['timeline', 'pin', 'list', 'road'].includes(arg) ? arg : 'road'; if (this.state.page !== 'history' || this.state.historyView !== v) this.setState({ page: 'history', historyView: v, menuOpen: false }); return; } if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','history','timeline','order','journal','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
+  readHash() { const m = (location.hash || '').replace(/^#\/?/, '').replace(/^journal/, 'essays'); if (!m) return; const [pg, arg] = m.split('/'); if (pg === 'history') { const v = ['timeline', 'pin', 'list', 'road'].includes(arg) ? arg : 'road'; if (this.state.page !== 'history' || this.state.historyView !== v) this.setState({ page: 'history', historyView: v, menuOpen: false }); return; } if (pg === 'hymn' && arg) { if (Number(arg) !== this.state.hymn || this.state.page !== 'hymn') { this.setState({ hymn: Number(arg), page: 'hymn', noteOpen: {}, downloadsOpen: false }); } } else if (pg && pg !== this.state.page && ['home','about','hymnal','hymns','history','timeline','order','essays','faq','contact','sources','article'].includes(pg)) this.setState({ page: pg, menuOpen: false }); }
   setHash(s) { try { if (('#' + s) !== location.hash) history.replaceState(null, '', '#' + s); } catch (_) {} }
   shareVals(p, h, N) {
     const base = location.href.split('#')[0]; const url = base + '#' + (p === 'hymn' ? 'hymn/' + h.n : p === 'home' ? '' : p);
-    const names = { home: 'Covenant Hymnal', about: 'About the Covenant Hymnal', hymnal: 'Inside the Covenant Hymnal', hymns: 'The Hymns — Covenant Hymnal', order: 'Order the Covenant Hymnal', journal: 'Journal — Covenant Hymnal', article: 'Journal — Covenant Hymnal', faq: 'FAQ — Covenant Hymnal', contact: 'Contact — Covenant Hymnal', sources: 'Sources & Permissions — Covenant Hymnal' };
+    const names = { home: 'Covenant Hymnal', about: 'About the Covenant Hymnal', hymnal: 'Inside the Covenant Hymnal', hymns: 'The Hymns — Covenant Hymnal', order: 'Order the Covenant Hymnal', essays: 'Essays — Covenant Hymnal', article: 'Essays — Covenant Hymnal', faq: 'FAQ — Covenant Hymnal', contact: 'Contact — Covenant Hymnal', sources: 'Sources & Permissions — Covenant Hymnal' };
     const title = p === 'hymn' ? `${h.n} · ${h.title} — Covenant Hymnal` : names[p] || 'Covenant Hymnal';
     const text = p === 'hymn' && N && N.blurb ? N.blurb.replace(/\[\^\d+\]/g, '') : '';
     return { showTopShare: p !== 'hymn', shareLabel: this.state.shared ? 'Link copied' : 'Share', share: async () => { const data = { title, text, url }; try { if (navigator.share && (!navigator.canShare || navigator.canShare(data))) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; } try { await navigator.clipboard.writeText(url); } catch (_) { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } this.setState({ shared: true }); setTimeout(() => this.setState({ shared: false }), 1800); } };
@@ -1244,8 +1244,8 @@ class Component extends DCLogic {
   renderVals() {
     const p = this.state.page; const c = this.cycle();
     const year = this.state.year ?? c.yi;
-    const labels = [['home','Home'],['hymns','The Hymns'],['hymnal','Inside'],['history','History of Hymns'],['about','About'],['journal','Journal'],['order','Order'],['faq','FAQ'],['contact','Contact']];
-    const active = p === 'article' ? 'journal' : p === 'hymn' ? 'hymns' : p === 'timeline' ? 'history' : p;
+    const labels = [['home','Home'],['hymns','The Hymns'],['hymnal','Inside'],['history','History of Hymns'],['about','About'],['essays','Essays'],['order','Order'],['faq','FAQ'],['contact','Contact']];
+    const active = p === 'article' ? 'essays' : p === 'hymn' ? 'hymns' : p === 'timeline' ? 'history' : p;
     const nav = labels.map(([k, label]) => ({ label, go: this.go(k), line: active === k ? 'var(--color-accent-400)' : 'transparent', color: active === k ? 'var(--color-accent-300)' : 'var(--color-bg)' }));
     const hero = this.props.heroLayout ?? 'book-and-letter';
     const qtys = ['1', '2–10', '11–50', '50+']; const subs = ['Ordering', 'Permissions', 'Corrections', 'Other'];
@@ -1253,9 +1253,9 @@ class Component extends DCLogic {
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), menuLabel: this.state.menuOpen ? 'Close ✕' : 'Menu ☰', menuOpenClass: this.state.menuOpen ? 'open' : '',
       nav, showUtility: this.props.showUtilityBar ?? true, ...this.shareVals(p, (this.state.hymns || []).find(x => x.n === this.state.hymn) || {}, (this.state.notes || {})[this.state.hymn]),
       ...this.hymnVals(), isHymns: p === 'hymns', isHymn: p === 'hymn', isTimeline: p === 'timeline', isHistory: p === 'history', historyView: this.state.historyView || 'road', setHistoryView: this.setHistoryView, openHymnFn: n => this.openHymn(n), goTimelineFn: () => this.go('timeline')(), ...this.tlVals(), goAncient: () => { this.go('hymns')(); this.setState({ view: 'ancient', q: '' }); }, goHymns: this.go('hymns'), goContact: this.go('contact'),
-      isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isJournal: p === 'journal', isArticle: p === 'article', isFaq: p === 'faq', isSources: p === 'sources', isContact: p === 'contact',
+      isHome: p === 'home', isAbout: p === 'about', isHymnal: p === 'hymnal', isOrder: p === 'order', isEssays: p === 'essays', isArticle: p === 'article', isFaq: p === 'faq', isSources: p === 'sources', isContact: p === 'contact',
       heroLetter: hero === 'book-and-letter', heroCentered: hero === 'book-centered',
-      goHome: this.go('home'), goAbout: this.go('about'), goHymnal: this.go('hymnal'), goOrder: this.go('order'), goJournal: this.go('journal'), goArticle: this.go('article'),
+      goHome: this.go('home'), goAbout: this.go('about'), goHymnal: this.go('hymnal'), goOrder: this.go('order'), goEssays: this.go('essays'), goArticle: this.go('article'),
       hom: { now: { month: MONTHS[c.mi], title: HOM[c.yi][c.mi] }, next: { month: MONTHS[c.nmi], title: HOM[c.nyi][c.nmi] }, yearLabel: `Year ${c.yi + 1}`, days: c.days, daysLabel: c.days === 1 ? 'day until' : 'days until' },
       yearTabs: HOM.map((_, i) => ({ label: `Year ${i + 1}`, go: () => this.setState({ year: i }), line: year === i ? 'var(--color-accent)' : 'transparent', color: year === i ? 'var(--color-accent-700)' : 'var(--color-neutral-700)' })),
       yearMonths: MONTHS.map((month, i) => { const isNow = year === c.yi && i === c.mi; return { month, title: HOM[year][i], flag: isNow ? ' · This month' : '', bg: isNow ? 'var(--color-accent-100)' : 'transparent', monthColor: isNow ? 'var(--color-accent-800)' : 'var(--color-neutral-700)' }; }),
@@ -1264,7 +1264,7 @@ class Component extends DCLogic {
         { n: 'II', title: 'Leadsheets & keys', body: 'Leadsheets and alternate keys for instrumentalists and home singing.' },
         { n: 'III', title: 'Sound & video', body: 'Hear each tune before Sunday, and learn the Hymn of the Month at home.' },
         { n: 'IV', title: 'Authors & composers', body: 'Biographies of those who wrote the texts and the music.' },
-        { n: 'V', title: 'Articles', body: 'Fuller notes on the hymn texts and their music, in the Journal.' },
+        { n: 'V', title: 'Articles', body: 'Fuller notes on the hymn texts and their music, in the Essays.' },
       ],
       intro: INTRO,
       principles: [
@@ -1316,7 +1316,7 @@ class Component extends DCLogic {
       submitNews: (e) => { e.preventDefault(); w3fSend(e.target,'Newsletter signup',{}).then(ok=>{ if(ok) this.setState({ newsSent: true }); else alert('Sorry, that did not send. Please try again in a moment.'); }); },
       footCols: [
         { title: 'The Hymnal', links: [{ label: 'Inside', go: this.go('hymnal') }, { label: 'The Hymns', go: this.go('hymns') }, { label: 'Hymns of the Month', go: this.go('home') }, { label: 'Order', go: this.go('order') }] },
-        { title: 'Read', links: [{ label: 'Introduction', go: this.go('about') }, { label: 'Journal', go: this.go('journal') }, { label: 'FAQ', go: this.go('faq') }] },
+        { title: 'Read', links: [{ label: 'Introduction', go: this.go('about') }, { label: 'Essays', go: this.go('essays') }, { label: 'FAQ', go: this.go('faq') }] },
         { title: 'Contact', links: [{ label: 'Write to us', go: this.go('contact') }, { label: 'Sources & Permissions', go: this.go('sources') }] },
       ],
     };
