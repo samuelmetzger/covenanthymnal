@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
   !function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};["show","hide","isVisible","capture","cancelCapture","unload","reload","isExtensionInstalled","setReporter","clearReporter","setCustomData","on","off"].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement("script");s.async=1,s.src="https://edge.marker.io/latest/shim.js";var i=r.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}(window,document);
 </script>
+<script>const W3F_KEY='5c242665-8388-4a6c-a442-33fbca77c93c';
+const w3fSend=(form,kind,extra)=>{const data={access_key:W3F_KEY,subject:'Covenant Hymnal website: '+kind,from_name:'Covenant Hymnal website'};let replyto='';form.querySelectorAll('input,textarea').forEach(el=>{if(el.type==='radio'||el.type==='hidden')return;const lab=el.closest('.field')?.querySelector('label');const k=(lab?lab.textContent:(el.type==='email'?'Email':'Field')).trim();data[k]=el.value;if(el.type==='email')replyto=el.value;});if(replyto)data.replyto=replyto;Object.assign(data,extra||{});return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)}).then(r=>r.json()).then(j=>!!j.success).catch(()=>false);};
+</script>
 </head>
 <body>
 <x-dc>
@@ -576,7 +579,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
     <div style="display:flex;flex-direction:column;gap:22px">
       <img class="photo" src="assets/photo-aerial.jpg" alt="Covenant Presbyterian Church from the air" style="width:100%;aspect-ratio:16/10;object-fit:cover;object-position:50% 60%;display:block">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:22px;font-size:14px;line-height:1.65">
-        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">By post</span><span>Covenant Presbyterian Church<br>325 Burton Hills Boulevard<br>Nashville, TN 37205</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">By post</span><span>Covenant Presbyterian Church<br>33 Burton Hills Boulevard<br>Nashville, TN 37215</span></div>
         <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Permissions</span><span>Requests to reproduce any text or music must be made in writing. Many texts and tunes are held by other copyright owners.</span></div>
       </div>
     </div>
@@ -943,7 +946,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--color-accent);outli
     </sc-for>
   </div>
   <div style="max-width:1200px;margin:0 auto;padding:18px clamp(20px,4vw,48px) 28px;border-top:1px solid rgba(243,242,242,.12);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px">
-    <span>Copyright © 2026 Covenant Presbyterian Church · 325 Burton Hills Boulevard, Nashville, TN 37205</span>
+    <span>Copyright © 2026 Covenant Presbyterian Church · 33 Burton Hills Boulevard, Nashville, TN 37215</span>
     <span>International Copyright Secured. All Rights Reserved.</span>
   </div>
 </footer>
@@ -1133,7 +1136,7 @@ class Component extends DCLogic {
       noTextPlain: lyr.length === 0 && !PUBLISHER_LYRICS[h.n], hasPubLyrics: lyr.length === 0 && !!PUBLISHER_LYRICS[h.n], pub: PUBLISHER_LYRICS[h.n] ? { ...PUBLISHER_LYRICS[h.n], open: () => this.openPublisher(PUBLISHER_LYRICS[h.n].url) } : {},
       noTextMsg: (N && N.show_lyrics === false) || !h.pd ? 'This text is under copyright and is not reproduced here; the hymnal page carries it in full.' : 'Text to be added. Each hymn page will carry the full text as printed.',
       scriptureTags: tags.map(t => ({ t, href: this.esvHref(t) || '#' })),
-      downloads: (() => { if (!h.pd && !D) { const pb = PUBLISHER_LYRICS[h.n]; return pb ? [{ label: 'Lyrics at ' + pb.name + ' ↗', kind: pb.credit, href: pb.url, go: e => { e.preventDefault(); this.openPublisher(pb.url); } }] : [{ label: 'Publisher link to come', kind: '', href: '#', go: e => e.preventDefault() }]; } let list = (D || ['Hymnal page', 'Leadsheet (G)', 'Chord chart (G)'].map(label => ({ label, kind: 'to come', file: null }))).slice(); const txt = list.find(d => /^text only$/i.test(d.label)); list = list.filter(d => d !== txt); if (!list.some(d => /lyric sheet/i.test(d.label))) list.unshift(txt ? { ...txt, label: 'Lyric sheet' } : { label: 'Lyric sheet', kind: 'to come', file: null }); const rows = list.map(d => ({ label: d.label, kind: d.kind, href: d.file || '#' })); const pub = PUBLISHER_LYRICS[h.n]; if (pub) rows.splice(1, 0, { label: 'Lyrics at ' + pub.name + ' ↗', kind: pub.credit, href: pub.url, go: e => { e.preventDefault(); this.openPublisher(pub.url); } }); return rows; })(),
+      downloads: (() => { if (!h.pd) { const pb = PUBLISHER_LYRICS[h.n]; return pb ? [{ label: 'Lyrics at ' + pb.name + ' ↗', kind: pb.credit, href: pb.url, go: e => { e.preventDefault(); this.openPublisher(pb.url); } }] : [{ label: 'Publisher link to come', kind: '', href: '#', go: e => e.preventDefault() }]; } let list = (D || ['Hymnal page', 'Leadsheet (G)', 'Chord chart (G)'].map(label => ({ label, kind: 'to come', file: null }))).slice(); const txt = list.find(d => /^text only$/i.test(d.label)); list = list.filter(d => d !== txt); if (!list.some(d => /lyric sheet/i.test(d.label))) list.unshift(txt ? { ...txt, label: 'Lyric sheet' } : { label: 'Lyric sheet', kind: 'to come', file: null }); const rows = list.map(d => ({ label: d.label, kind: d.kind, href: d.file || '#' })); const pub = PUBLISHER_LYRICS[h.n]; if (pub) rows.splice(1, 0, { label: 'Lyrics at ' + pub.name + ' ↗', kind: pub.credit, href: pub.url, go: e => { e.preventDefault(); this.openPublisher(pub.url); } }); return rows; })(),
       listen: { hasVideo: !!id, noVideo: !id, embed: id ? 'https://www.youtube-nocookie.com/embed/' + id : '', label: (L && L.label) || 'Lyric video to come' },
     };
   }
@@ -1297,7 +1300,7 @@ class Component extends DCLogic {
       qtyOpts: qtys.map(q => ({ label: q, checked: this.state.qty === q, pick: () => this.setState({ qty: q }) })),
       qty: this.state.qty,
       orderOpen: !this.state.orderSent, orderSent: this.state.orderSent,
-      submitOrder: (e) => { e.preventDefault(); this.setState({ orderSent: true }); },
+      submitOrder: (e) => { e.preventDefault(); w3fSend(e.target,'Order reservation',{Copies:this.state.qty}).then(ok=>{ if(ok) this.setState({ orderSent: true }); else alert('Sorry, that did not send. Please try again in a moment.'); }); },
       posts: [
         { kicker: 'About', title: 'Why a new hymnal?', body: 'Three reasons, from the Session’s introduction.', go: this.go('about') },
         { kicker: 'Inside', title: 'How to use this hymnal', body: 'Numbers, credits, tunes, meters, and the dots in the margin.', go: this.go('hymnal') },
@@ -1308,9 +1311,9 @@ class Component extends DCLogic {
       subjects: subs.map(s => ({ label: s, checked: this.state.subject === s, pick: () => this.setState({ subject: s }) })),
       subjectLower: this.state.subject.toLowerCase(),
       contactOpen: !this.state.contactSent, contactSent: this.state.contactSent,
-      submitContact: (e) => { e.preventDefault(); this.setState({ contactSent: true }); },
+      submitContact: (e) => { e.preventDefault(); w3fSend(e.target,'Contact: '+this.state.subject,{Regarding:this.state.subject}).then(ok=>{ if(ok) this.setState({ contactSent: true }); else alert('Sorry, that did not send. Please try again in a moment.'); }); },
       newsLabel: this.state.newsSent ? 'Subscribed' : 'Subscribe',
-      submitNews: (e) => { e.preventDefault(); this.setState({ newsSent: true }); },
+      submitNews: (e) => { e.preventDefault(); w3fSend(e.target,'Newsletter signup',{}).then(ok=>{ if(ok) this.setState({ newsSent: true }); else alert('Sorry, that did not send. Please try again in a moment.'); }); },
       footCols: [
         { title: 'The Hymnal', links: [{ label: 'Inside', go: this.go('hymnal') }, { label: 'The Hymns', go: this.go('hymns') }, { label: 'Hymns of the Month', go: this.go('home') }, { label: 'Order', go: this.go('order') }] },
         { title: 'Read', links: [{ label: 'Introduction', go: this.go('about') }, { label: 'Journal', go: this.go('journal') }, { label: 'FAQ', go: this.go('faq') }] },
