@@ -21,6 +21,24 @@ document.addEventListener('DOMContentLoaded',function(){
   b.onclick=function(){ if(window.Marker){ try{window.Marker.capture('fullscreen');}catch(e){window.Marker.capture();} } else alert('Feedback tool is still loading; please try again in a moment.'); };
   document.body.appendChild(b);
   var t=setInterval(function(){ if(window.Marker&&window.Marker.hide){ try{window.Marker.hide();}catch(e){} clearInterval(t);} },500); setTimeout(function(){clearInterval(t)},15000);
+  // Reviewer identity: ask once, remember in this browser, pass to Marker so each issue carries a name.
+  function reporter(){ try{ return JSON.parse(localStorage.getItem('betaReviewer')||'null'); }catch(e){ return null; } }
+  function applyReporter(r){ if(r&&window.Marker&&window.Marker.setReporter){ try{ window.Marker.setReporter({ email: r.email||('reviewer+'+r.name.toLowerCase().replace(/[^a-z0-9]+/g,'.')+'@covenanthymnal.beta'), fullName: r.name }); }catch(e){} } }
+  var origClick=b.onclick;
+  b.onclick=function(){
+    var r=reporter();
+    if(!r){ var name=prompt('Welcome, reviewer. Your name, please (asked only once on this device):'); if(!name) return; var email=prompt('Email, if you would like replies (optional):')||''; r={name:name.trim(),email:email.trim()}; try{localStorage.setItem('betaReviewer',JSON.stringify(r));}catch(e){} }
+    applyReporter(r); origClick();
+  };
+  var t2=setInterval(function(){ if(window.Marker&&window.Marker.setReporter){ applyReporter(reporter()); clearInterval(t2);} },500); setTimeout(function(){clearInterval(t2)},15000);
+  // Hymn tagging: tell Marker which hymn/page the reviewer is on.
+  function tag(){ if(!(window.Marker&&window.Marker.setCustomData)) return;
+    var m=(location.hash||'').match(/^#\/?hymn\/(\d+)/); var d={ page:(location.hash||'#/').replace(/^#\/?/,'')||'home' };
+    if(m){ d.hymn=Number(m[1]); var hs=window.__HYMNS||[]; var h=hs.find(function(x){return x.n===d.hymn;}); if(h){ d.hymnTitle=h.title; d.author=h.author||''; d.tune=h.tune||''; } }
+    try{ window.Marker.setCustomData(d); }catch(e){} }
+  window.addEventListener('hashchange',tag);
+  var t3=setInterval(function(){ if(window.Marker&&window.Marker.setCustomData){ tag(); clearInterval(t3);} },500); setTimeout(function(){clearInterval(t3)},15000);
+  import('./hymns-data.js').then(function(m){ window.__HYMNS=m.HYMNS; tag(); }).catch(function(){});
 });
 </script>
 <!-- Marker.io feedback widget (beta review period; remove at launch) -->
